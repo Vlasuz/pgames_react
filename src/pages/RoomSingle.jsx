@@ -25,6 +25,7 @@ import FoolButtonTake from "../components/component_game/game_fool/FoolButtonTak
 import FoolCenterEndgame from "../components/component_game/game_fool/FoolCenterEndgame";
 import FoolButtonWaiting from "../components/component_game/game_fool/FoolButtonWaiting";
 import GlobalLink from "../GlobalLink";
+import GlobalSocket from "../GlobalSocket";
 
 const RoomSingle = () => {
 
@@ -50,7 +51,7 @@ const RoomSingle = () => {
 
     useEffect(() => {
 
-        const socket = new WebSocket(GlobalLink(`/room/${roomId}/`))
+        const socket = new WebSocket(GlobalSocket(`/room/${roomId}/`))
         socket.onopen = () => {
             socket.send(JSON.stringify({"command": "auth", "data": {"token": GetCookies('access_token')}}))
 
