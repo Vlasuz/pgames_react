@@ -20,6 +20,7 @@ import {potReducer} from "../redux_poker/reducers_poker/GamePotReducer";
 import {cardsForPlayer2Reducer} from "../redux_poker/reducers_poker/poker_players/pokerPlayer_2";
 import {myStepReducer} from "../redux_poker/reducers_poker/GameMyStepReducer";
 import {userInfoReducer} from "./userInfoReducer";
+import {gamesListPlayersReducer} from "./gamesListPlayersReducer";
 
 export const rootReducer = combineReducers({
     logoutReducer,
@@ -45,4 +46,6 @@ export const rootReducer = combineReducers({
     myStepReducer,
 
     userInfoReducer,
+
+    gamesListPlayersReducer,
 })

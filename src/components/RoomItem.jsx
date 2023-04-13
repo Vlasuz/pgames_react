@@ -8,6 +8,7 @@ import {addBalance} from "../redux/actions";
 import axios from "axios";
 import GetCookies from "../hooks/GetCookies";
 import GlobalLink from "../GlobalLink";
+import {setGamePlayers} from "../redux/reducers/gamesListPlayersReducer";
 
 const RoomItem = ({ game }) => {
     const navigate = useNavigate()
@@ -30,6 +31,7 @@ const RoomItem = ({ game }) => {
         axios.post(GlobalLink(`/api/room/join_to_room/${game?.id}/`)).then(res => {
             console.log('join room', res.data)
             navigate('/rooms/'+game?.id)
+            dispatch(setGamePlayers(res.data.players))
         })
 
         // if(auth){

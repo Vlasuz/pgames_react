@@ -1,5 +1,3 @@
-import React from 'react';
-
 const FoolCenterEndgame = ({ isWinner, userId }) => {
     return (
         <div className="game__main--table game__table">

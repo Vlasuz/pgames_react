@@ -17235,4 +17235,20 @@ label._error .popup-input-placeholder{
     opacity: .3;
 }
 
+.game__table-cards--item{
+    top: 0;
+}
+.game__table-cards--item.game__table-cards--item_from-position-2 .game__table-cards--card{
+    padding: 0;
+    width: 0;
+    max-width: 0;
+}
+.game__table-cards--item.game__table-cards--item_from-position-2{
+    left: -480px;
+    transform: scale(.6);
+    top: 40px;
+    z-index: 3;
+    /*padding: 0;*/
+}
+
 /*NEW STYLE*/

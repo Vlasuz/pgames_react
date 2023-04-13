@@ -34,6 +34,8 @@ const PopupLoginForm = () => {
                 ClosePopup("#login-popup")
                 setInputEmail('')
                 setInputPassword('')
+            }).catch(er => {
+                console.log(er)
             })
 
         }

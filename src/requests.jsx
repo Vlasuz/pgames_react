@@ -29,28 +29,33 @@ const Requests = () => {
     useEffect(() => {
 
         if(GetCookies('access_token')){
-            axios.defaults.headers.get['Authorization'] = `Bearer ${GetCookies('access_token')}`;
-            axios.get(GlobalLink('/api/user/me/')).then(res => {
-                dispatch(setUserInfo(res.data))
-                dispatch(actionLogout(prev => !prev))
-            }).catch(er => {
 
-                if(!isError) {
-                    axios.defaults.headers.post['Authorization'] = `Bearer ${GetCookies('refresh_token')}`;
-                    axios.post(GlobalLink('/api/auth/refresh/')).then(res => {
-                        document.cookie = `access_token=${res.data.access_token}`;
-                        document.cookie = `refresh_token=${res.data.refresh_token}`;
+            try{
+                axios.defaults.headers.get['Authorization'] = `Bearer ${GetCookies('access_token')}`;
+                axios.get(GlobalLink('/api/user/me/')).then(res => {
+                    dispatch(setUserInfo(res.data))
+                    dispatch(actionLogout(prev => !prev))
+                }).catch(er => {
 
-                        axios.defaults.headers.get['Authorization'] = `Bearer ${res.data.access_token}`;
-                        axios.get(GlobalLink('/api/user/me/')).then(res => {
-                            dispatch(setUserInfo(res.data))
-                            dispatch(actionLogout(prev => !prev))
+                    if(!isError) {
+                        axios.defaults.headers.post['Authorization'] = `Bearer ${GetCookies('refresh_token')}`;
+                        axios.post(GlobalLink('/api/auth/refresh/')).then(res => {
+                            document.cookie = `access_token=${res.data.access_token}`;
+                            document.cookie = `refresh_token=${res.data.refresh_token}`;
+
+                            axios.defaults.headers.get['Authorization'] = `Bearer ${res.data.access_token}`;
+                            axios.get(GlobalLink('/api/user/me/')).then(res => {
+                                dispatch(setUserInfo(res.data))
+                                dispatch(actionLogout(prev => !prev))
+                            })
+
                         })
-
-                    })
-                    setIsError(true)
-                }
-            })
+                        setIsError(true)
+                    }
+                })
+            } catch (er) {
+                console.log('error', er)
+            }
         }
     }, [isError])
     // AUTH

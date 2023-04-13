@@ -1,16 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import uniqid from "uniqid";
-import {addRoomAction} from "../../redux/actions";
 import JsCustomSelect from "../JS_CustomSelect";
 import RoomItem from "../RoomItem";
 import axios from "axios";
 import GetCookies from "../../hooks/GetCookies";
-import {logDOM} from "@testing-library/react";
 import {useNavigate} from "react-router-dom";
 import GlobalLink from "../../GlobalLink";
 
-const GamesSingleRooms = ({ gamesId }) => {
+const GamesSingleRooms = ({gamesId}) => {
 
     useEffect(() => {
         JsCustomSelect()
@@ -23,24 +19,11 @@ const GamesSingleRooms = ({ gamesId }) => {
         setIsActiveCreate(prev => !prev)
     }
 
-    const dispatch = useDispatch();
-
-    // const rooms = useSelector(state => {
-    //     const {addRoomReducer} = state;
-    //     return addRoomReducer.rooms
-    // })
-    // const games = useSelector(state => {
-    //     const {GamesListReducer} = state;
-    //     return GamesListReducer.games
-    // })
-    // const thisGame = games.filter(item => item.id === gamesId)[0];
-
-    // const [gameIs, setGameIs] = useState(thisGame.id)
     const [currency, setCurreny] = useState('chips')
     const [maxLength, setMaxLength] = useState(2)
     const [isAccess, setIsAccess] = useState(true)
     const [typeOfGame, setTypeOfGame] = useState('Классический')
-    const [gamers, setGamers] = useState([])
+    // const [gamers, setGamers] = useState([])
     const [cost, setCost] = useState(0)
     const [title, setTitle] = useState('')
     const navigate = useNavigate()
@@ -55,31 +38,14 @@ const GamesSingleRooms = ({ gamesId }) => {
 
     const handleCreateRoom = (e) => {
         e.preventDefault()
-        // const id = uniqid()
-        //
-        // let dateNow = new Date()
-        // let date = [`${dateNow.getDate()}.${dateNow.getMonth()}.${dateNow.getFullYear()}`, `${dateNow.getHours()}:${dateNow.getMinutes()}`]
-        //
-        // let people = {
-        //     nowLength: 0,
-        //     maxLength,
-        // }
-        //
-        // let data = (
-        //     {id, gameIs, icon, title, currency, cost, date, people, isAccess, typeOfGame, gamers}
-        // )
-        //
-        // dispatch(addRoomAction(data))
-        //
-
 
         axios.defaults.headers.post['platform'] = `pc`;
         axios.defaults.headers.post['Authorization'] = `Bearer ${GetCookies('access_token')}`;
         axios.post(GlobalLink(`/api/room/create/`), {
             "bet_type": currency,
             "game": gamesId,
-            "player_slots": 10,
-            "room_type": "public",
+            "player_slots": maxLength,
+            "room_type": isAccess ? "public" : "private",
             "bet": cost
         }).then(game => {
 
@@ -88,13 +54,7 @@ const GamesSingleRooms = ({ gamesId }) => {
             setIsActiveCreate(true)
             axios.get(GlobalLink(`/api/game/get/${gamesId}/`)).then(res => {
                 setRooms(game.data.room)
-                navigate('/rooms/'+game.data.id)
-
-                // axios.defaults.headers.post['platform'] = `pc`;
-                // axios.defaults.headers.post['Authorization'] = `Bearer ${GetCookies('access_token')}`;
-                // axios.post(`https://board-games.sonisapps.com/api/room/join_to_room/${game.data.id}/`).then(res => {
-                //     console.log('join: ', res.data)
-                // })
+                navigate('/rooms/' + game.data.id)
             })
         })
 
@@ -129,8 +89,8 @@ const GamesSingleRooms = ({ gamesId }) => {
                                         return a.players_count - b.players_count
                                     })
                                     .map(game =>
-                                    <RoomItem key={game.id} game={game}/>
-                                )
+                                        <RoomItem key={game.id} game={game}/>
+                                    )
                             }
 
                         </ul>
@@ -164,10 +124,10 @@ const GamesSingleRooms = ({ gamesId }) => {
                                     <div className="page-rooms__select-wrapper">
                                         <select onChange={e => setCurreny(e.target.value)} name="currency"
                                                 className="page-rooms__select custom-select">
-                                            <option value="chips" data-image="images/icons/chip.svg">
+                                            <option value="chips" data-image="../images/icons/chip.svg">
                                                 Фишки
                                             </option>
-                                            <option value="money" data-image="images/icons/dollar-circle.svg">
+                                            <option value="money" data-image="../images/icons/dollar-circle.svg">
                                                 Деньги
                                             </option>
                                         </select>
@@ -175,7 +135,7 @@ const GamesSingleRooms = ({ gamesId }) => {
                                 </div>
                                 <div className="page-rooms__create--col">
                                     <label className="page-rooms__label form-label">
-                                        <input onChange={e => setCost(e.target.value)} value={cost} type="number"
+                                        <input onChange={e => setCost(e.target.value)} type="number"
                                                name="sum" required placeholder="Сумма"
                                                className="page-rooms__input form-input _add-bg"/>
                                         <span className="page-rooms__input-placeholder form-input-placeholder">

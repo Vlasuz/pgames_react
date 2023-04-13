@@ -1,15 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
-import {use} from "i18next";
-import openPopup from "../hooks/OpenPopup";
-import PopupCross from "../components/components_popups/PopupCross";
-import PopupBgd from "../components/components_popups/PopupBgd";
-import StartGame from "../components/component_game/game_thousand/StartGame";
-import GameDealing from "../components/component_game/game_thousand/GameDealing";
-import GameRunning from "../components/component_game/game_thousand/GameRunning";
-import GameGives from "../components/component_game/game_thousand/GameGives";
-import GameStart from "../components/component_game/game_poker/GameStart";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import GetCookies from "../hooks/GetCookies";
 import axios from "axios";
 import FoolCenterWaiting from "../components/component_game/game_fool/FoolCenterWaiting";
@@ -26,14 +17,16 @@ import FoolCenterEndgame from "../components/component_game/game_fool/FoolCenter
 import FoolButtonWaiting from "../components/component_game/game_fool/FoolButtonWaiting";
 import GlobalLink from "../GlobalLink";
 import GlobalSocket from "../GlobalSocket";
+import cardEvent from "../components/component_game/game_fool/functions/card_event";
+import setPosition from "../components/component_game/game_fool/functions/set_position";
+import socketMessages from "../components/component_game/game_fool/functions/socket_messages";
 
 const RoomSingle = () => {
 
     const [socketClose, setSocketClose] = useState(false)
 
     const {roomId} = useParams()
-    const [stepOfGame, setStepOfGame] = useState(2)
-    const [player, setPlayer] = useState(false)
+    const [isLoad, setIsLoad] = useState(true)
     const [response, setResponse] = useState({})
     const [trump, setTrump] = useState({})
     const [myCards, setMyCards] = useState([])
@@ -45,106 +38,54 @@ const RoomSingle = () => {
     const [isWinner, setIsWinner] = useState([])
     const [timer, setTimer] = useState(0)
     const [fixedTime, setFixedTime] = useState(0)
+    const [isEndGame, setIsEndGame] = useState(false)
+    const [isGameStart, setIsGameStart] = useState(false)
+    const [isAttacker, setIsAttacker] = useState(false)
+    const [infoRoom, setInfoRoom] = useState({})
 
+    const players = useSelector(state => state.gamesListPlayersReducer.players)
     const user = useSelector(state => state.userInfoReducer.data)
     const games = useSelector(state => state.gamesListReducer.list)
 
+    const dispatch = useDispatch()
+
+    websocket.onmessage = (e) => {
+        const data = JSON.parse(e.data)
+        console.log("socket message", data)
+        setResponse(data)
+
+        setTimeout(() => {
+            document.querySelectorAll('.game__table-cards--item')?.forEach(item => item.classList.remove('_new-card'))
+        }, 10)
+
+        data.data?.timeout && setTimer(data.data?.timeout)
+        data.data?.timeout && setFixedTime(data.data?.timeout)
+
+        socketMessages(data, setTrump, setUserTurn, setIsWinner, setIsEndGame, setIsGameStart, setIsAttacker, dispatch, setMyCards, setCardsOnTable, setSelectedCard, user)
+    }
+    websocket.onerror = (e) => console.log('GAME socket Error')
+    websocket.onclose = () => setSocketClose(true)
+
     useEffect(() => {
 
-        const socket = new WebSocket(GlobalSocket(`/room/${roomId}/`))
-        socket.onopen = () => {
-            socket.send(JSON.stringify({"command": "auth", "data": {"token": GetCookies('access_token')}}))
+        if (isLoad) {
+            setIsLoad(false)
 
-            setWebsocket(socket)
+            const socket = new WebSocket(GlobalSocket(`/room/${roomId}/`))
+            socket.onopen = () => {
+                socket.send(JSON.stringify({"command": "auth", "data": {"token": GetCookies('access_token')}}))
 
-            axios.defaults.headers.get['Authorization'] = `Bearer ${GetCookies('access_token')}`;
-            axios.get(GlobalLink(`/api/room/get/${roomId}/`)).then(res => {
-                console.log('info about room', res.data)
-            })
+                setWebsocket(socket)
 
-            socket.onmessage = (e) => {
-                const data = JSON.parse(e.data)
-                console.log("socket message", data)
-                setResponse(data)
-
-                setTimeout(() => {
-                    document.querySelectorAll('.game__table-cards--item')?.forEach(item => item.classList.remove('_new-card'))
-                }, 10)
-
-                data.data?.timeout && setTimer(data.data?.timeout)
-                data.data?.timeout && setFixedTime(data.data?.timeout)
-
-                switch (data.event) {
-                    case "card_distribution":
-                        setTrump(data.data.trump)
-                        setMyCards(data.data.cards)
-                        break;
-                    case "player_turn":
-                        setUserTurn({
-                            id: data.data.player.id,
-                            event: data.data.role,
-                        })
-                        break;
-                    case "attacker_played":
-                        setCardsOnTable(prev => [...prev, {
-                            attacker_card: data.data.played_card,
-                            defence_card: {}
-                        }])
-                        break;
-                    case "sub_attacker_played":
-                        setCardsOnTable(prev => [...prev, {
-                            attacker_card: data.data.played_card,
-                            defence_card: {}
-                        }])
-                        break;
-                    case "defender_played":
-
-                        setCardsOnTable(prev => prev.map(item => {
-
-                            if (item.attacker_card.rank === data.data.entry_card.rank && item.attacker_card.suit === data.data.entry_card.suit) {
-                                setSelectedCard({})
-                                return {
-                                    attacker_card: data.data.entry_card,
-                                    defence_card: data.data.played_card
-                                };
-                            } else {
-                                return item;
-                            }
-
-                        }))
-                        break;
-
-                    case "defender_take":
-                        setCardsOnTable([])
-                        if (user.id === data.data.player.id) {
-                            setMyCards(prev => [...prev, ...data.data.cards])
-                        }
-                        break;
-                    case "new_cards":
-                        if (user.id === data.data.player.id) {
-                            setMyCards(prev => [...prev, ...data.data.cards])
-                        }
-                        break;
-                    case "cards_beat":
-                        setCardsOnTable([])
-                        break;
-                    case "player_win":
-                        setIsWinner(prev => data.data.player.id === user.id ? [...prev, user.id] : prev)
-                        break;
-                    case "end_game":
-                        break;
-
-                }
-            }
-            socket.onerror = (e) => console.log('GAME socket Error')
-            socket.onclose = () => {
-                setSocketClose(true)
-                console.log('GAME socket Close')
+                axios.defaults.headers.get['Authorization'] = `Bearer ${GetCookies('access_token')}`;
+                axios.get(GlobalLink(`/api/room/get/${roomId}/`)).then(res => {
+                    console.log('info about room', res.data)
+                    setInfoRoom(res.data)
+                })
             }
         }
 
     }, [])
-
     useEffect(() => {
 
         if (!!games.length) {
@@ -152,109 +93,6 @@ const RoomSingle = () => {
         }
 
     }, [games])
-
-    const handleReady = () => {
-        axios.post(GlobalLink(`/api/room/start/?room_id=${roomId}`)).then(res => {
-            console.log('game is start >>>', res.data)
-        })
-    }
-
-
-    // GAME PROCCESS
-
-    const gameCenter = {
-        'auth': <FoolCenterWaiting/>,
-        'start_game': <FoolCenterStarting/>,
-        'end_game': <FoolCenterEndgame isWinner={isWinner} userId={user.id}/>
-    }
-
-    const cardEvent = (item, e) => {
-        setWrongStep(false)
-
-        if (userTurn.id === user.id) {
-
-            console.log("Card move", item)
-
-            if (((userTurn.event === "attacker" || userTurn.event === "sub_attacker") &&
-                    (cardsOnTable.some(card => card.attacker_card?.rank === item.rank) || cardsOnTable.some(card => card.defence_card?.rank === item.rank))) ||
-                cardsOnTable.length === 0) {
-
-                const top = e.target.closest('li').getBoundingClientRect().top - document.querySelector('.game__table-cards--card_empty').getBoundingClientRect().top;
-                const left = e.target.closest('li').getBoundingClientRect().left - document.querySelector('.game__table-cards--card_empty').getBoundingClientRect().left;
-                const width = document.querySelector('.game__table-cards--card_empty').clientWidth;
-                const height = document.querySelector('.game__table-cards--card_empty').clientHeight;
-
-                e.target.closest('li').style.top = `${-top + 27}px`
-                e.target.closest('li').style.left = `${-left - 14}px`
-                e.target.closest('li').querySelector('.game-user-cards__item--body').style.width = `${width - 10}px`
-                e.target.closest('li').querySelector('.game-user-cards__item--body').style.height = `${height}px`
-
-                setTimeout(() => {
-                    websocket.send(
-                        JSON.stringify({
-                            "command": "paying_card",
-                            "data": {
-                                "card": {
-                                    "rank": item.rank,
-                                    "suit": item.suit
-                                }
-                            }
-                        })
-                    )
-
-                    e.target.closest('li').style.transition = `none`;
-                    e.target.closest('li').style.top = `0px`;
-                    e.target.closest('li').style.left = `0px`;
-                    e.target.closest('li').querySelector('.game-user-cards__item--body').style.width = `100%`
-                    e.target.closest('li').querySelector('.game-user-cards__item--body').style.height = `155px`
-                    setTimeout(() => {
-                        e.target.closest('li').style.transition = `all .3s ease`;
-                    }, 100)
-
-                    setTimeout(() => {
-                        setMyCards(prev => prev.filter(card => {
-                            if (!(card.suit === item.suit && card.rank === item.rank)) {
-                                return card
-                            }
-                        }))
-                    }, 50)
-                }, 300)
-            } else if (userTurn.event === "defender") {
-
-                document.querySelector('.game-user-cards__item._active')?.classList.remove('_active')
-                e.target.closest('li').classList.toggle('_active')
-
-                if (e.target.closest('li').classList.contains('_active')) {
-                    setSelectedCard({
-                        "card": {
-                            "rank": item.rank,
-                            "suit": item.suit
-                        },
-                        "entry_card": {
-                            "rank": null,
-                            "suit": null
-                        }
-                    })
-                } else {
-                    setSelectedCard({
-                        "card": {
-                            "rank": null,
-                            "suit": null
-                        },
-                        "entry_card": {
-                            "rank": null,
-                            "suit": null
-                        }
-                    })
-                }
-            } else {
-                setWrongStep(true)
-            }
-
-        }
-
-    }
-
     useEffect(() => {
         let time = setInterval(() => {
             timer > 0 && setTimer(prev => prev - 1)
@@ -263,16 +101,14 @@ const RoomSingle = () => {
         return () => clearInterval(time)
     }, [timer])
 
+    const gameCenter = {
+        'auth': <FoolCenterWaiting/>,
+        'start_game': <FoolCenterStarting/>,
+        'end_game': <FoolCenterEndgame isWinner={isWinner} userId={user.id}/>
+    }
+
     return (
         <>
-            {/*{*/}
-            {/*    roomId == 1 ?*/}
-            {/*        stepOfGame === 1 ? <StartGame setStepOfGame={setStepOfGame}/> :*/}
-            {/*            stepOfGame === 2 ? <GameDealing setStepOfGame={setStepOfGame}/> :*/}
-            {/*                stepOfGame === 3 ? <GameGives setStepOfGame={setStepOfGame}/> :*/}
-            {/*                    <GameRunning setStepOfGame={setStepOfGame}/>*/}
-            {/*        : <GameStart/>*/}
-            {/*}*/}
 
             <main className={"main" + (socketClose ? " main_socket_close" : "")}>
                 <section className="game page-padding-top">
@@ -304,33 +140,57 @@ const RoomSingle = () => {
                             <div className="game__main--grid game__grid">
                                 <div className="game__grid--item">
                                     <div className="game__bet">
-                                        <span className="game__bet--value">1500</span>
-                                        <img src="../images/icons/chip.svg" alt="" className="game__bet--currency"/>
+                                        <span className="game__bet--value">
+                                            {infoRoom.bet}
+                                        </span>
+                                        <img src={infoRoom.bet_type === 'chips' ? "../images/icons/chip.svg" : "../images/icons/dollar-circle.svg"} alt="" className="game__bet--currency"/>
                                     </div>
                                 </div>
                                 <div className="game__grid--item">
-
                                     {
-                                        player ? <GamePlayer/> : <GamePlayerWaiting/>
+                                        Object.keys(players.filter(item => item.position === setPosition(3, players, user))).length ?
+                                            <GamePlayer
+                                                userTurn={userTurn}
+                                                fixedTime={fixedTime}
+                                                timer={timer}
+                                                isEndGame={isEndGame}
+                                                isGameStart={isGameStart}
+                                                player={players.filter(item => item.position === setPosition(3, players, user))[0]}/> :
+                                            <GamePlayerWaiting/>
+                                    }
+
+                                </div>
+                                <div className="game__grid--item">
+                                    {
+                                        Object.keys(players.filter(item => item.position === setPosition(4, players, user))).length ?
+                                            <GamePlayer
+                                                userTurn={userTurn}
+                                                fixedTime={fixedTime}
+                                                timer={timer}
+                                                isEndGame={isEndGame}
+                                                isGameStart={isGameStart}
+                                                player={players.filter(item => item.position === setPosition(4, players, user))[0]}/> :
+                                            <GamePlayerWaiting/>
                                     }
 
                                 </div>
                                 <div className="game__grid--item">
 
                                     {
-                                        player ? <GamePlayer/> : <GamePlayerWaiting/>
+                                        Object.keys(players.filter(item => item.position === setPosition(5, players, user))).length ?
+                                            <GamePlayer
+                                                userTurn={userTurn}
+                                                fixedTime={fixedTime}
+                                                timer={timer}
+                                                isEndGame={isEndGame}
+                                                isGameStart={isGameStart}
+                                                player={players.filter(item => item.position === setPosition(5, players, user))[0]}/> :
+                                            <GamePlayerWaiting/>
                                     }
 
                                 </div>
                                 <div className="game__grid--item">
-
-                                    {
-                                        player ? <GamePlayer/> : <GamePlayerWaiting/>
-                                    }
-
-                                </div>
-                                <div className="game__grid--item">
-                                    <form action="#" className="game__cards">
+                                    {!!Object.keys(trump).length && <form action="#" className="game__cards">
                                         <button className="game__cards--element">
                                             <div className="game__cards--back">
                                                 <img src="../images/game/cards/Back.svg" alt=""/>
@@ -340,19 +200,35 @@ const RoomSingle = () => {
                                                      alt=""/>
                                             </div>
                                         </button>
-                                    </form>
+                                    </form>}
                                 </div>
                                 <div className="game__grid--item">
 
                                     {
-                                        player ? <GamePlayer/> : <GamePlayerWaiting/>
+                                        Object.keys(players.filter(item => item.position === setPosition(2, players, user))).length ?
+                                            <GamePlayer
+                                                userTurn={userTurn}
+                                                fixedTime={fixedTime}
+                                                timer={timer}
+                                                isEndGame={isEndGame}
+                                                isGameStart={isGameStart}
+                                                player={players.filter(item => item.position === setPosition(2, players, user))[0]}/> :
+                                            <GamePlayerWaiting/>
                                     }
 
                                 </div>
                                 <div className="game__grid--item">
 
                                     {
-                                        player ? <GamePlayer/> : <GamePlayerWaiting/>
+                                        Object.keys(players.filter(item => item.position === setPosition(6, players, user))).length ?
+                                            <GamePlayer
+                                                userTurn={userTurn}
+                                                fixedTime={fixedTime}
+                                                timer={timer}
+                                                isEndGame={isEndGame}
+                                                isGameStart={isGameStart}
+                                                player={players.filter(item => item.position === setPosition(6, players, user))[0]}/> :
+                                            <GamePlayerWaiting/>
                                     }
 
                                 </div>
@@ -396,7 +272,8 @@ const RoomSingle = () => {
                                                         return ranks[a.rank] - ranks[b.rank];
                                                     })
                                                         .map((item, index) =>
-                                                            <li key={index} onClick={e => cardEvent(item, e)}
+                                                            <li key={index}
+                                                                onClick={e => cardEvent(item, e, setWrongStep, userTurn, user, cardsOnTable, websocket, setSelectedCard, setMyCards)}
                                                                 className="game-user-cards__item">
                                                                 <div className="game-user-cards__item--body">
                                                                     <img
@@ -417,7 +294,7 @@ const RoomSingle = () => {
                                                 </h3>
 
                                                 {
-                                                    user.id === userTurn.id ?
+                                                    user.id === userTurn.id && !isEndGame ?
                                                         <progress className="game__user--progress" max="100"
                                                                   value={timer * 100 / fixedTime}></progress> : ""
                                                 }
@@ -438,14 +315,15 @@ const RoomSingle = () => {
                                 {
                                     gameCenter[response.event] ? gameCenter[response.event] :
                                         <FoolCenterRunning cardsOnTable={cardsOnTable}
-                                                           setCardsOnTable={setCardsOnTable}
                                                            setSelectedCard={setSelectedCard}
                                                            selectedCard={selectedCard}
                                                            websocket={websocket}
-                                                           myCards={myCards}
                                                            setMyCards={setMyCards}
                                                            trump={trump}
                                                            setWrongStep={setWrongStep}
+                                                           isAttacker={isAttacker}
+                                                           user={user}
+                                                           players={players}
                                                            userTurn={userTurn.id === user.id && userTurn}
                                         />
                                 }
@@ -462,14 +340,18 @@ const RoomSingle = () => {
                                 </div>
 
                                 {
-                                    userTurn.id === user.id && (userTurn.event === "attacker" || userTurn.event === "sub_attacker") ?
-                                        <FoolButtonPass timer={timer} websocket={websocket}
-                                                        cardsOnTable={cardsOnTable}/> :
-                                        userTurn.id === user.id && userTurn.event === "defender" ?
-                                            <FoolButtonTake timer={timer} websocket={websocket}/> :
-                                            response.event === 'auth' ?
-                                                <FoolButtonReady handleReady={handleReady}/> :
-                                                <FoolButtonWaiting/>
+                                    !isEndGame ? <>
+                                        {
+                                            userTurn.id === user.id && (userTurn.event === "attacker" || userTurn.event === "sub_attacker") ?
+                                                <FoolButtonPass timer={timer} websocket={websocket}
+                                                                cardsOnTable={cardsOnTable}/> :
+                                                userTurn.id === user.id && userTurn.event === "defender" ?
+                                                    <FoolButtonTake timer={timer} websocket={websocket}/> :
+                                                    response.event === 'auth' || response.event === 'new_player' ?
+                                                        <FoolButtonReady roomId={roomId}/> :
+                                                        <FoolButtonWaiting/>
+                                        }
+                                    </> : ""
                                 }
 
                             </div>
