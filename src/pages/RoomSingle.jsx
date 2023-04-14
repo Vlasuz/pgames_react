@@ -26,6 +26,7 @@ const RoomSingle = () => {
     const [socketClose, setSocketClose] = useState(false)
 
     const {roomId} = useParams()
+    const [isReady, setIsReady] = useState(false);
     const [isLoad, setIsLoad] = useState(true)
     const [response, setResponse] = useState({})
     const [trump, setTrump] = useState({})
@@ -40,8 +41,15 @@ const RoomSingle = () => {
     const [fixedTime, setFixedTime] = useState(0)
     const [isEndGame, setIsEndGame] = useState(false)
     const [isGameStart, setIsGameStart] = useState(false)
-    const [isAttacker, setIsAttacker] = useState(false)
     const [infoRoom, setInfoRoom] = useState({})
+    const [defenderTake, setDefenderTake] = useState({})
+    const [cardsLeft, setCardsLeft] = useState({})
+    const [playersWhoReady, setPlayersWhoReady] = useState([])
+    const [playersQuantityCards, setPlayersQuantityCards] = useState([])
+    const [allCardsCount, setAllCardsCount] = useState(0)
+    const [isCardsBeat, setIsCardsBeat] = useState(false)
+    const [attacker, setAttacker] = useState({})
+    const [defender, setDefender] = useState({})
 
     const players = useSelector(state => state.gamesListPlayersReducer.players)
     const user = useSelector(state => state.userInfoReducer.data)
@@ -51,7 +59,6 @@ const RoomSingle = () => {
 
     websocket.onmessage = (e) => {
         const data = JSON.parse(e.data)
-        console.log("socket message", data)
         setResponse(data)
 
         setTimeout(() => {
@@ -61,7 +68,28 @@ const RoomSingle = () => {
         data.data?.timeout && setTimer(data.data?.timeout)
         data.data?.timeout && setFixedTime(data.data?.timeout)
 
-        socketMessages(data, setTrump, setUserTurn, setIsWinner, setIsEndGame, setIsGameStart, setIsAttacker, dispatch, setMyCards, setCardsOnTable, setSelectedCard, user)
+        socketMessages(
+            data,
+            setTrump,
+            setUserTurn,
+            setIsWinner,
+            setIsEndGame,
+            setIsGameStart,
+            dispatch,
+            setMyCards,
+            setCardsOnTable,
+            cardsOnTable,
+            setSelectedCard,
+            user,
+            setDefenderTake,
+            setCardsLeft,
+            setPlayersWhoReady,
+            setPlayersQuantityCards,
+            setAllCardsCount,
+            setIsCardsBeat,
+            setAttacker,
+            setDefender
+        )
     }
     websocket.onerror = (e) => console.log('GAME socket Error')
     websocket.onclose = () => setSocketClose(true)
@@ -143,7 +171,9 @@ const RoomSingle = () => {
                                         <span className="game__bet--value">
                                             {infoRoom.bet}
                                         </span>
-                                        <img src={infoRoom.bet_type === 'chips' ? "../images/icons/chip.svg" : "../images/icons/dollar-circle.svg"} alt="" className="game__bet--currency"/>
+                                        <img
+                                            src={infoRoom.bet_type === 'chips' ? "../images/icons/chip.svg" : "../images/icons/dollar-circle.svg"}
+                                            alt="" className="game__bet--currency"/>
                                     </div>
                                 </div>
                                 <div className="game__grid--item">
@@ -155,6 +185,10 @@ const RoomSingle = () => {
                                                 timer={timer}
                                                 isEndGame={isEndGame}
                                                 isGameStart={isGameStart}
+                                                cardsLeft={cardsLeft}
+                                                playersWhoReady={playersWhoReady}
+                                                defenderTake={defenderTake}
+                                                playersQuantityCards={playersQuantityCards}
                                                 player={players.filter(item => item.position === setPosition(3, players, user))[0]}/> :
                                             <GamePlayerWaiting/>
                                     }
@@ -169,6 +203,10 @@ const RoomSingle = () => {
                                                 timer={timer}
                                                 isEndGame={isEndGame}
                                                 isGameStart={isGameStart}
+                                                cardsLeft={cardsLeft}
+                                                playersWhoReady={playersWhoReady}
+                                                defenderTake={defenderTake}
+                                                playersQuantityCards={playersQuantityCards}
                                                 player={players.filter(item => item.position === setPosition(4, players, user))[0]}/> :
                                             <GamePlayerWaiting/>
                                     }
@@ -184,14 +222,21 @@ const RoomSingle = () => {
                                                 timer={timer}
                                                 isEndGame={isEndGame}
                                                 isGameStart={isGameStart}
+                                                cardsLeft={cardsLeft}
+                                                playersWhoReady={playersWhoReady}
+                                                defenderTake={defenderTake}
+                                                playersQuantityCards={playersQuantityCards}
                                                 player={players.filter(item => item.position === setPosition(5, players, user))[0]}/> :
                                             <GamePlayerWaiting/>
                                     }
 
                                 </div>
-                                <div className="game__grid--item">
-                                    {!!Object.keys(trump).length && <form action="#" className="game__cards">
-                                        <button className="game__cards--element">
+                                <div className="game__grid--item" style={{paddingTop: allCardsCount < 1 ? 80 : 130}}>
+                                    <form action="#" className="game__cards">
+                                        {allCardsCount < 1 ? <div className="game__cards--symbol">
+                                            <img src={`../images/game/cards/symbols/${trump.suit}.svg`} alt=""/>
+                                        </div> : ""}
+                                        <button className={"game__cards--element" + (allCardsCount > 0 ? "" : " _hidden")}>
                                             <div className="game__cards--back">
                                                 <img src="../images/game/cards/Back.svg" alt=""/>
                                             </div>
@@ -200,7 +245,7 @@ const RoomSingle = () => {
                                                      alt=""/>
                                             </div>
                                         </button>
-                                    </form>}
+                                    </form>
                                 </div>
                                 <div className="game__grid--item">
 
@@ -212,6 +257,10 @@ const RoomSingle = () => {
                                                 timer={timer}
                                                 isEndGame={isEndGame}
                                                 isGameStart={isGameStart}
+                                                cardsLeft={cardsLeft}
+                                                playersWhoReady={playersWhoReady}
+                                                defenderTake={defenderTake}
+                                                playersQuantityCards={playersQuantityCards}
                                                 player={players.filter(item => item.position === setPosition(2, players, user))[0]}/> :
                                             <GamePlayerWaiting/>
                                     }
@@ -227,6 +276,10 @@ const RoomSingle = () => {
                                                 timer={timer}
                                                 isEndGame={isEndGame}
                                                 isGameStart={isGameStart}
+                                                cardsLeft={cardsLeft}
+                                                playersWhoReady={playersWhoReady}
+                                                defenderTake={defenderTake}
+                                                playersQuantityCards={playersQuantityCards}
                                                 player={players.filter(item => item.position === setPosition(6, players, user))[0]}/> :
                                             <GamePlayerWaiting/>
                                     }
@@ -321,10 +374,13 @@ const RoomSingle = () => {
                                                            setMyCards={setMyCards}
                                                            trump={trump}
                                                            setWrongStep={setWrongStep}
-                                                           isAttacker={isAttacker}
                                                            user={user}
                                                            players={players}
-                                                           userTurn={userTurn.id === user.id && userTurn}
+                                                           userTurn={userTurn}
+                                                           defenderTake={defenderTake}
+                                                           isCardsBeat={isCardsBeat}
+                                                           attacker={attacker}
+                                                           defender={defender}
                                         />
                                 }
 
@@ -347,8 +403,9 @@ const RoomSingle = () => {
                                                                 cardsOnTable={cardsOnTable}/> :
                                                 userTurn.id === user.id && userTurn.event === "defender" ?
                                                     <FoolButtonTake timer={timer} websocket={websocket}/> :
-                                                    response.event === 'auth' || response.event === 'new_player' ?
-                                                        <FoolButtonReady roomId={roomId}/> :
+                                                    !isReady ?
+                                                        <FoolButtonReady setIsReady={setIsReady}
+                                                                         websocket={websocket}/> :
                                                         <FoolButtonWaiting/>
                                         }
                                     </> : ""

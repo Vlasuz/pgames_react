@@ -17235,20 +17235,159 @@ label._error .popup-input-placeholder{
     opacity: .3;
 }
 
-.game__table-cards--item{
+.game__table-cards--card{
     top: 0;
+    left: 0;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
 }
-.game__table-cards--item.game__table-cards--item_from-position-2 .game__table-cards--card{
+.game__table-cards--item_defender-from-position-6 .game__table-cards--card:last-child,
+.game__table-cards--item_defender-from-position-5 .game__table-cards--card:last-child,
+.game__table-cards--item_defender-from-position-4 .game__table-cards--card:last-child,
+.game__table-cards--item_defender-from-position-3 .game__table-cards--card:last-child,
+.game__table-cards--item_defender-from-position-2 .game__table-cards--card:last-child,
+.game__table-cards--item_attacker-from-position-6 .game__table-cards--card:first-child,
+.game__table-cards--item_attacker-from-position-5 .game__table-cards--card:first-child,
+.game__table-cards--item_attacker-from-position-4 .game__table-cards--card:first-child,
+.game__table-cards--item_attacker-from-position-3 .game__table-cards--card:first-child,
+.game__table-cards--item_attacker-from-position-2 .game__table-cards--card:first-child{
     padding: 0;
     width: 0;
     max-width: 0;
-}
-.game__table-cards--item.game__table-cards--item_from-position-2{
     left: -480px;
     transform: scale(.6);
     top: 40px;
     z-index: 3;
-    /*padding: 0;*/
+}
+/*.game__table-cards--item_defender-from-position-6 .game__table-cards--card:last-child,*/
+/*.game__table-cards--item_defender-from-position-5 .game__table-cards--card:last-child,*/
+/*.game__table-cards--item_defender-from-position-4 .game__table-cards--card:last-child,*/
+/*.game__table-cards--item_defender-from-position-3 .game__table-cards--card:last-child,*/
+/*.game__table-cards--item_defender-from-position-2 .game__table-cards--card:last-child,*/
+/*.game__table-cards--item_attacker-from-position-6 .game__table-cards--card:first-child,*/
+/*.game__table-cards--item_attacker-from-position-5 .game__table-cards--card:first-child,*/
+/*.game__table-cards--item_attacker-from-position-4 .game__table-cards--card:first-child,*/
+/*.game__table-cards--item_attacker-from-position-3 .game__table-cards--card:first-child,*/
+/*.game__table-cards--item_attacker-from-position-2 .game__table-cards--card:first-child{*/
+/*    left: -480px;*/
+/*    transform: scale(.6);*/
+/*    top: 40px;*/
+/*    z-index: 3;*/
+/*    padding: 0;*/
+/*}*/
+
+.game__table-cards--item_defender-from-position-6 .game__table-cards--card:last-child,
+.game__table-cards--item_attacker-from-position-6 .game__table-cards--card:first-child{
+    left: 480px;
+}
+.game__table-cards--item_defender-from-position-5 .game__table-cards--card:last-child,
+.game__table-cards--item_attacker-from-position-5 .game__table-cards--card:first-child{
+    left: 320px;
+    top: -200px;
+}
+.game__table-cards--item_defender-from-position-4 .game__table-cards--card:last-child,
+.game__table-cards--item_attacker-from-position-4 .game__table-cards--card:first-child{
+    left: 60px;
+    top: -200px;
+}
+.game__table-cards--item_defender-from-position-3 .game__table-cards--card:last-child,
+.game__table-cards--item_attacker-from-position-3 .game__table-cards--card:first-child{
+    left: -210px;
+    top: -200px;
+}
+.game__table-cards--item_defender-from-position-2 .game__table-cards--card:last-child,
+.game__table-cards--item_attacker-from-position-2 .game__table-cards--card:first-child{
+    left: 480px;
+}
+
+.game__table-cards--item_take-other{
+    padding: 0;
+    max-width: 0;
+    min-width: 0;
+    left: 300px;
+    bottom: -220px;
+}
+
+.game__table-cards--item,
+.game__grid--item{
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+.game__table-cards--item{
+    bottom: 0;
+}
+.game__table-cards--item_cards-beat,
+.game__table-cards--item_take-other-to-6,
+.game__table-cards--item_take-other-to-5,
+.game__table-cards--item_take-other-to-4,
+.game__table-cards--item_take-other-to-3,
+.game__table-cards--item_take-other-to-2,
+.game__table-cards--item_take-me{
+    max-width: 0;
+    padding: 0;
+    min-width: 0;
+    width: 0;
+    bottom: -230px;
+    left: 360px;
+}
+
+.game__table-cards--item_take-other-to-6{
+    bottom: -50px;
+    left: 500px;
+    -webkit-transform: scale(.5);
+    -moz-transform: scale(.5);
+    -ms-transform: scale(.5);
+    -o-transform: scale(.5);
+    transform: scale(.5);
+}
+.game__table-cards--item_take-other-to-5{
+    bottom: 190px;
+    left: 450px;
+    -webkit-transform: scale(.5);
+    -moz-transform: scale(.5);
+    -ms-transform: scale(.5);
+    -o-transform: scale(.5);
+    transform: scale(.5);
+}
+.game__table-cards--item_take-other-to-4{
+    bottom: 190px;
+    left: 180px;
+    -webkit-transform: scale(.5);
+    -moz-transform: scale(.5);
+    -ms-transform: scale(.5);
+    -o-transform: scale(.5);
+    transform: scale(.5);
+}
+.game__table-cards--item_take-other-to-3{
+    bottom: 190px;
+    left: -100px;
+    -webkit-transform: scale(.5);
+    -moz-transform: scale(.5);
+    -ms-transform: scale(.5);
+    -o-transform: scale(.5);
+    transform: scale(.5);
+}
+.game__table-cards--item_take-other-to-2{
+    bottom: -40px;
+    left: -330px;
+    -webkit-transform: scale(.5);
+    -moz-transform: scale(.5);
+    -ms-transform: scale(.5);
+    -o-transform: scale(.5);
+    transform: scale(.5);
+}
+
+.game__table-cards--item_cards-beat{
+    bottom: 160px;
+    left: -540px;
+    transform: scale(.5);
 }
 
 /*NEW STYLE*/

@@ -6,8 +6,6 @@ const initialState = {
 
 export const myStepReducer = (state = initialState, action) => {
 
-    console.log(action.step)
-
     switch(action.type) {
         case WHICH_MY_STEP:
             return{
