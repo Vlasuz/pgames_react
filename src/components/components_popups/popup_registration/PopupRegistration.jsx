@@ -18,7 +18,7 @@ const PopupRegistration = () => {
                         <PopupCross/>
 
                         <div className="registration-popup__logo popup-logo">
-                            <img src="../images/logo.svg" width="100" height="38" alt="" className="popup-logo__img" />
+                            <img src="images/logo.svg" width="100" height="38" alt="" className="popup-logo__img" />
                         </div>
                         <h2 className="registration-popup__title popup-title section-title _center">
                             Регистрация
