@@ -1,11 +1,10 @@
 import React from 'react';
+import PopupLogin from "../components/components_popups/popup_login/PopupLogin";
+import {popupTitle} from "../redux/actions";
 
-const OpenPopup = (e, popupClass) => {
-    e.preventDefault()
-    document.querySelectorAll(".popup").forEach(popup => popup.classList.remove('_active'))
-    let popup = e.target?.closest('a').getAttribute('href')?.replace("#", ".")
+const OpenPopup = (popup) => {
 
-    popupClass ? document.querySelector(popupClass).classList.add('_active') : document.querySelector(popup).classList.add('_active')
+
 
 };
 

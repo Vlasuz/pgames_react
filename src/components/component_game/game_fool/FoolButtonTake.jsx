@@ -15,7 +15,7 @@ const FoolButtonTake = ({websocket, timer}) => {
                 Осталось:
                 <b>{timer} сек</b>
             </div>
-            <button className="game__user-menu--main-btn btn _large _shadow" type="button" onClick={handleTake}>
+            <button className="game__user-menu--main-btn btn _large _shadow _red" type="button" onClick={handleTake}>
                 Взять карты
             </button>
         </div>

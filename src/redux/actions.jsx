@@ -7,7 +7,7 @@ import {
     BALANCE_VALUE,
     CARDS_VALUE,
     THREE_CARDS_DEALING,
-    CARDS_DELETE_VALUE, RESULT_OF_GAME, CARDS_VALUE_LFT, CARDS_VALUE_RHT
+    CARDS_DELETE_VALUE, RESULT_OF_GAME, CARDS_VALUE_LFT, CARDS_VALUE_RHT, SET_POPUP_TITLE
 } from "./types";
 
 export function actionLogout() {
@@ -88,5 +88,11 @@ export function resultOfGame(num) {
     return{
         type: RESULT_OF_GAME,
         num
+    }
+}
+export function popupTitle(popup) {
+    return{
+        type: SET_POPUP_TITLE,
+        popup
     }
 }

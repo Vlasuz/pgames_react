@@ -1,7 +1,12 @@
 import React from 'react';
+import {useDispatch} from "react-redux";
+import {popupTitle} from "../redux/actions";
 
 const ClosePopup = () => {
-    document.querySelectorAll(".popup").forEach(popup => popup.classList.remove('_active'))
+    const dispatch = useDispatch()
+
+    document.querySelector('.popup')?.classList.remove('_active')
+    dispatch(popupTitle(''))
 };
 
 export default ClosePopup;

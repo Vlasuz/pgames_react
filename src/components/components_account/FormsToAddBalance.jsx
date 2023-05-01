@@ -1,24 +1,30 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import axios from "axios";
+import GlobalLink from "../../GlobalLink";
+import GetCookies from "../../hooks/GetCookies";
 
 const FormsToAddBalance = () => {
 
     const [isOpenVarious, setIsOpenVarious] = useState(false)
-    const [isBalanceChips, setIsBalanceChips] = useState(true)
+    const [isBalanceChips, setIsBalanceChips] = useState('chips')
+    const [inputCash, setInputCash] = useState('')
 
-
-    const handleFastAdd = (e) => {
-        let accountBalanceMinBtn = e.target.closest('button');
-        const parent = accountBalanceMinBtn.closest('.account-balance__block'),
-            input = parent.querySelector('.account-balance__input'),
-            value = accountBalanceMinBtn.dataset.value;
-
-        input.value = value;
+    const addCash = (e) => {
+        e.preventDefault()
+        axios.defaults.headers.post['Authorization'] = `Bearer ${GetCookies('access_token')}`;
+        axios.post(GlobalLink('/api/finance/replenish_balance/'), {
+            "amount": +inputCash,
+            "service": "visa",
+            "currency_type": isBalanceChips
+        }).then(({data}) => {
+            console.log('add cash', data)
+        })
     }
 
     return (
         <>
-            <form action="#" className={"account-balance__block" + (isBalanceChips ? " _visible" : "")}
-                  id="balance-chips">
+            <form action="#" className={"account-balance__block" + (isBalanceChips === 'chips' ? " _visible" : "")}
+                  id="balance-chips" onSubmit={addCash}>
                 <div className="account-balance__block--body">
                     <div className="account-balance__block--header">
                         <button
@@ -37,7 +43,7 @@ const FormsToAddBalance = () => {
                         <div className="account-balance__list">
                             <button type="button"
                                     className="account-balance__list--btn"
-                                    onClick={e => {setIsBalanceChips(prev => !prev); setIsOpenVarious(prev => !prev)}}
+                                    onClick={e => {setIsBalanceChips("money"); setIsOpenVarious(prev => !prev)}}
                             >
                                 <svg width="20" height="21" viewBox="0 0 20 21"
                                      fill="none"
@@ -57,8 +63,10 @@ const FormsToAddBalance = () => {
                         </div>
                     </div>
                     <label className="account-balance__label form-label">
-                        <input type="number" min="1" max="100" name="chips"
+                        <input type="number" min="1" name="chips"
                                placeholder="10 фишек"
+                               value={inputCash}
+                               onChange={e => setInputCash(e.target.value)}
                                className="account-balance__input form-input"
                                required/>
                         <span
@@ -74,19 +82,19 @@ const FormsToAddBalance = () => {
                 <div className="account-balance__btn-list">
                     <button type="button" className="account-balance__min-btn"
                             data-value="10"
-                            onClick={handleFastAdd}
+                            onClick={_ => setInputCash('10')}
                     >
                         10
                     </button>
                     <button type="button" className="account-balance__min-btn"
                             data-value="25"
-                            onClick={handleFastAdd}
+                            onClick={_ => setInputCash('25')}
                     >
                         25
                     </button>
                     <button type="button" className="account-balance__min-btn"
                             data-value="50"
-                            onClick={handleFastAdd}
+                            onClick={_ => setInputCash('50')}
                     >
                         50
                     </button>
@@ -106,8 +114,8 @@ const FormsToAddBalance = () => {
                     Пополнить баланс
                 </button>
             </form>
-            <form action="#" className={"account-balance__block" + (!isBalanceChips ? " _visible" : "")}
-                  id="balance-money">
+            <form action="#" className={"account-balance__block" + (isBalanceChips === 'money' ? " _visible" : "")}
+                  id="balance-money" onSubmit={addCash}>
                 <div className="account-balance__block--body">
                     <div className="account-balance__block--header">
                         <button
@@ -133,7 +141,7 @@ const FormsToAddBalance = () => {
                         <div className="account-balance__list">
                             <button type="button"
                                     className="account-balance__list--btn"
-                                    onClick={e => {setIsBalanceChips(prev => !prev); setIsOpenVarious(prev => !prev)}}
+                                    onClick={e => {setIsBalanceChips('chips'); setIsOpenVarious(prev => !prev)}}
                             >
                                 <svg width="17" height="17" viewBox="0 0 17 17"
                                      fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -148,6 +156,8 @@ const FormsToAddBalance = () => {
                     <label className="account-balance__label form-label">
                         <input type="number" min="5" max="5000" name="money"
                                placeholder="5$"
+                               value={inputCash}
+                               onChange={e => setInputCash(e.target.value)}
                                className="account-balance__input form-input"
                                required/>
                         <span
@@ -163,19 +173,19 @@ const FormsToAddBalance = () => {
                 <div className="account-balance__btn-list">
                     <button type="button" className="account-balance__min-btn"
                             data-value="10"
-                            onClick={handleFastAdd}
+                            onClick={_ => setInputCash('10')}
                     >
                         10
                     </button>
                     <button type="button" className="account-balance__min-btn"
                             data-value="25"
-                            onClick={handleFastAdd}
+                            onClick={_ => setInputCash('25')}
                     >
                         25
                     </button>
                     <button type="button" className="account-balance__min-btn"
                             data-value="50"
-                            onClick={handleFastAdd}
+                            onClick={_ => setInputCash('50')}
                     >
                         50
                     </button>

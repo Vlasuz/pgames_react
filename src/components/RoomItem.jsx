@@ -15,15 +15,6 @@ const RoomItem = ({ game }) => {
 
     const dispatch = useDispatch()
 
-    const balance = useSelector(state => {
-        const { accountBalanceReducer } = state;
-        return accountBalanceReducer.balance
-    })
-    const auth = useSelector(state => {
-        const { logoutReducer } = state;
-        return logoutReducer.auth
-    })
-
     const handleEntry = (e) => {
 
         axios.defaults.headers.post['platform'] = `pc`;
@@ -32,6 +23,10 @@ const RoomItem = ({ game }) => {
             console.log('join room', res.data)
             navigate('/rooms/'+game?.id)
             dispatch(setGamePlayers(res.data.players))
+        }).catch(error => {
+            if(error.message.includes('401')) {
+                ActiveNotification('#notification_not-auth')
+            }
         })
 
         // if(auth){

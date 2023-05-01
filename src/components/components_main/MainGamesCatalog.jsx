@@ -33,8 +33,8 @@ const MainGamesCatalog = ({ games }) => {
                                 className={"games__filter--btn tab-btn" + (itemNum === 0 ? " _active" : "")}
                                 onClick={e => catalogClick(e, itemNum)}
                             >
-                                {/*<img src={item.icon} width="13" height="13" alt=""*/}
-                                {/*     className="games__filter--icon"/>*/}
+                                <img src={`../images/icons/${item.slug}.svg`} width="13" height="13" alt=""
+                                     className="games__filter--icon"/>
                                 {item.name}
                             </button>
                         </li>

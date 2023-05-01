@@ -5,9 +5,6 @@ const cardEvent = (item, e, setWrongStep, userTurn, user, cardsOnTable, websocke
 
     if (userTurn.id === user.id) {
 
-        console.log("Card move", item)
-        console.log("Card move", e)
-
         if (((userTurn.event === "attacker" || userTurn.event === "sub_attacker") &&
                 (cardsOnTable.some(card => card.attacker_card?.rank === item.rank) || cardsOnTable.some(card => card.defence_card?.rank === item.rank))) ||
             cardsOnTable.length === 0) {
@@ -39,18 +36,21 @@ const cardEvent = (item, e, setWrongStep, userTurn, user, cardsOnTable, websocke
                 e.target.closest('li').style.top = `0px`;
                 e.target.closest('li').style.left = `0px`;
                 e.target.closest('li').querySelector('.game-user-cards__item--body').style.width = `100%`
-                e.target.closest('li').querySelector('.game-user-cards__item--body').style.height = `155px`
+                console.log('window.innerWidth', window.innerWidth)
+                if(window.innerWidth > 900) {
+                    e.target.closest('li').querySelector('.game-user-cards__item--body').style.height = `155px`
+                } else {
+                    e.target.closest('li').querySelector('.game-user-cards__item--body').style.height = `85px`
+                }
                 setTimeout(() => {
                     e.target.closest('li').style.transition = `all .3s ease`;
                 }, 100)
 
-                setTimeout(() => {
-                    setMyCards(prev => prev.filter(card => {
-                        if (!(card.suit === item.suit && card.rank === item.rank)) {
-                            return card
-                        }
-                    }))
-                }, 50)
+                setMyCards(prev => prev.filter(card => {
+                    if (!(card.suit === item.suit && card.rank === item.rank)) {
+                        return card
+                    }
+                }))
             }, 300)
         } else if (userTurn.event === "defender") {
 

@@ -5,8 +5,7 @@ const setPosition = (num, players, user) => {
 
     if (yourPosition !== 1 && yourPosition !== undefined) {
 
-        let newPosition = yourPosition - 1 + num;
-        return newPosition > 6 ? 7 - num : newPosition;
+        return yourPosition - 1 + num > 6 ? (yourPosition - 1 + num) - 6 : yourPosition - 1 + num
 
     } else {
         return num;

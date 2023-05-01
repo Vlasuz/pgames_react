@@ -1,22 +1,32 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import axios from "axios";
 
 const FooterInfo = () => {
+
+    const [contacts, setContacts] = useState({})
+
+    useEffect(() => {
+        axios.get('https://board-games.sonisapps.com/api/landing/contacts/').then(res => {
+            setContacts(res.data)
+        }).catch(er => console.log('CONTACTS', er))
+    }, [])
+
     return (
         <div className="footer__intro">
             <a href="index.html" className="footer__logo">
                 <img src="../images/logo.svg" width="100" height="39" loading="lazy" alt="" className="footer__logo--img"/>
             </a>
             <div className="footer__contacts">
-                <a href="tel:+38098111111" className="footer__contacts--link" aria-label="+38098111111">
+                <a href={`tel:${contacts.support_phone_number?.replace(/[^+0-9]/g,'')}`} className="footer__contacts--link" aria-label="+38098111111">
                     <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
                          xmlns="http://www.w3.org/2000/svg">
                         <path d="M0.599373 10.6435L4.03698 9.36192C4.44189 9.20955 4.91682 9.3123 5.19183 9.60931L6.58873 11.092C8.78279 10.1553 10.565 8.60405 11.6422 6.69795L9.93731 5.4847C9.59672 5.24279 9.48076 4.83207 9.65299 4.47999L11.1266 1.49094C11.3196 1.10774 11.7951 0.898094 12.2605 0.992036L15.4542 1.63255C15.9056 1.72208 16.2215 2.06782 16.2215 2.47168C16.2215 9.42225 9.72016 15.0753 1.72653 15.0753C1.26174 15.0753 0.865384 14.8007 0.76178 14.408L0.0251496 11.6311C-0.0815272 11.2275 0.158915 10.8088 0.599373 10.6435Z" fill="#F9F1DF"/>
                     </svg>
                     <span>
-                                +38098111111
-                            </span>
+                        {contacts.support_phone_number}
+                    </span>
                 </a>
-                <a href="mailto:boardgames@gmail.com" className="footer__contacts--link"
+                <a href={`mailto:${contacts.support_email}`} className="footer__contacts--link"
                    aria-label="boardgames@gmail.com">
                     <svg width="18" height="12" viewBox="0 0 18 12" fill="none"
                          xmlns="http://www.w3.org/2000/svg">
@@ -25,14 +35,14 @@ const FooterInfo = () => {
                             fill="#F9F1DF"/>
                     </svg>
                     <span>
-                                boardgames@gmail.com
-                            </span>
+                        {contacts.support_email}
+                    </span>
                 </a>
             </div>
             <div className="footer__social">
                 <ul className="footer__social--list">
                     <li className="footer__social--item">
-                        <a href="#" className="footer__social--link" title="Instagram">
+                        <a href={contacts.instagram} className="footer__social--link" title="Instagram">
                             <svg width="21" height="21" viewBox="0 0 21 21" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -42,7 +52,7 @@ const FooterInfo = () => {
                         </a>
                     </li>
                     <li className="footer__social--item">
-                        <a href="#" className="footer__social--link" title="Twitter">
+                        <a href={contacts.twitter} className="footer__social--link" title="Twitter">
                             <svg width="27" height="20" viewBox="0 0 27 20" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -52,7 +62,7 @@ const FooterInfo = () => {
                         </a>
                     </li>
                     <li className="footer__social--item">
-                        <a href="#" className="footer__social--link" title="Telegram">
+                        <a href={contacts.telegram} className="footer__social--link" title="Telegram">
                             <svg width="24" height="23" viewBox="0 0 24 23" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path fillRule="evenodd" clipRule="evenodd"
@@ -62,7 +72,7 @@ const FooterInfo = () => {
                         </a>
                     </li>
                     <li className="footer__social--item">
-                        <a href="#" className="footer__social--link" title="Facebook">
+                        <a href={contacts.facebook} className="footer__social--link" title="Facebook">
                             <svg width="24" height="23" viewBox="0 0 24 23" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path

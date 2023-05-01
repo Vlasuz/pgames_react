@@ -17,10 +17,12 @@ const HeaderMobNav = () => {
         return accountInformationReducer.info
     })
 
+    const auth = useSelector(state => state.logoutReducer.auth)
+
     return (
         <div className="header__nav-mob--body">
             <ul className="header__nav-mob--list">
-                <li className="header__nav-mob--item">
+                {auth && <li className="header__nav-mob--item">
                     <div
                         className={"header__nav-mob--account header__mob-account header__mob-select custom-select" + (isAccountMobMenuOpen ? " _active" : "")}>
                         <button type="button" title="Профиль"
@@ -28,7 +30,8 @@ const HeaderMobNav = () => {
                                 onClick={() => setIsAccountMobMenuOpen(prev => !prev)}
                         >
                             <picture>
-                                <img src={photo ? photo : "images/account/avatar-none.svg"} width="27" height="27" alt=""
+                                <img src={photo ? photo : "images/account/avatar-none.svg"} width="27" height="27"
+                                     alt=""
                                      loading="lazy" className="header__mob-account--avatar"/>
                             </picture>
                             <span className="header__mob-account--name">
@@ -146,7 +149,7 @@ const HeaderMobNav = () => {
                             </ul>
                         </div>
                     </div>
-                </li>
+                </li>}
                 <li className="header__nav-mob--item">
                     <NavLink to={'/'} className="header__nav-mob--link">
                         Главная

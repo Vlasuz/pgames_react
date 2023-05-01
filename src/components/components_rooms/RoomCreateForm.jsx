@@ -10,18 +10,9 @@ import OpenPopup from "../../hooks/OpenPopup";
 const RoomCreateForm = () => {
     const navigate = useNavigate()
 
-    const balance = useSelector(state => {
-        const { accountBalanceReducer } = state;
-        return accountBalanceReducer.balance
-    })
-    const games = useSelector(state => {
-        const {GamesListReducer} = state;
-        return GamesListReducer.games
-    })
-    const auth = useSelector(state => {
-        const {logoutReducer} = state;
-        return logoutReducer.auth
-    })
+    const balance = useSelector(state => state.accountBalanceReducer.balance)
+    const games = useSelector(state => state.gamesListReducer.games)
+    const auth = useSelector(state => state.logoutReducer.auth)
 
     const [gameIs, setGameIs] = useState(games[0].id)
     const [currency, setCurrency] = useState('chips')

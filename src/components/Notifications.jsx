@@ -7,6 +7,10 @@ import NotificationSendEmailError from "./components_notifications/NotificationS
 import NotificationAddBonus from "./components_notifications/NotificationAddBonus";
 import NotificationNotEnoughBalance from "./components_notifications/NotificationNotEnoughBalance";
 import NotificationNotAuth from "./components_notifications/NotificationNotAuth";
+import NotificationInDevelop from "./components_notifications/NotificationInDevelop";
+import NotificationPromoCode404 from "./components_notifications/NotificationPromoCode404";
+import NotificationPromoCode409 from "./components_notifications/NotificationPromoCode409";
+import NotificationPromoCodeSuccess from "./components_notifications/NotificationPromoCodeSuccess";
 
 const Notifications = () => {
 
@@ -41,6 +45,10 @@ const Notifications = () => {
                     <NotificationAddBonus handleClose={handleClose}/>
                     <NotificationNotEnoughBalance handleClose={handleClose}/>
                     <NotificationNotAuth handleClose={handleClose}/>
+                    <NotificationInDevelop handleClose={handleClose}/>
+                    <NotificationPromoCode404 handleClose={handleClose}/>
+                    <NotificationPromoCode409 handleClose={handleClose}/>
+                    <NotificationPromoCodeSuccess handleClose={handleClose}/>
 
                     <li id={"notification_game-is-run"} className="notifications__item notification-item">
                         <div className="notification-item__body">
@@ -78,7 +86,6 @@ const Notifications = () => {
                             </div>
                         </div>
                     </li>
-
                     <li className="notifications__item notification-item">
                         <div className="notification-item__body">
                             <div className="notification-item__header _error">

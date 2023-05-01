@@ -3,7 +3,7 @@ import {Link, NavLink, useNavigate} from "react-router-dom";
 import OpenPopup from "../../hooks/OpenPopup";
 import {useDispatch, useSelector} from "react-redux";
 import {logoutReducer} from "../../redux/reducers/logoutReducer";
-import {actionLogout} from "../../redux/actions";
+import {actionLogout, popupTitle} from "../../redux/actions";
 
 const AccountAside = () => {
 
@@ -77,7 +77,7 @@ const AccountAside = () => {
                         </NavLink>
                     </li>
                     <li className="account-aside__item _border">
-                        <a onClick={OpenPopup} href="#promocode-popup" className="account-aside__link _accent open-popup">
+                        <button onClick={_ => dispatch(popupTitle('promo-code'))} className="account-aside__link _accent open-popup">
                             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -85,10 +85,10 @@ const AccountAside = () => {
                                     fill="#61C8AF"/>
                             </svg>
                             Промокод
-                        </a>
+                        </button>
                     </li>
                     <li className="account-aside__item">
-                        <a onClick={OpenPopup} href="#subscribe-popup" className="account-aside__link open-popup">
+                        <a onClick={_ => dispatch(popupTitle('promo-code'))} className="account-aside__link open-popup">
                             <svg width="13" height="12" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M12.7887 5.20202L8.32012 9.24972C7.92963 9.60601 7.31241 9.3179 7.31241 8.76325V6.4316C3.37426 6.49053 1.67723 7.52188 2.82838 11.4062C2.95612 11.8372 2.46252 12.1713 2.11596 11.905C1.00517 11.0526 0 9.42385 0 7.77637C0 3.69919 3.23462 2.83661 7.31216 2.78571V0.643186C7.31216 0.0894718 7.92862 -0.199574 8.31987 0.15671L12.7884 4.20442C13.0705 4.48409 13.0705 4.94485 12.7887 5.20202Z" fill="#F9F1DF"></path>
                             </svg>

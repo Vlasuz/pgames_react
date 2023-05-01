@@ -4,28 +4,31 @@ import ActiveNotification from "../../../hooks/ActiveNotification";
 import {useDispatch, useSelector} from "react-redux";
 import {accountBalanceReducer} from "../../../redux/reducers/accountBalanceReducer";
 import {addBalance} from "../../../redux/actions";
+import axios from "axios";
+import GetCookies from "../../../hooks/GetCookies";
 
 const PopupPromocodeForm = () => {
 
     const [inputValue, setInputValue] = useState('')
 
-    const balance = useSelector(state => {
-        const { accountBalanceReducer } = state
-        return accountBalanceReducer.balance
-    })
-
     const dispatch = useDispatch()
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        if(inputValue.toLowerCase() === 'хочубонус!'){
-            ActiveNotification('#notification_add-bonus')
-            dispatch(addBalance({
-                chips: balance.chips + 20,
-                money: balance.money
-            }))
-            ClosePopup(e, "#promocode-popup")
-        }
+
+        axios.defaults.headers.post['Authorization'] = `Bearer ${GetCookies('access_token')}`;
+        axios.post(`https://board-games.sonisapps.com/api/finance/promo_code/?code=${inputValue}`).then(res => {
+            console.log(res.data)
+            ActiveNotification('#notification_promocode-success')
+        }).catch(er => {
+
+            if(er.response.status === 404) {
+                ActiveNotification('#notification-promo-404')
+            } else if (er.response.status === 409) {
+                ActiveNotification('#notification-promo-409')
+            }
+
+        })
     }
 
     return (

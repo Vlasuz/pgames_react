@@ -23,8 +23,8 @@ const MainRoomsList = () => {
         <ul className="rooms__list">
 
             {
-                rooms?.map(game =>
-                    <RoomItem key={game.id} game={game} />
+                rooms?.map((game, index) =>
+                    index < 10 && <RoomItem key={index} game={game} />
                 )
             }
 

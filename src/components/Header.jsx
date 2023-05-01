@@ -3,11 +3,12 @@ import {Link, NavLink} from "react-router-dom";
 import HeaderAccount from "./components_header/HeaderAccount";
 import HeaderLanguages from "./components_header/HeaderLanguages";
 import HeaderNotifications from "./components_header/HeaderNotifications";
-import {connect, useSelector} from "react-redux";
+import {connect, useDispatch, useSelector} from "react-redux";
 import HeaderMobBurgerMenu from "./components_header/HeaderMobBurgerMenu";
 import OpenPopup from "../hooks/OpenPopup";
 import i18next from "i18next";
 import HeaderBalance from "./components_header/HeaderBalance";
+import {popupTitle} from "../redux/actions";
 
 const Header = (props) => {
 
@@ -20,9 +21,11 @@ const Header = (props) => {
     ]
 
     const isLogout = useSelector(state => {
-        const { logoutReducer } = state
+        const {logoutReducer} = state
         return logoutReducer.auth
     })
+
+    const dispatch = useDispatch()
 
 
     return (
@@ -57,12 +60,14 @@ const Header = (props) => {
                         <HeaderLanguages/>
 
 
-                        { isLogout ? <HeaderAccount /> : <a className={'link-to-register btn _gradient _shadow'} onClick={OpenPopup} href={"#login-popup"}>Войти</a> }
+                        {isLogout ? <HeaderAccount/> :
+                            <a className={'link-to-register btn _gradient _shadow'} onClick={_ => dispatch(popupTitle('login'))}
+                               href={"#login-popup"}>Войти</a>}
 
                     </div>
                 </nav>
 
-                <HeaderMobBurgerMenu />
+                <HeaderMobBurgerMenu/>
 
             </div>
         </header>

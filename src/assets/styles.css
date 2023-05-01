@@ -3251,7 +3251,7 @@ a.page-pagination__btn{
     right: 0;
     /*bottom: 0;*/
     top: 60px;
-    z-index: 2;
+    z-index: 101;
     max-width: 400px;
     width: 100%;
     height: calc(var(--height-screen,100vh) - var(--height-header,0px));
@@ -4571,7 +4571,7 @@ a.page-pagination__btn{
     background: rgba(0,0,0,0);
     z-index: 10;
     cursor: pointer;
-    display: inline-block
+    display: inline-block;
 }
 
 .preferance-popup__item--body,.preferance__misere--body {
@@ -5239,9 +5239,18 @@ a.page-pagination__btn{
     color: var(--light)
 }
 
+.link-to-register{
+    height: fit-content;
+    margin: auto 0;
+    margin-right: 10px;
+}
+
 @media(min-width:992px) {
     .video.section-padding {
         padding: 40px 0 8px
+    }
+    .link-to-register{
+        margin-right: 0px;
     }
 }
 
@@ -5874,7 +5883,9 @@ a.page-pagination__btn{
     color: var(--light);
     background: rgba(0,0,0,0);
     border-radius: 6px;
-    transition: color .2s ease-in-out,background .2s ease-in-out
+    transition: color .2s ease-in-out,background .2s ease-in-out;
+    width: 100%;
+    justify-content: flex-start;
 }
 
 .account-aside__link svg {
@@ -8637,6 +8648,12 @@ a.page-pagination__btn{
     min-height: 28px;
     margin-inline: auto
 }
+.game__player--info.player_defender{
+    background: rgba(0, 68, 51, .7);
+}
+.game__player--info.player_attacker{
+    background: rgba(88, 0, 0, .7);
+}
 
 @media(min-width:1150px) {
     .game__player--avatar-img {
@@ -9120,16 +9137,18 @@ a.page-pagination__btn{
     width: 100%;
     min-height: 38px;
     padding: 7px;
-    margin-bottom: -5px
+    margin-bottom: -5px;
+    min-width: 80px;
 }
 
 @media(min-width:1150px) {
     .game__user--info {
         width: 100%;
-        max-width: 167px;
+        /*max-width: 167px;*/
         font-size: 1rem;
         padding: 13px;
-        min-height: 50px
+        min-height: 54px;
+        min-width: 126px;
     }
 }
 
@@ -9147,18 +9166,21 @@ a.page-pagination__btn{
     text-overflow: ellipsis
 }
 
-@media(min-width:1150px) {
-    .game__user--name {
-        font-size: 1rem
-    }
-}
-
 .game__user--progress {
     height: 7px;
     border-radius: 15px;
     margin-top: 5px;
-    width: 100px;
+    width: 70px;
     background: #0e0e0e
+}
+
+@media(min-width:1150px) {
+    .game__user--name {
+        font-size: 1rem
+    }
+    .game__user--progress{
+        width: 100%;
+    }
 }
 
 .game__table--block{
@@ -9170,7 +9192,8 @@ a.page-pagination__btn{
     top: -120px;
 }
 .game__table--block.game__table--block_active .game__table--min-message{
-    display: block;
+    opacity: 1;
+    visibility: visible;
 }
 
 .game__user--progress::-webkit-progress-bar {
@@ -9372,11 +9395,15 @@ a.page-pagination__btn{
     border-radius: 6px
 }
 
-@media(min-width:900px) {
     .game__table--min-message {
-        display: none
+        opacity: 0;
+        visibility: hidden;
+        -webkit-transition: all .3s ease;
+        -moz-transition: all .3s ease;
+        -ms-transition: all .3s ease;
+        -o-transition: all .3s ease;
+        transition: all .3s ease;
     }
-}
 
 @media(min-width:1150px) {
     .game__table--min-message {
@@ -10054,10 +10081,20 @@ a.page-pagination__btn{
     }
 }
 
-.game__table-popup {
-    display: none
-}
 
+
+@media(max-width: 900px) {
+    .game__table-popup .alt-btn._min{
+        padding: 8px;
+        font-size: 10px;
+    }
+    .game__table-popup .game__table-popup--text{
+        font-size: 9px;
+    }
+    .game__table-popup .section-title{
+        font-size: 12px;
+    }
+}
 @media(min-width:900px) {
     .game__table-popup {
         display: block
@@ -10244,11 +10281,12 @@ a.page-pagination__btn{
 .game-user-cards {
     position: absolute;
     left: 50%;
-    top: 15px;
+    top: 25px;
     -webkit-transform: translate(-50%,-100%);
     transform: translate(-50%,-100%);
     overflow: hidden;
-    padding: 70px 0 0;
+    /*padding: 70px 0 0;*/
+    padding: 440px 0 0;
     width: calc(100vw - 65px);
     border-radius: 0 0 7vw 7vw;
 }
@@ -17076,10 +17114,6 @@ html{
 .account-referal__form button svg{
     margin-right: 5px;
 }
-.link-to-register{
-    height: fit-content;
-    margin: auto 0;
-}
 .header__nav--language .header__drop-down--link{
     text-transform: uppercase;
 }
@@ -17227,12 +17261,27 @@ label._error .popup-input-placeholder{
     transform: rotateY(180deg);
 }
 
-.game__user--info{
-    min-height: 54px;
-}
+/*.game__user--info{*/
+/*    min-height: 54px;*/
+/*}*/
 
 .main_socket_close{
     opacity: .3;
+}
+
+
+.game__table-cards--item,
+.game__grid--item{
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+.game__table-cards--item{
+    bottom: 0;
+    left: 0;
 }
 
 .game__table-cards--card{
@@ -17244,16 +17293,8 @@ label._error .popup-input-placeholder{
     -o-transition: all .3s ease;
     transition: all .3s ease;
 }
-.game__table-cards--item_defender-from-position-6 .game__table-cards--card:last-child,
-.game__table-cards--item_defender-from-position-5 .game__table-cards--card:last-child,
-.game__table-cards--item_defender-from-position-4 .game__table-cards--card:last-child,
-.game__table-cards--item_defender-from-position-3 .game__table-cards--card:last-child,
-.game__table-cards--item_defender-from-position-2 .game__table-cards--card:last-child,
-.game__table-cards--item_attacker-from-position-6 .game__table-cards--card:first-child,
-.game__table-cards--item_attacker-from-position-5 .game__table-cards--card:first-child,
-.game__table-cards--item_attacker-from-position-4 .game__table-cards--card:first-child,
-.game__table-cards--item_attacker-from-position-3 .game__table-cards--card:first-child,
-.game__table-cards--item_attacker-from-position-2 .game__table-cards--card:first-child{
+.game__table-cards--item_defender .game__table-cards--card:last-child,
+.game__table-cards--item_attacker .game__table-cards--card:first-child{
     padding: 0;
     width: 0;
     max-width: 0;
@@ -17262,22 +17303,6 @@ label._error .popup-input-placeholder{
     top: 40px;
     z-index: 3;
 }
-/*.game__table-cards--item_defender-from-position-6 .game__table-cards--card:last-child,*/
-/*.game__table-cards--item_defender-from-position-5 .game__table-cards--card:last-child,*/
-/*.game__table-cards--item_defender-from-position-4 .game__table-cards--card:last-child,*/
-/*.game__table-cards--item_defender-from-position-3 .game__table-cards--card:last-child,*/
-/*.game__table-cards--item_defender-from-position-2 .game__table-cards--card:last-child,*/
-/*.game__table-cards--item_attacker-from-position-6 .game__table-cards--card:first-child,*/
-/*.game__table-cards--item_attacker-from-position-5 .game__table-cards--card:first-child,*/
-/*.game__table-cards--item_attacker-from-position-4 .game__table-cards--card:first-child,*/
-/*.game__table-cards--item_attacker-from-position-3 .game__table-cards--card:first-child,*/
-/*.game__table-cards--item_attacker-from-position-2 .game__table-cards--card:first-child{*/
-/*    left: -480px;*/
-/*    transform: scale(.6);*/
-/*    top: 40px;*/
-/*    z-index: 3;*/
-/*    padding: 0;*/
-/*}*/
 
 .game__table-cards--item_defender-from-position-6 .game__table-cards--card:last-child,
 .game__table-cards--item_attacker-from-position-6 .game__table-cards--card:first-child{
@@ -17300,35 +17325,11 @@ label._error .popup-input-placeholder{
 }
 .game__table-cards--item_defender-from-position-2 .game__table-cards--card:last-child,
 .game__table-cards--item_attacker-from-position-2 .game__table-cards--card:first-child{
-    left: 480px;
+    left: -480px;
 }
 
-.game__table-cards--item_take-other{
-    padding: 0;
-    max-width: 0;
-    min-width: 0;
-    left: 300px;
-    bottom: -220px;
-}
-
-.game__table-cards--item,
-.game__grid--item{
-    -webkit-transition: all .3s ease;
-    -moz-transition: all .3s ease;
-    -ms-transition: all .3s ease;
-    -o-transition: all .3s ease;
-    transition: all .3s ease;
-}
-
-.game__table-cards--item{
-    bottom: 0;
-}
+.game__table-cards--item_take-other,
 .game__table-cards--item_cards-beat,
-.game__table-cards--item_take-other-to-6,
-.game__table-cards--item_take-other-to-5,
-.game__table-cards--item_take-other-to-4,
-.game__table-cards--item_take-other-to-3,
-.game__table-cards--item_take-other-to-2,
 .game__table-cards--item_take-me{
     max-width: 0;
     padding: 0;
@@ -17337,57 +17338,100 @@ label._error .popup-input-placeholder{
     bottom: -230px;
     left: 360px;
 }
-
-.game__table-cards--item_take-other-to-6{
-    bottom: -50px;
-    left: 500px;
+.game__table-cards--item_take-other{
     -webkit-transform: scale(.5);
     -moz-transform: scale(.5);
     -ms-transform: scale(.5);
     -o-transform: scale(.5);
     transform: scale(.5);
+}
+.game__table-cards--item_take-other-to-6{
+    bottom: -50px;
+    left: 500px;
 }
 .game__table-cards--item_take-other-to-5{
     bottom: 190px;
     left: 450px;
-    -webkit-transform: scale(.5);
-    -moz-transform: scale(.5);
-    -ms-transform: scale(.5);
-    -o-transform: scale(.5);
-    transform: scale(.5);
 }
 .game__table-cards--item_take-other-to-4{
     bottom: 190px;
     left: 180px;
-    -webkit-transform: scale(.5);
-    -moz-transform: scale(.5);
-    -ms-transform: scale(.5);
-    -o-transform: scale(.5);
-    transform: scale(.5);
 }
 .game__table-cards--item_take-other-to-3{
     bottom: 190px;
     left: -100px;
-    -webkit-transform: scale(.5);
-    -moz-transform: scale(.5);
-    -ms-transform: scale(.5);
-    -o-transform: scale(.5);
-    transform: scale(.5);
 }
 .game__table-cards--item_take-other-to-2{
     bottom: -40px;
     left: -330px;
-    -webkit-transform: scale(.5);
-    -moz-transform: scale(.5);
-    -ms-transform: scale(.5);
-    -o-transform: scale(.5);
-    transform: scale(.5);
 }
-
 .game__table-cards--item_cards-beat{
     bottom: 160px;
     left: -540px;
     transform: scale(.5);
+    position: relative;
+}
+
+
+@media screen and (max-width: 649px) {
+    .game__table-cards--item_cards-beat{
+        bottom: 190px;
+        left: -90px;
+    }
+
+    .game__table-cards--item_take-other,
+    .game__table-cards--item_defender .game__table-cards--card:last-child,
+    .game__table-cards--item_attacker .game__table-cards--card:first-child{
+        padding: 0;
+        width: 0;
+        max-width: 0;
+        left: -70px;
+        transform: scale(.5);
+        top: 90px;
+        z-index: 3;
+        position: relative;
+    }
+
+    .game__table-cards--item_take-other-to-3,
+    .game__table-cards--item_attacker-from-position-3 .game__table-cards--card:last-child,
+    .game__table-cards--item_defender-from-position-3 .game__table-cards--card:last-child{
+        top: -70px;
+    }
+    .game__table-cards--item_take-other-to-4,
+    .game__table-cards--item_attacker-from-position-4 .game__table-cards--card:last-child,
+    .game__table-cards--item_defender-from-position-4 .game__table-cards--card:last-child{
+        top: -160px;
+        left: 80px;
+    }
+    .game__table-cards--item_take-other-to-5,
+    .game__table-cards--item_attacker-from-position-5 .game__table-cards--card:last-child,
+    .game__table-cards--item_defender-from-position-5 .game__table-cards--card:last-child{
+        top: -40px;
+        left: 160px;
+    }
+    .game__table-cards--item_take-other-to-6,
+    .game__table-cards--item_attacker-from-position-6 .game__table-cards--card:last-child,
+    .game__table-cards--item_defender-from-position-6 .game__table-cards--card:last-child{
+        left: 160px;
+    }
+}
+
+
+._hidden-silhouette{
+    opacity: 0;
+}
+
+.table-for-mob{
+    display: none;
+}
+
+@media screen and (max-width: 649px) {
+    .game__main--table.game__bg picture{
+        display: none;
+    }
+    .game__main--table.game__bg .table-for-mob{
+        display: block;
+    }
 }
 
 /*NEW STYLE*/

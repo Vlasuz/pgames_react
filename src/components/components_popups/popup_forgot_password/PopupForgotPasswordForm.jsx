@@ -1,14 +1,17 @@
 import React, {useState} from 'react';
 import OpenPopup from "../../../hooks/OpenPopup";
+import {useDispatch} from "react-redux";
+import {popupTitle} from "../../../redux/actions";
 
 const PopupForgotPasswordForm = () => {
 
     const [valueInput, setValueInput] = useState('')
+    const dispatch = useDispatch()
 
     const handleSend = (e) => {
         e.preventDefault()
 
-        OpenPopup(e, '.password-send-popup')
+        dispatch(popupTitle('forgot-password-send'))
     }
 
     return (
@@ -25,10 +28,10 @@ const PopupForgotPasswordForm = () => {
                     className={"forgot-password-popup__submit popup-submit btn _large _shadow" + (/\S+@\S+\.\S+/.test(valueInput) ? "" : " _disabled")}>
                 Отправить
             </button>
-            <a href="#login-popup" onClick={OpenPopup}
+            <button onClick={_ => dispatch(popupTitle('login'))}
                className="forgot-password-popup__link popup-link popup-close open-popup">
                 Назад
-            </a>
+            </button>
         </form>
     );
 };

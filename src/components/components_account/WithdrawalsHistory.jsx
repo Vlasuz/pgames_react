@@ -1,4 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import axios from "axios";
+import GlobalLink from "../../GlobalLink";
+import GetCookies from "../../hooks/GetCookies";
 
 const WithdrawalsHistory = () => {
 
@@ -21,7 +24,7 @@ const WithdrawalsHistory = () => {
             reason: "Вывод — Monobank",
             date: ["02.03.2022", "10:52"]
         },
-    ]
+    ];
 
     return (
         <div className="account-withdrawals-history">

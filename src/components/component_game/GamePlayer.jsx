@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useSelector} from "react-redux";
 import {logDOM} from "@testing-library/react";
 
-const GamePlayer = ({ player, userTurn, fixedTime, timer, isEndGame, isGameStart, cardsLeft, playersWhoReady, playersQuantityCards, defenderTake }) => {
+const GamePlayer = ({ player, userTurn, fixedTime, timer, isEndGame, isGameStart, cardsLeft, playersWhoReady, playersQuantityCards, defenderTake, isWinner, whoToWhom }) => {
 
     const playerHere = player?.user !== undefined ? player.user : player
 
@@ -23,8 +23,12 @@ const GamePlayer = ({ player, userTurn, fixedTime, timer, isEndGame, isGameStart
 
         if(playersQuantityCards.some(item => item.player.id === playerHere.id)) {
             let num = playersQuantityCards.filter(item => item.player.id === playerHere.id)[0].player.new_cards_count
-            for (let i = 0; i < num; i++) {
-                setCards(prev => [...prev, 'card'])
+            if(num > 0) {
+                for (let i = 0; i < num; i++) {
+                    setCards(prev => [...prev, 'card'])
+                }
+            } else {
+                setCards([])
             }
         }
 
@@ -49,14 +53,10 @@ const GamePlayer = ({ player, userTurn, fixedTime, timer, isEndGame, isGameStart
                     <img src="../images/account/avatar.png" width="76" height="76" alt=""
                          className="game__player--avatar-img"/>
                 </div>
-                <div className="game__player--info">
+                <div className={"game__player--info" + (whoToWhom?.defender?.id === playerHere?.id ? " player_defender" : whoToWhom?.attacker?.id === playerHere?.id ? " player_attacker" : "")}>
                     <h3 className="game__player--name">
                         {
                             playerHere.username
-                        }
-                        <br/>
-                        {
-                            playerHere.id
                         }
                     </h3>
                     {
@@ -70,7 +70,7 @@ const GamePlayer = ({ player, userTurn, fixedTime, timer, isEndGame, isGameStart
                         <ul className="game__player--cards-list">
 
                             {
-                                 cards.map((_, index) =>
+                                !isWinner.some(user => user.id === playerHere.id) && cards.map((_, index) =>
                                     <li key={index} className="game__player--cards-item">
                                         <div className="game__player--cards-item-body">
                                             <img src="../images/game/cards/Back.svg" alt="" className="game__player--cards-img" />

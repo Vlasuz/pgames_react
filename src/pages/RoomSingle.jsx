@@ -20,6 +20,9 @@ import GlobalSocket from "../GlobalSocket";
 import cardEvent from "../components/component_game/game_fool/functions/card_event";
 import setPosition from "../components/component_game/game_fool/functions/set_position";
 import socketMessages from "../components/component_game/game_fool/functions/socket_messages";
+import ActiveNotification from "../hooks/ActiveNotification";
+import FoolTopButtons from "../components/component_game/game_fool/FoolTopButtons";
+import FoolDeck from "../components/component_game/game_fool/FoolDeck";
 
 const RoomSingle = () => {
 
@@ -50,10 +53,11 @@ const RoomSingle = () => {
     const [isCardsBeat, setIsCardsBeat] = useState(false)
     const [attacker, setAttacker] = useState({})
     const [defender, setDefender] = useState({})
+    const [whoToWhom, setWhoToWhom] = useState({})
 
+    const isAuth = useSelector(state => state.userInfoReducer.data)
     const players = useSelector(state => state.gamesListPlayersReducer.players)
     const user = useSelector(state => state.userInfoReducer.data)
-    const games = useSelector(state => state.gamesListReducer.list)
 
     const dispatch = useDispatch()
 
@@ -77,6 +81,7 @@ const RoomSingle = () => {
             setIsGameStart,
             dispatch,
             setMyCards,
+            myCards,
             setCardsOnTable,
             cardsOnTable,
             setSelectedCard,
@@ -88,7 +93,8 @@ const RoomSingle = () => {
             setAllCardsCount,
             setIsCardsBeat,
             setAttacker,
-            setDefender
+            setDefender,
+            setWhoToWhom,
         )
     }
     websocket.onerror = (e) => console.log('GAME socket Error')
@@ -96,7 +102,7 @@ const RoomSingle = () => {
 
     useEffect(() => {
 
-        if (isLoad) {
+        if (isLoad && Object.keys(isAuth).length) {
             setIsLoad(false)
 
             const socket = new WebSocket(GlobalSocket(`/room/${roomId}/`))
@@ -113,14 +119,26 @@ const RoomSingle = () => {
             }
         }
 
-    }, [])
+    }, [isAuth])
+
+    // useEffect(() => {
+    //
+    //     if (!!games.length) {
+    //         games.map(game => game.game.map(room => room))
+    //     }
+    //
+    // }, [games])
+
     useEffect(() => {
 
-        if (!!games.length) {
-            games.map(game => game.game.map(room => room))
+        if(wrongStep) {
+            setTimeout(() => {
+                setWrongStep(false)
+            }, 1000)
         }
 
-    }, [games])
+    }, [wrongStep])
+
     useEffect(() => {
         let time = setInterval(() => {
             timer > 0 && setTimer(prev => prev - 1)
@@ -132,7 +150,7 @@ const RoomSingle = () => {
     const gameCenter = {
         'auth': <FoolCenterWaiting/>,
         'start_game': <FoolCenterStarting/>,
-        'end_game': <FoolCenterEndgame isWinner={isWinner} userId={user.id}/>
+        'end_game': <FoolCenterEndgame isWinner={isWinner} userId={user.id} infoRoom={infoRoom}/>
     }
 
     return (
@@ -147,21 +165,16 @@ const RoomSingle = () => {
                                     Дурак
                                 </h2>
                             </div>
-                            <div className="game__header--col">
-                                <div className="game__header--block">
-                                    <a href="#game-exit-popup" className="game__header--btn btn _dark open-popup">
-                                        Выйти
-                                    </a>
-                                    <a href="#game-invite-popup" className="game__header--btn btn _red open-popup">
-                                        Пригласить +
-                                    </a>
-                                </div>
-                            </div>
+                            <FoolTopButtons/>
                         </div>
                         <div className="game__main">
                             <div className="game__main--table game__bg">
                                 <picture>
                                     <img src="../images/game/table.png" alt="" width="300"
+                                         className="game__bg--img"/>
+                                </picture>
+                                <picture className={"table-for-mob"}>
+                                    <img src="../images/game/table-mob.png" alt="" width="300"
                                          className="game__bg--img"/>
                                 </picture>
                             </div>
@@ -182,6 +195,8 @@ const RoomSingle = () => {
                                             <GamePlayer
                                                 userTurn={userTurn}
                                                 fixedTime={fixedTime}
+                                                isWinner={isWinner}
+                                                whoToWhom={whoToWhom}
                                                 timer={timer}
                                                 isEndGame={isEndGame}
                                                 isGameStart={isGameStart}
@@ -200,6 +215,8 @@ const RoomSingle = () => {
                                             <GamePlayer
                                                 userTurn={userTurn}
                                                 fixedTime={fixedTime}
+                                                isWinner={isWinner}
+                                                whoToWhom={whoToWhom}
                                                 timer={timer}
                                                 isEndGame={isEndGame}
                                                 isGameStart={isGameStart}
@@ -219,6 +236,8 @@ const RoomSingle = () => {
                                             <GamePlayer
                                                 userTurn={userTurn}
                                                 fixedTime={fixedTime}
+                                                isWinner={isWinner}
+                                                whoToWhom={whoToWhom}
                                                 timer={timer}
                                                 isEndGame={isEndGame}
                                                 isGameStart={isGameStart}
@@ -231,22 +250,7 @@ const RoomSingle = () => {
                                     }
 
                                 </div>
-                                <div className="game__grid--item" style={{paddingTop: allCardsCount < 1 ? 80 : 130}}>
-                                    <form action="#" className="game__cards">
-                                        {allCardsCount < 1 ? <div className="game__cards--symbol">
-                                            <img src={`../images/game/cards/symbols/${trump.suit}.svg`} alt=""/>
-                                        </div> : ""}
-                                        <button className={"game__cards--element" + (allCardsCount > 0 ? "" : " _hidden")}>
-                                            <div className="game__cards--back">
-                                                <img src="../images/game/cards/Back.svg" alt=""/>
-                                            </div>
-                                            <div className="game__cards--last">
-                                                <img src={`../images/game/cards/${trump.rank}-${trump.suit}.svg`}
-                                                     alt=""/>
-                                            </div>
-                                        </button>
-                                    </form>
-                                </div>
+                                <FoolDeck allCardsCount={allCardsCount} trump={trump} />
                                 <div className="game__grid--item">
 
                                     {
@@ -254,6 +258,8 @@ const RoomSingle = () => {
                                             <GamePlayer
                                                 userTurn={userTurn}
                                                 fixedTime={fixedTime}
+                                                isWinner={isWinner}
+                                                whoToWhom={whoToWhom}
                                                 timer={timer}
                                                 isEndGame={isEndGame}
                                                 isGameStart={isGameStart}
@@ -273,6 +279,8 @@ const RoomSingle = () => {
                                             <GamePlayer
                                                 userTurn={userTurn}
                                                 fixedTime={fixedTime}
+                                                isWinner={isWinner}
+                                                whoToWhom={whoToWhom}
                                                 timer={timer}
                                                 isEndGame={isEndGame}
                                                 isGameStart={isGameStart}
@@ -320,8 +328,8 @@ const RoomSingle = () => {
                                                             'K': 13,
                                                             'A': 14,
                                                         }
-                                                        ranks[a.rank] = a.suit !== trump.suit ? ranks[a.rank] : ranks[a.rank] + 20
-                                                        ranks[b.rank] = b.suit !== trump.suit ? ranks[b.rank] : ranks[b.rank] + 20
+                                                        ranks[a.rank] = a.suit !== trump.suit ? ranks[a.rank] : ranks[a.rank] + 40
+                                                        ranks[b.rank] = b.suit !== trump.suit ? ranks[b.rank] : ranks[b.rank] + 40
                                                         return ranks[a.rank] - ranks[b.rank];
                                                     })
                                                         .map((item, index) =>
@@ -351,6 +359,7 @@ const RoomSingle = () => {
                                                         <progress className="game__user--progress" max="100"
                                                                   value={timer * 100 / fixedTime}></progress> : ""
                                                 }
+
 
                                             </div>
                                         </div>

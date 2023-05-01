@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import ActiveNotification from "../../hooks/ActiveNotification";
+import axios from "axios";
 
 const MainFeedbackFrom = () => {
 
@@ -23,6 +24,14 @@ const MainFeedbackFrom = () => {
                 Message: ${inputMessage}
             `
             )
+
+            axios.post('https://board-games.sonisapps.com/api/landing/feedback/', {
+                "email": inputEmail,
+                "name": inputName,
+                "message": inputMessage
+            }).then(res => {
+                // console.log(res.data)
+            }).catch(er => console.log("CONTACT FORM", er))
 
             setIsValidate(false)
 

@@ -5,6 +5,7 @@ import axios from "axios";
 import GetCookies from "../../hooks/GetCookies";
 import {useNavigate} from "react-router-dom";
 import GlobalLink from "../../GlobalLink";
+import ActiveNotification from "../../hooks/ActiveNotification";
 
 const GamesSingleRooms = ({gamesId}) => {
 
@@ -56,6 +57,10 @@ const GamesSingleRooms = ({gamesId}) => {
                 setRooms(game.data.room)
                 navigate('/rooms/' + game.data.id)
             })
+        }).catch(error => {
+            if (error.message.includes('401')) {
+                ActiveNotification('#notification_not-auth')
+            }
         })
 
     }
@@ -84,13 +89,9 @@ const GamesSingleRooms = ({gamesId}) => {
                         <ul className="page-rooms__list">
 
                             {
-                                rooms
-                                    .sort((a, b) => {
-                                        return a.players_count - b.players_count
-                                    })
-                                    .map(game =>
-                                        <RoomItem key={game.id} game={game}/>
-                                    )
+                                rooms.sort((a, b) => a.players_count - b.players_count).map(game =>
+                                    <RoomItem key={game.id} game={game}/>
+                                )
                             }
 
                         </ul>

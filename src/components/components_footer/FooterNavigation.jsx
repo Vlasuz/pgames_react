@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, NavLink} from "react-router-dom";
+import axios from "axios";
 
 const FooterNavigation = () => {
 
@@ -21,7 +22,7 @@ const FooterNavigation = () => {
             link: "/news",
         },
     ]
-    const menu_2 = [
+    const [menu2, setMenu2] = useState([
         {
             title: "Правила использования",
             link: "/faq",
@@ -42,7 +43,14 @@ const FooterNavigation = () => {
             title: "Статья",
             link: "/text-page",
         },
-    ]
+    ])
+
+    useEffect(() => {
+        axios.get('https://board-games.sonisapps.com/api/page/get/ru/').then(({data}) => {
+            setMenu2(data)
+            console.log('data pages', data)
+        })
+    }, [])
 
     return (
         <nav className="footer__nav">
@@ -66,7 +74,7 @@ const FooterNavigation = () => {
                     <ul className="footer__nav--list">
 
                         {
-                            menu_2.map((item, itemNum) =>
+                            menu2.map((item, itemNum) =>
                                 <li key={itemNum} className="footer__nav--item">
                                     <NavLink to={item.link} className="footer__nav--link">
                                         {item.title}

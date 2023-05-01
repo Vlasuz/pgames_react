@@ -1,10 +1,12 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import swiperSliders from "../JS_SwiperSlider";
 import openPopup from "../../hooks/OpenPopup";
 import MainIntroDecorLeft from "./MainIntroDecorLeft";
 import MainIntroDecorRight from "./MainIntroDecorRight";
 import i18next from "i18next";
 import {NavLink} from "react-router-dom";
+import axios from "axios";
+import GlobalLink from "../../GlobalLink";
 
 const MainIntroSlider = () => {
 
@@ -27,13 +29,21 @@ const MainIntroSlider = () => {
         },
     ]
 
+    const [sliderData, setSliderData] = useState([])
+
+    useEffect(() => {
+        axios.get(GlobalLink('/api/landing/banner_list/'), {'lang-code': 'ru'}).then(({data}) => {
+            setSliderData(data)
+        })
+    }, [])
+
     return (
         <div className="intro__slider swiper">
             <ul className="intro__slider--list swiper-wrapper">
 
                 {
-                    sliderInner.map(slide =>
-                        <li key={slide.id} className="intro__slider--item swiper-slide">
+                    sliderData.map((item, index) =>
+                        <li key={index} className="intro__slider--item swiper-slide">
 
                             <MainIntroDecorLeft/>
                             <div className="intro__block" data-aos="fade-in" data-aos-delay="800">
@@ -45,11 +55,11 @@ const MainIntroSlider = () => {
                                 </div>
                                 <div className="intro__text">
                                     <p>
-                                        {slide.text}
+                                        {item.text}
                                     </p>
                                 </div>
-                                <NavLink to={'/games'} className="intro__btn btn _gradient _shadow">
-                                    Подключиться
+                                <NavLink to={item.button_link} className="intro__btn btn _gradient _shadow">
+                                    {item.button_name}
                                 </NavLink>
                             </div>
                             <MainIntroDecorRight/>

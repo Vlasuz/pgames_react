@@ -60,7 +60,11 @@ const handleSelect = (item, htmlCard, setWrongStep, selectedCard, trump, setSele
                 e.style.left = `0px`;
                 e.style.transform = `none`
                 e.querySelector('.game-user-cards__item--body').style.width = `100%`
-                e.querySelector('.game-user-cards__item--body').style.height = `155px`
+                if(window.innerWidth > 900) {
+                    e.querySelector('.game-user-cards__item--body').style.height = `155px`
+                } else {
+                    e.querySelector('.game-user-cards__item--body').style.height = `85px`
+                }
                 setTimeout(() => {
                     e.style.transition = `all .3s ease`;
                 }, 100)

@@ -5,7 +5,7 @@ import {accountPhotoReducer} from "./accountPhotoReducer";
 import {addRoomReducer} from "./addRoomReducer";
 import {GamesSearchReducer} from "./gamesSearchReducer";
 import {newsListReducer} from "./newsListReducer";
-import {gamesListReducer, GamesListReducer} from "./gamesListReducer";
+import {gamesListReducer} from "./gamesListReducer";
 import {GamesCatalogListReducer} from "./gamesCatalogListReducer";
 import {accountBalanceReducer} from "./accountBalanceReducer";
 import {cardsListReducer} from "./cardsListReducer";
@@ -21,6 +21,7 @@ import {cardsForPlayer2Reducer} from "../redux_poker/reducers_poker/poker_player
 import {myStepReducer} from "../redux_poker/reducers_poker/GameMyStepReducer";
 import {userInfoReducer} from "./userInfoReducer";
 import {gamesListPlayersReducer} from "./gamesListPlayersReducer";
+import {popupReducer} from "./popupReducer";
 
 export const rootReducer = combineReducers({
     logoutReducer,
@@ -48,4 +49,5 @@ export const rootReducer = combineReducers({
     userInfoReducer,
 
     gamesListPlayersReducer,
+    popupReducer,
 })
