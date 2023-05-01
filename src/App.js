@@ -5,7 +5,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import testWebP from "./components/JS_WebP";
 import Routers from "./pages/Routers";
-import {BrowserRouter} from "react-router-dom";
+import {BrowserRouter, HashRouter} from "react-router-dom";
 import Popups from "./components/components_popups/Popups";
 import {useTranslation} from "react-i18next";
 import Notifications from "./components/Notifications";
@@ -25,7 +25,7 @@ const App = (props) => {
     requests();
 
     return (
-        <BrowserRouter>
+        <HashRouter>
             <div className="wrapper-bg _webp-true" data-aos="fade-in" data-aos-delay="200" style={{backgroundImage: "url(../images/body-bg.webp)"}}/>
             <div className="wrapper-bg _webp-false" data-aos="fade-in" data-aos-delay="200" style={{backgroundImage: "url(../images/body-bg.jpg)"}}/>
             <Header />
@@ -36,7 +36,7 @@ const App = (props) => {
             <Popups/>
             <Notifications />
 
-        </BrowserRouter>
+        </HashRouter>
     );
 };
 
