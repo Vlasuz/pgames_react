@@ -105,7 +105,7 @@ const GamesSingle = () => {
                                                 <span>
                                                     {/*{thisGame.data.max_gamers}*/}
                                                 </span>
-                                                <img src="../images/icons/person.svg" width="13" height="13" alt=""/>
+                                                <img src="images/icons/person.svg" width="13" height="13" alt=""/>
                                             </div>
                                         </div>
                                     </li>
@@ -117,13 +117,13 @@ const GamesSingle = () => {
                                             {/*{*/}
                                             {/*    thisGame.data.currency.money ?*/}
                                             {/*        <div className="page-game__param--element">*/}
-                                            {/*            <img src="../images/icons/dollar-circle.svg" width="15" height="15" alt=""/>*/}
+                                            {/*            <img src="images/icons/dollar-circle.svg" width="15" height="15" alt=""/>*/}
                                             {/*        </div> : ""*/}
                                             {/*}*/}
                                             {/*{*/}
                                             {/*    thisGame.data.currency.chips ?*/}
                                             {/*        <div className="page-game__param--element">*/}
-                                            {/*            <img src="../images/icons/chip.svg" width="15" height="15" alt=""/>*/}
+                                            {/*            <img src="images/icons/chip.svg" width="15" height="15" alt=""/>*/}
                                             {/*        </div> : ""*/}
                                             {/*}*/}
                                         </div>
@@ -137,14 +137,14 @@ const GamesSingle = () => {
                                             {/*    thisGame.data.type_rooms.open_rooms ?*/}
                                             {/*        <div className="page-game__param--element">*/}
                                             {/*            <span>Открытая игра</span>*/}
-                                            {/*            <img src="../images/icons/door-open.svg" width="17" height="17" alt=""/>*/}
+                                            {/*            <img src="images/icons/door-open.svg" width="17" height="17" alt=""/>*/}
                                             {/*        </div> : ""*/}
                                             {/*}*/}
                                             {/*{*/}
                                             {/*    thisGame.data.type_rooms.close_rooms ?*/}
                                             {/*        <div className="page-game__param--element">*/}
                                             {/*            <span>Закрытая игра</span>*/}
-                                            {/*            <img src="../images/icons/door-lock.svg" width="17" height="17" alt=""/>*/}
+                                            {/*            <img src="images/icons/door-lock.svg" width="17" height="17" alt=""/>*/}
                                             {/*        </div> : ""*/}
                                             {/*}*/}
 

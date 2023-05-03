@@ -34,7 +34,6 @@ const Requests = () => {
                 axios.defaults.headers.get['Authorization'] = `Bearer ${GetCookies('access_token')}`;
                 axios.get(GlobalLink('/api/user/me/')).then(res => {
                     dispatch(setUserInfo(res.data))
-                    dispatch(actionLogout(prev => !prev))
                 }).catch(er => {
 
                     if(!isError) {
@@ -46,7 +45,6 @@ const Requests = () => {
                             axios.defaults.headers.get['Authorization'] = `Bearer ${res.data.access_token}`;
                             axios.get(GlobalLink('/api/user/me/')).then(res => {
                                 dispatch(setUserInfo(res.data))
-                                dispatch(actionLogout(prev => !prev))
                             })
 
                         })

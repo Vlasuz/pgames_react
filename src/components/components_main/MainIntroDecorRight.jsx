@@ -10,7 +10,7 @@ const MainIntroDecorRight = () => {
                     <picture className="hide-on-table">
                         <source srcSet="images/main-page/intro/decor/item-2-1.webp"
                                 type="image/webp"/>
-                        <img src="../images/main-page/intro/decor/item-2-1.png" loading="lazy" alt=""
+                        <img src="images/main-page/intro/decor/item-2-1.png" loading="lazy" alt=""
                              style={{transform: "translate(0%,0%)"}}
                              className="intro__decor--img"/>
                     </picture>
@@ -20,7 +20,7 @@ const MainIntroDecorRight = () => {
                     <picture className="hide-on-table">
                         <source srcSet="images/main-page/intro/decor/item-2-2.webp"
                                 type="image/webp"/>
-                        <img src="../images/main-page/intro/decor/item-2-2.png" loading="lazy" alt=""
+                        <img src="images/main-page/intro/decor/item-2-2.png" loading="lazy" alt=""
                              style={{transform: "translate(50%,145%)"}}
                              className="intro__decor--img"/>
                     </picture>
@@ -30,7 +30,7 @@ const MainIntroDecorRight = () => {
                     <picture className="hide-on-table">
                         <source srcSet="images/main-page/intro/decor/item-2-3.webp"
                                 type="image/webp"/>
-                        <img src="../images/main-page/intro/decor/item-2-3.png" loading="lazy" alt=""
+                        <img src="images/main-page/intro/decor/item-2-3.png" loading="lazy" alt=""
                              style={{transform: "translate(130%,105%)"}}
                              className="intro__decor--img"/>
                     </picture>
@@ -40,7 +40,7 @@ const MainIntroDecorRight = () => {
                     <picture className="visible-on-table">
                         <source srcSet="images/main-page/intro/decor/item-2-1.webp"
                                 type="image/webp"/>
-                        <img src="../images/main-page/intro/decor/item-2-1.png" loading="lazy" alt=""
+                        <img src="images/main-page/intro/decor/item-2-1.png" loading="lazy" alt=""
                              style={{transform: "translate(50%,0%)"}}
                              className="intro__decor--img"/>
                     </picture>
@@ -50,7 +50,7 @@ const MainIntroDecorRight = () => {
                     <picture className="visible-on-table">
                         <source srcSet="images/main-page/intro/decor/item-2-2.webp"
                                 type="image/webp"/>
-                        <img src="../images/main-page/intro/decor/item-2-2.png" loading="lazy" alt=""
+                        <img src="images/main-page/intro/decor/item-2-2.png" loading="lazy" alt=""
                              style={{transform: "translate(150%,175%)"}}
                              className="intro__decor--img"/>
                     </picture>

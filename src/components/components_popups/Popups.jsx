@@ -19,6 +19,7 @@ const Popups = () => {
         'forgot-password-send': <PopupForgotPasswordSent/>,
         'winner-game': <PopupWinnerGame/>,
         'promo-code': <PopupPromocode/>,
+        'subscribe': <PopupSubscribe/>,
     }
 
     const [popup, setPopup] = useState('')

@@ -26,8 +26,8 @@ const App = (props) => {
 
     return (
         <HashRouter>
-            <div className="wrapper-bg _webp-true" data-aos="fade-in" data-aos-delay="200" style={{backgroundImage: "url(../images/body-bg.webp)"}}/>
-            <div className="wrapper-bg _webp-false" data-aos="fade-in" data-aos-delay="200" style={{backgroundImage: "url(../images/body-bg.jpg)"}}/>
+            <div className="wrapper-bg _webp-true" data-aos="fade-in" data-aos-delay="200" style={{backgroundImage: "url(images/body-bg.webp)"}}/>
+            <div className="wrapper-bg _webp-false" data-aos="fade-in" data-aos-delay="200" style={{backgroundImage: "url(images/body-bg.jpg)"}}/>
             <Header />
 
             <Routers />

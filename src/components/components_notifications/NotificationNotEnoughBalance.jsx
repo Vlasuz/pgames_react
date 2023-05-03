@@ -5,7 +5,7 @@ const NotificationNotEnoughBalance = ({handleClose}) => {
         <li id={"notification_no-enough-balance"} className="notifications__item notification-item">
             <div className="notification-item__body">
                 <div className="notification-item__header _error">
-                    <img src="../images/icons/error.svg" width="20" height="20" alt=""
+                    <img src="images/icons/error.svg" width="20" height="20" alt=""
                          className="notification-item__icon"/>
                     <h3 className="notification-item__title" title="Бонус!">
                         Системное сообщение

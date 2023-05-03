@@ -11,7 +11,7 @@ const Error404 = () => {
                         >
                             <picture>
                                 <source srcSet="images/404/decor-1.webp" type="image/webp"/>
-                                    <img src="../images/404/decor-1.png" alt="" loading="lazy"
+                                    <img src="images/404/decor-1.png" alt="" loading="lazy"
                                          className="page-404__layer--img"/>
                             </picture>
                         </div>
@@ -20,14 +20,14 @@ const Error404 = () => {
                         >
                             <picture>
                                 <source srcSet="images/404/decor-2.webp" type="image/webp"/>
-                                    <img src="../images/404/decor-2.png" alt="" loading="lazy"
+                                    <img src="images/404/decor-2.png" alt="" loading="lazy"
                                          className="page-404__layer--img"/>
                             </picture>
                         </div>
                         <div className="page-404__layer--item _full" data-aos="fade-down" data-aos-delay="300">
                             <picture>
                                 <source srcSet="images/404/code.webp" type="image/webp"/>
-                                    <img src="../images/404/code.png" alt="" loading="lazy" className="page-404__layer--img"/>
+                                    <img src="images/404/code.png" alt="" loading="lazy" className="page-404__layer--img"/>
                             </picture>
                         </div>
                     </div>
@@ -37,7 +37,7 @@ const Error404 = () => {
                         >
                             <picture>
                                 <source srcSet="images/404/decor-4.webp" type="image/webp"/>
-                                    <img src="../images/404/decor-4.png" alt="" loading="lazy"
+                                    <img src="images/404/decor-4.png" alt="" loading="lazy"
                                          className="page-404__layer--img"/>
                             </picture>
                         </div>
@@ -46,7 +46,7 @@ const Error404 = () => {
                         >
                             <picture>
                                 <source srcSet="images/404/decor-3.webp" type="image/webp"/>
-                                    <img src="../images/404/decor-3.png" alt="" loading="lazy"
+                                    <img src="images/404/decor-3.png" alt="" loading="lazy"
                                          className="page-404__layer--img"/>
                             </picture>
                         </div>
@@ -55,7 +55,7 @@ const Error404 = () => {
                         >
                             <picture>
                                 <source srcSet="images/404/decor-5.webp" type="image/webp"/>
-                                    <img src="../images/404/decor-5.png" alt="" loading="lazy"
+                                    <img src="images/404/decor-5.png" alt="" loading="lazy"
                                          className="page-404__layer--img"/>
                             </picture>
                         </div>
@@ -64,7 +64,7 @@ const Error404 = () => {
                         >
                             <picture>
                                 <source srcSet="images/404/decor-6.webp" type="image/webp"/>
-                                    <img src="../images/404/decor-6.png" alt="" loading="lazy"
+                                    <img src="images/404/decor-6.png" alt="" loading="lazy"
                                          className="page-404__layer--img"/>
                             </picture>
                         </div>
@@ -73,7 +73,7 @@ const Error404 = () => {
                         <div className="page-404__info" data-aos="fade-in" data-aos-delay="300"
                              data-aos-anchor=".page__container">
                             <div className="page-404__logo">
-                                <img src="../images/logo.svg" alt="" width="200" height="51" className="page-404__logo--img"/>
+                                <img src="images/logo.svg" alt="" width="200" height="51" className="page-404__logo--img"/>
                             </div>
                             <div className="page-404__text">
                                 Пожалуйста попробуйте обновить страницу позже!

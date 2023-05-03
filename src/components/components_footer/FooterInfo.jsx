@@ -14,7 +14,7 @@ const FooterInfo = () => {
     return (
         <div className="footer__intro">
             <a href="index.html" className="footer__logo">
-                <img src="../images/logo.svg" width="100" height="39" loading="lazy" alt="" className="footer__logo--img"/>
+                <img src="images/logo.svg" width="100" height="39" loading="lazy" alt="" className="footer__logo--img"/>
             </a>
             <div className="footer__contacts">
                 <a href={`tel:${contacts.support_phone_number?.replace(/[^+0-9]/g,'')}`} className="footer__contacts--link" aria-label="+38098111111">

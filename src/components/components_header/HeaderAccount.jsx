@@ -6,6 +6,7 @@ import {actionLogout} from "../../redux/actions";
 import axios from "axios";
 import GetCookies from "../../hooks/GetCookies";
 import GlobalLink from "../../GlobalLink";
+import {setUserInfo} from "../../redux/reducers/userInfoReducer";
 
 const HeaderAccount = () => {
 
@@ -18,11 +19,17 @@ const HeaderAccount = () => {
     const handleLogout = () => {
         axios.defaults.headers.post['platform'] = `pc`;
         axios.defaults.headers.post['Authorization'] = `Bearer ${GetCookies('refresh_token')}`;
-        axios.post(GlobalLink(`/api/user/logout/`)).then(res => {
-            console.log(res.data)
-            dispatch(actionLogout())
+        axios.post(GlobalLink(`/api/user/logout/`)).then(({data}) => {
+            dispatch(setUserInfo({}))
             document.cookie = "access_token=; expires=Thu, 18 Dec 2013 12:00:00 UTC";
             GetCookies('access_token')
+        }).catch(error => {
+            if(error.response.status === '498') {
+                dispatch(setUserInfo({}))
+                document.cookie = "access_token=; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+                GetCookies('access_token')
+            }
+
         })
     }
 
@@ -36,7 +43,7 @@ const HeaderAccount = () => {
             >
 
                 <picture>
-                    <img src={userInfo.avatar ? userInfo.avatar :  "../images/account/avatar-none.svg"} alt="" width="27" height="27" alt="Ваш аватар" loading="lazy"
+                    <img src={userInfo.avatar ? userInfo.avatar :  "images/account/avatar-none.svg"} alt="" width="27" height="27" alt="Ваш аватар" loading="lazy"
                          className="header__account--avatar"/>
                 </picture>
                 <span className="header__account--name">

@@ -17,7 +17,7 @@ const MainIntro = () => {
                 <div className="intro__bg--element">
                     <picture>
                         <source srcSet="images/main-page/intro/bg.webp" type="image/webp"/>
-                        <img src="../images/main-page/intro/bg.png" alt="" loading="lazy" width="0" height="0"
+                        <img src="images/main-page/intro/bg.png" alt="" loading="lazy" width="0" height="0"
                              className="intro__bg--img"/>
                     </picture>
                 </div>

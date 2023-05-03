@@ -114,10 +114,12 @@ const FoolCenterRunning = ({
                                     {
                                         card?.attacker_card?.rank ?
                                             <div className={"game__table-cards--card"}
-                                                // (isAttacker.id !== user.id ? ` game__table-cards--item_from-position-${getUserPosition()}` : "")
-                                                 onClick={e => handleSelect(card.attacker_card, e, setWrongStep, selectedCard, trump, setSelectedCard, setMyCards)}>
+                                                 onClick={e => handleSelect(card.attacker_card, e, setWrongStep, selectedCard, trump, setSelectedCard, setMyCards, false)}
+                                                 onMouseMove={e => handleSelect(card.attacker_card, e, setWrongStep, selectedCard, trump, setSelectedCard, setMyCards, true)}
+                                                 onMouseLeave={e => handleSelect(card.attacker_card, e, setWrongStep, selectedCard, trump, setSelectedCard, setMyCards, true)}
+                                            >
                                                 <img
-                                                    src={`../images/game/cards/${card.attacker_card.rank}-${card.attacker_card.suit}.svg`}
+                                                    src={`images/game/cards/${card.attacker_card.rank}-${card.attacker_card.suit}.svg`}
                                                     alt="" className="game__table-cards--img"/>
                                             </div> : ""
                                     }
@@ -125,7 +127,7 @@ const FoolCenterRunning = ({
                                         card?.defence_card?.rank ?
                                             <div className={"game__table-cards--card"}>
                                                 <img
-                                                    src={`../images/game/cards/${card.defence_card.rank}-${card.defence_card.suit}.svg`}
+                                                    src={`images/game/cards/${card.defence_card.rank}-${card.defence_card.suit}.svg`}
                                                     alt="" className="game__table-cards--img"/>
                                             </div> : ""
                                     }
@@ -139,7 +141,7 @@ const FoolCenterRunning = ({
                     (userTurn?.event === 'attacker' || userTurn?.event === 'sub_attacker') && userTurn.id === user.id ?
                         <li className="game__table-cards--item _accent">
                             <div className="game__table-cards--card game__table-cards--card_empty">
-                                <img src="../images/game/cards/place.svg" alt="" className="game__table-cards--img"/>
+                                <img src="images/game/cards/place.svg" alt="" className="game__table-cards--img"/>
                             </div>
                         </li> : ""
                 }

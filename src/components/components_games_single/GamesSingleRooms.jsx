@@ -6,6 +6,7 @@ import GetCookies from "../../hooks/GetCookies";
 import {useNavigate} from "react-router-dom";
 import GlobalLink from "../../GlobalLink";
 import ActiveNotification from "../../hooks/ActiveNotification";
+import {useSelector} from "react-redux";
 
 const GamesSingleRooms = ({gamesId}) => {
 
@@ -15,9 +16,14 @@ const GamesSingleRooms = ({gamesId}) => {
 
     const [isActiveCreate, setIsActiveCreate] = useState(true)
     const [rooms, setRooms] = useState([])
+    const userInfo = useSelector(state => state.userInfoReducer.data)
 
     const handleCreate = (e) => {
-        setIsActiveCreate(prev => !prev)
+        if(Object.keys(userInfo).length) {
+            setIsActiveCreate(prev => !prev)
+        } else {
+            ActiveNotification('#notification_not-auth')
+        }
     }
 
     const [currency, setCurreny] = useState('chips')
@@ -125,10 +131,10 @@ const GamesSingleRooms = ({gamesId}) => {
                                     <div className="page-rooms__select-wrapper">
                                         <select onChange={e => setCurreny(e.target.value)} name="currency"
                                                 className="page-rooms__select custom-select">
-                                            <option value="chips" data-image="../images/icons/chip.svg">
+                                            <option value="chips" data-image="images/icons/chip.svg">
                                                 Фишки
                                             </option>
-                                            <option value="money" data-image="../images/icons/dollar-circle.svg">
+                                            <option value="money" data-image="images/icons/dollar-circle.svg">
                                                 Деньги
                                             </option>
                                         </select>

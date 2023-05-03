@@ -3,7 +3,7 @@ import ClosePopup from "../../../hooks/ClosePopup";
 import ActiveNotification from "../../../hooks/ActiveNotification";
 import {useDispatch, useSelector} from "react-redux";
 import {accountBalanceReducer} from "../../../redux/reducers/accountBalanceReducer";
-import {addBalance} from "../../../redux/actions";
+import {addBalance, popupTitle} from "../../../redux/actions";
 import axios from "axios";
 import GetCookies from "../../../hooks/GetCookies";
 
@@ -20,6 +20,8 @@ const PopupPromocodeForm = () => {
         axios.post(`https://board-games.sonisapps.com/api/finance/promo_code/?code=${inputValue}`).then(res => {
             console.log(res.data)
             ActiveNotification('#notification_promocode-success')
+            setInputValue('')
+            dispatch(popupTitle(''))
         }).catch(er => {
 
             if(er.response.status === 404) {

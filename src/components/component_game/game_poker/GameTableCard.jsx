@@ -25,12 +25,12 @@ const GameTableCard = ({cardsInTable, cell}) => {
                             <div className="poker__table--card-body card-body">
                                 <div className="one-thousand__back-cards--item-back">
                                     <img
-                                        src={`../images/cards/${card.card_type}-${card.card_suit}.svg`}
+                                        src={`images/cards/${card.card_type}-${card.card_suit}.svg`}
                                         alt=""
                                         className="one-thousand__back-cards--img"/>
                                 </div>
                                 <div className="one-thousand__back-cards--item-front">
-                                    <img src="../images/game/cards/Back.svg" alt=""
+                                    <img src="images/game/cards/Back.svg" alt=""
                                          className="one-thousand__back-cards--img"/>
                                 </div>
                             </div>

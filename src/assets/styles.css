@@ -17268,6 +17268,9 @@ label._error .popup-input-placeholder{
 .main_socket_close{
     opacity: .3;
 }
+.intro__container .swiper{
+    width: 100%;
+}
 
 
 .game__table-cards--item,
@@ -17425,6 +17428,25 @@ label._error .popup-input-placeholder{
     display: none;
 }
 
+.active-card .game__table-cards--card:first-child{
+    box-shadow: 0 0 20px 5px var(--red-2);
+    -webkit-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    -o-transform: scale(1.05);
+    transform: scale(1.05);
+}
+
+@media screen and (max-width: 767px) {
+    .intro__decor--image{
+        top: -400px;
+    }
+}
+@media screen and (max-width: 576px) {
+    .intro__decor--image{
+        top: -150px;
+    }
+}
 @media screen and (max-width: 649px) {
     .game__main--table.game__bg picture{
         display: none;

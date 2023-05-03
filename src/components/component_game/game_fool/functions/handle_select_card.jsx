@@ -1,7 +1,6 @@
 import React from 'react';
 
-const handleSelect = (item, htmlCard, setWrongStep, selectedCard, trump, setSelectedCard, setMyCards) => {
-    setWrongStep(false)
+const handleSelect = (item, htmlCard, setWrongStep, selectedCard, trump, setSelectedCard, setMyCards, isMouseMove = false) => {
 
     const ranks = {
         '1': 1,
@@ -20,11 +19,32 @@ const handleSelect = (item, htmlCard, setWrongStep, selectedCard, trump, setSele
         'A': 14,
     }
 
+    const isTrueCard = (item?.suit === selectedCard?.card?.suit && ranks[item?.rank] < ranks[selectedCard?.card?.rank]) ||
+        (trump?.suit === selectedCard?.card?.suit && selectedCard?.card?.suit !== item?.suit) ||
+        (trump?.suit === selectedCard?.card?.suit && selectedCard?.card?.suit === item?.suit && ranks[selectedCard?.card?.rank] > ranks[item?.rank]);
+
+    if(isMouseMove) {
+
+        if(isTrueCard && htmlCard.target.closest('li').querySelectorAll('.game__table-cards--card').length === 1) {
+            if(htmlCard.type === 'mouseleave') {
+                htmlCard.target.closest('li').classList.remove('active-card');
+            } else {
+                htmlCard.target.closest('li').classList.add('active-card');
+            }
+        }
+        return null;
+
+    }
+
+    if(htmlCard.target.closest('li').querySelectorAll('.game__table-cards--card').length !== 1) {
+        return null;
+    }
+
     if (Object.keys(selectedCard).length <= 0) {
         console.log('Choose a card')
-    } else if ((item.suit === selectedCard?.card?.suit && ranks[item.rank] < ranks[selectedCard.card.rank]) ||
-        (trump.suit === selectedCard.card.suit && selectedCard.card.suit !== item.suit) ||
-        (trump.suit === selectedCard.card.suit && selectedCard.card.suit === item.suit && ranks[selectedCard.card.rank] > ranks[item.rank])) {
+    } else if (isTrueCard) {
+
+        htmlCard.target.closest('li').classList.remove('active-card');
 
         const e = document.querySelector('.game-user-cards__item._active')
 
@@ -80,8 +100,10 @@ const handleSelect = (item, htmlCard, setWrongStep, selectedCard, trump, setSele
         }, 300)
 
     } else {
+        setTimeout(() => {
+            setWrongStep(false)
+        }, 1000)
         setWrongStep(true)
-        setSelectedCard({})
     }
 
 }

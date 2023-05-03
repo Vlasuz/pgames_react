@@ -1,16 +1,18 @@
 import React from 'react';
 
-const NotificationPromoCode404 = ({handleClose}) => {
+const NotificationSuccessPayment = ({handleClose}) => {
     return (
-        <li className="notifications__item notification-item" id={"notification-promo-404"}>
+        <li id={"notification_payment-success"} className="notifications__item notification-item">
             <div className="notification-item__body">
-                <div className="notification-item__header _error">
-                    <img src="images/icons/error.svg" width="20" height="20" alt=""
+                <div className="notification-item__header _message">
+                    <img src="images/icons/bell.svg" width="20" height="20" alt=""
                          className="notification-item__icon"/>
-                    <h3 className="notification-item__title" title="Системное сообщение!">
-                        Промо-код
+                    <h3 className="notification-item__title" title="Бонус!">
+                        Пополнение счета
                     </h3>
-                    {/*<span className="notification-item__time">10 mins ago</span>*/}
+                    <span className="notification-item__time">
+                        {/*10 mins ago*/}
+                    </span>
                     <button onClick={handleClose} className="notification-item__close-btn" type="button"
                             title="Закрыть">
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
@@ -24,7 +26,7 @@ const NotificationPromoCode404 = ({handleClose}) => {
                 </div>
                 <div className="notification-item__content">
                     <p>
-                        Такого промо-кода не существует
+                        Счет успешно пополнен
                     </p>
                 </div>
             </div>
@@ -32,4 +34,4 @@ const NotificationPromoCode404 = ({handleClose}) => {
     );
 };
 
-export default NotificationPromoCode404;
+export default NotificationSuccessPayment;

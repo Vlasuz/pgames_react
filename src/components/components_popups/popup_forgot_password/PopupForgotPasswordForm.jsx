@@ -28,10 +28,10 @@ const PopupForgotPasswordForm = () => {
                     className={"forgot-password-popup__submit popup-submit btn _large _shadow" + (/\S+@\S+\.\S+/.test(valueInput) ? "" : " _disabled")}>
                 Отправить
             </button>
-            <button onClick={_ => dispatch(popupTitle('login'))}
+            <a onClick={_ => dispatch(popupTitle('login'))}
                className="forgot-password-popup__link popup-link popup-close open-popup">
                 Назад
-            </button>
+            </a>
         </form>
     );
 };

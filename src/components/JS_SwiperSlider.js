@@ -24,7 +24,7 @@ const swiperSliders = () => {
         }
     }
 
-    let introSlider = new Swiper('.intro__slider', {
+    new Swiper('.intro__slider', {
 
         modules: [Pagination, EffectFade],
         spaceBetween: 30,
