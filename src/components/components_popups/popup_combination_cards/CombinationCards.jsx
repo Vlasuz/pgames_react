@@ -25,7 +25,7 @@ const CombinationCards = () => {
                                         </div>
                                     </div>
                                     <div className="poker-combination-popup__item--image">
-                                        <img src="../images/poker/combination/1.svg" alt=""
+                                        <img src="images/poker/combination/1.svg" alt=""
                                              className="poker-combination-popup__item--img"/>
                                     </div>
                                 </div>
@@ -41,7 +41,7 @@ const CombinationCards = () => {
                                         </div>
                                     </div>
                                     <div className="poker-combination-popup__item--image">
-                                        <img src="../images/poker/combination/2.svg" alt=""
+                                        <img src="images/poker/combination/2.svg" alt=""
                                              className="poker-combination-popup__item--img"/>
                                     </div>
                                 </div>
@@ -57,7 +57,7 @@ const CombinationCards = () => {
                                         </div>
                                     </div>
                                     <div className="poker-combination-popup__item--image">
-                                        <img src="../images/poker/combination/3.svg" alt=""
+                                        <img src="images/poker/combination/3.svg" alt=""
                                              className="poker-combination-popup__item--img"/>
                                     </div>
                                 </div>
@@ -73,7 +73,7 @@ const CombinationCards = () => {
                                         </div>
                                     </div>
                                     <div className="poker-combination-popup__item--image">
-                                        <img src="../images/poker/combination/4.svg" alt=""
+                                        <img src="images/poker/combination/4.svg" alt=""
                                              className="poker-combination-popup__item--img"/>
                                     </div>
                                 </div>
@@ -89,7 +89,7 @@ const CombinationCards = () => {
                                         </div>
                                     </div>
                                     <div className="poker-combination-popup__item--image">
-                                        <img src="../images/poker/combination/5.svg" alt=""
+                                        <img src="images/poker/combination/5.svg" alt=""
                                              className="poker-combination-popup__item--img"/>
                                     </div>
                                 </div>
@@ -105,7 +105,7 @@ const CombinationCards = () => {
                                         </div>
                                     </div>
                                     <div className="poker-combination-popup__item--image">
-                                        <img src="../images/poker/combination/6.svg" alt=""
+                                        <img src="images/poker/combination/6.svg" alt=""
                                              className="poker-combination-popup__item--img"/>
                                     </div>
                                 </div>
@@ -121,7 +121,7 @@ const CombinationCards = () => {
                                         </div>
                                     </div>
                                     <div className="poker-combination-popup__item--image">
-                                        <img src="../images/poker/combination/7.svg" alt=""
+                                        <img src="images/poker/combination/7.svg" alt=""
                                              className="poker-combination-popup__item--img"/>
                                     </div>
                                 </div>
@@ -137,7 +137,7 @@ const CombinationCards = () => {
                                         </div>
                                     </div>
                                     <div className="poker-combination-popup__item--image">
-                                        <img src="../images/poker/combination/8.svg" alt=""
+                                        <img src="images/poker/combination/8.svg" alt=""
                                              className="poker-combination-popup__item--img"/>
                                     </div>
                                 </div>
@@ -153,7 +153,7 @@ const CombinationCards = () => {
                                         </div>
                                     </div>
                                     <div className="poker-combination-popup__item--image">
-                                        <img src="../images/poker/combination/9.svg" alt=""
+                                        <img src="images/poker/combination/9.svg" alt=""
                                              className="poker-combination-popup__item--img"/>
                                     </div>
                                 </div>
@@ -169,7 +169,7 @@ const CombinationCards = () => {
                                         </div>
                                     </div>
                                     <div className="poker-combination-popup__item--image">
-                                        <img src="../images/poker/combination/10.svg" alt=""
+                                        <img src="images/poker/combination/10.svg" alt=""
                                              className="poker-combination-popup__item--img"/>
                                     </div>
                                 </div>

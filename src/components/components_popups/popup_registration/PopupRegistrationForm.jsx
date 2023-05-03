@@ -5,7 +5,7 @@ import axios from "axios";
 import {setUserInfo} from "../../../redux/reducers/userInfoReducer";
 import {useDispatch} from "react-redux";
 import ClosePopup from "../../../hooks/ClosePopup";
-import {actionLogout} from "../../../redux/actions";
+import {actionLogout, popupTitle} from "../../../redux/actions";
 import GlobalLink from "../../../GlobalLink";
 
 const PopupRegistrationForm = () => {
@@ -16,28 +16,31 @@ const PopupRegistrationForm = () => {
     const [inputRepeatPassword, setInputRepeatPassword] = useState('');
     const [isValid, setIsValid] = useState(false)
     const [isCheckedCheckbox, setIsCheckedCheckbox] = useState(true)
+    const [error, setError] = useState('')
     const dispatch = useDispatch()
 
     const handleSubmit = (e) => {
         e.preventDefault()
 
         axios.defaults.headers.post['platform'] = `pc`;
-        axios.post(GlobalLink(`/api/auth/sign_up/?email=${inputEmail}&username=${inputName}&password=${inputPassword}&confirm_password=${inputRepeatPassword}`))
-            .then(res => {
-                console.log('res.data', res.data)
-                dispatch(actionLogout(prev => !prev))
-                dispatch(setUserInfo(res.data.user))
-                document.cookie = `access_token=${res.data.access_token}`;
-                document.cookie = `refresh_token=${res.data.refresh_token}`;
+        axios.post(GlobalLink(`/api/auth/sign_up/?email=${inputEmail}&username=${inputName}&password=${inputPassword}&confirm_password=${inputRepeatPassword}`)).then(res => {
+            console.log('res.data', res.data)
+            dispatch(setUserInfo(res.data.user))
+            document.cookie = `access_token=${res.data.access_token}`;
+            document.cookie = `refresh_token=${res.data.refresh_token}`;
 
-                ClosePopup("#registration-popup")
-                setInputEmail('')
-                setInputName('')
-                setInputPassword('')
-                setInputRepeatPassword('')
-                setIsValid('')
+            setInputEmail('')
+            setInputName('')
+            setInputPassword('')
+            setInputRepeatPassword('')
+            setIsValid('')
 
-            })
+            dispatch(popupTitle(''))
+        }).catch(error => {
+            if(error.response.status === 409) {
+                setError('Такой аккаунт уже зарегистрирован')
+            }
+        })
         setIsValid(true)
     }
 
@@ -92,12 +95,14 @@ const PopupRegistrationForm = () => {
                 {!isValid || inputPassword.length > 0 && inputName.length > 0 && inputRepeatPassword.length > 0 ? "" :
                     <li>Пожалуйста, заполните все поля</li>}
                 {!isValid || inputPassword === inputRepeatPassword ? "" : <li>Пароли не совпадают</li>}
+
+                <li>{error}</li>
             </ul>
             <button type="submit"
                     className="registration-popup__submit popup-submit btn _large _shadow">
                 Зарегистрироваться
             </button>
-            <a href="#login-popup" onClick={openPopup}
+            <a onClick={_ => dispatch(popupTitle('login'))}
                className="registration-popup__link popup-link popup-close open-popup">
                 У меня уже есть аккаунт
             </a>

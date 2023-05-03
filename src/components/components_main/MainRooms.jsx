@@ -8,7 +8,7 @@ const MainRooms = () => {
         <section className="rooms section-padding">
             <div className="rooms__bg">
                 <picture>
-                    <img src="../images/main-page/rooms/bg.png" loading="lazy" alt="" width="0" height="0"
+                    <img src="images/main-page/rooms/bg.png" loading="lazy" alt="" width="0" height="0"
                          className="rooms__bg--img"/>
                 </picture>
             </div>

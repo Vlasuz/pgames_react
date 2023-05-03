@@ -205,14 +205,14 @@ const GameStart = () => {
                     <div className="poker__main">
                         <div className="poker__main--bg poker__bg">
                             <picture>
-                                <img src="../images/game/table.png" alt="" width="300" className="poker__bg--img"/>
+                                <img src="images/game/table.png" alt="" width="300" className="poker__bg--img"/>
                             </picture>
                         </div>
                         <div className="poker__main--grid poker__grid">
                             <div className="poker__grid--item">
                                 <div className="game__bet">
                                     <span className="game__bet--value">1500</span>
-                                    <img src="../images/icons/chip.svg" alt="" className="game__bet--currency"/>
+                                    <img src="images/icons/chip.svg" alt="" className="game__bet--currency"/>
                                 </div>
                             </div>
                             <div className="poker__grid--item">
@@ -221,7 +221,7 @@ const GameStart = () => {
                                         <div className="game__player _min">
                                             <div className="game__player--body">
                                                 <div className="game__player--avatar">
-                                                    <img src="../images/account/avatar.png" width="76" height="76"
+                                                    <img src="images/account/avatar.png" width="76" height="76"
                                                          alt=""
                                                          className="game__player--avatar-img"/>
                                                 </div>
@@ -257,11 +257,11 @@ const GameStart = () => {
                                                                     <li key={card.id}
                                                                         className="poker-player-cards__card">
                                                                         <div className="poker-player-cards__card--body">
-                                                                            <img src="../images/game/cards/Back.svg"
+                                                                            <img src="images/game/cards/Back.svg"
                                                                                  alt=""
                                                                                  className="poker-player-cards__card--back"/>
                                                                             <img
-                                                                                src={`../images/cards/${card.card_type}-${card.card_suit}.svg`}
+                                                                                src={`images/cards/${card.card_type}-${card.card_suit}.svg`}
                                                                                 alt=""
                                                                                 className="poker-player-cards__card--front"/>
                                                                         </div>
@@ -293,7 +293,7 @@ const GameStart = () => {
                                         <div className="game__player _min">
                                             <div className="game__player--body">
                                                 <div className="game__player--avatar">
-                                                    <img src="../images/account/avatar.png" width="76" height="76"
+                                                    <img src="images/account/avatar.png" width="76" height="76"
                                                          alt=""
                                                          className="game__player--avatar-img"/>
                                                 </div>
@@ -331,7 +331,7 @@ const GameStart = () => {
                                         <div className="game__player _min">
                                             <div className="game__player--body">
                                                 <div className="game__player--avatar">
-                                                    <img src="../images/account/avatar.png" width="76" height="76"
+                                                    <img src="images/account/avatar.png" width="76" height="76"
                                                          alt=""
                                                          className="game__player--avatar-img"/>
                                                 </div>
@@ -369,7 +369,7 @@ const GameStart = () => {
                                         <div className="game__player _min">
                                             <div className="game__player--body">
                                                 <div className="game__player--avatar">
-                                                    <img src="../images/account/avatar.png" width="76" height="76"
+                                                    <img src="images/account/avatar.png" width="76" height="76"
                                                          alt=""
                                                          className="game__player--avatar-img"/>
                                                 </div>
@@ -405,11 +405,11 @@ const GameStart = () => {
                                                                     <li key={card.id}
                                                                         className="poker-player-cards__card">
                                                                         <div className="poker-player-cards__card--body">
-                                                                            <img src="../images/game/cards/Back.svg"
+                                                                            <img src="images/game/cards/Back.svg"
                                                                                  alt=""
                                                                                  className="poker-player-cards__card--back"/>
                                                                             <img
-                                                                                src={`../images/cards/${card.card_type}-${card.card_suit}.svg`}
+                                                                                src={`images/cards/${card.card_type}-${card.card_suit}.svg`}
                                                                                 alt=""
                                                                                 className="poker-player-cards__card--front"/>
                                                                         </div>
@@ -440,7 +440,7 @@ const GameStart = () => {
                                         <div className="game__player _min">
                                             <div className="game__player--body">
                                                 <div className="game__player--avatar">
-                                                    <img src="../images/account/avatar.png" width="76" height="76"
+                                                    <img src="images/account/avatar.png" width="76" height="76"
                                                          alt=""
                                                          className="game__player--avatar-img"/>
                                                 </div>
@@ -478,7 +478,7 @@ const GameStart = () => {
                                         <div className="game__player _min">
                                             <div className="game__player--body">
                                                 <div className="game__player--avatar">
-                                                    <img src="../images/account/avatar.png" width="76" height="76"
+                                                    <img src="images/account/avatar.png" width="76" height="76"
                                                          alt=""
                                                          className="game__player--avatar-img"/>
                                                 </div>
@@ -516,7 +516,7 @@ const GameStart = () => {
                                         <div className="game__player _min">
                                             <div className="game__player--body">
                                                 <div className="game__player--avatar">
-                                                    <img src="../images/account/avatar.png" width="76" height="76"
+                                                    <img src="images/account/avatar.png" width="76" height="76"
                                                          alt=""
                                                          className="game__player--avatar-img"/>
                                                 </div>
@@ -559,7 +559,7 @@ const GameStart = () => {
                                                         <li key={card.id} className="poker-user-cards__card">
                                                             <div className="poker-user-cards__card--body">
                                                                 <img
-                                                                    src={`../images/cards/${card.card_type}-${card.card_suit}.svg`}
+                                                                    src={`images/cards/${card.card_type}-${card.card_suit}.svg`}
                                                                     alt=""
                                                                     className="poker-user-cards__card--img"/>
                                                             </div>
@@ -581,7 +581,7 @@ const GameStart = () => {
                                         </div>
                                     </div>
                                     <div className="game__user--avatar">
-                                        <img src="../images/account/avatar.png" alt=""
+                                        <img src="images/account/avatar.png" alt=""
                                              className="game__user--avatar-img"/>
                                     </div>
                                 </div>
@@ -603,7 +603,7 @@ const GameStart = () => {
                                         <div className="poker__table--value">
                                             <div className="game__bet">
                                                 <span className="game__bet--value">Pot {pot}</span>
-                                                <img src="../images/icons/chip.svg" alt=""
+                                                <img src="images/icons/chip.svg" alt=""
                                                      className="game__bet--currency"/>
                                             </div>
                                         </div>
@@ -665,7 +665,7 @@ const GameStart = () => {
                                             <ul className="game__chat--list">
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">
@@ -680,7 +680,7 @@ const GameStart = () => {
                                                 </li>
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">
@@ -695,7 +695,7 @@ const GameStart = () => {
                                                 </li>
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">
@@ -710,7 +710,7 @@ const GameStart = () => {
                                                 </li>
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">
@@ -725,7 +725,7 @@ const GameStart = () => {
                                                 </li>
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">
@@ -740,7 +740,7 @@ const GameStart = () => {
                                                 </li>
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">
@@ -755,7 +755,7 @@ const GameStart = () => {
                                                 </li>
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">
@@ -770,7 +770,7 @@ const GameStart = () => {
                                                 </li>
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">
@@ -785,7 +785,7 @@ const GameStart = () => {
                                                 </li>
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">
@@ -800,7 +800,7 @@ const GameStart = () => {
                                                 </li>
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">

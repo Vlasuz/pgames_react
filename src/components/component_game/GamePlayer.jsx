@@ -50,7 +50,7 @@ const GamePlayer = ({ player, userTurn, fixedTime, timer, isEndGame, isGameStart
         <div className="game__player">
             <div className="game__player--body">
                 <div className="game__player--avatar">
-                    <img src="../images/account/avatar.png" width="76" height="76" alt=""
+                    <img src="images/account/avatar.png" width="76" height="76" alt=""
                          className="game__player--avatar-img"/>
                 </div>
                 <div className={"game__player--info" + (whoToWhom?.defender?.id === playerHere?.id ? " player_defender" : whoToWhom?.attacker?.id === playerHere?.id ? " player_attacker" : "")}>
@@ -73,7 +73,7 @@ const GamePlayer = ({ player, userTurn, fixedTime, timer, isEndGame, isGameStart
                                 !isWinner.some(user => user.id === playerHere.id) && cards.map((_, index) =>
                                     <li key={index} className="game__player--cards-item">
                                         <div className="game__player--cards-item-body">
-                                            <img src="../images/game/cards/Back.svg" alt="" className="game__player--cards-img" />
+                                            <img src="images/game/cards/Back.svg" alt="" className="game__player--cards-img" />
                                         </div>
                                     </li>
                                 )

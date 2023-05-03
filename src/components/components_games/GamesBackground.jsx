@@ -6,14 +6,14 @@ const GamesBackground = () => {
             <div className="section-page-bg__element">
                 <picture>
                     <source srcSet="images/online-games/bg-1.webp" type="image/webp"/>
-                    <img src="../images/online-games/bg-1.png" loading="lazy" alt="" width="0" height="0"
+                    <img src="images/online-games/bg-1.png" loading="lazy" alt="" width="0" height="0"
                          className="section-page-bg__img"/>
                 </picture>
             </div>
             <div className="section-page-bg__element">
                 <picture>
                     <source srcSet="images/online-games/bg-2.webp" type="image/webp"/>
-                    <img src="../images/online-games/bg-2.png" loading="lazy" alt="" width="0" height="0"
+                    <img src="images/online-games/bg-2.png" loading="lazy" alt="" width="0" height="0"
                          className="section-page-bg__img"/>
                 </picture>
             </div>

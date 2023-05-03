@@ -21,7 +21,7 @@ const NewsPopular = () => {
                                     <picture>
                                         <source srcSet="images/main-page/news/image-large.webp"
                                                 type="image/webp"/>
-                                        <img src="../images/main-page/news/image-large.jpg" alt="" width="400"
+                                        <img src="images/main-page/news/image-large.jpg" alt="" width="400"
                                              loading="lazy" className="last-news__large-article--img"/>
                                     </picture>
                                 </div>

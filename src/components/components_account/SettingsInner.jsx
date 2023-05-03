@@ -23,7 +23,7 @@ const SettingsInner = () => {
                             Ввод кошелька
                         </h3>
                         <div className="account-wallets__add">
-                            <a href="#" className="account-wallets__add--btn btn _large-2">
+                            <a onClick={_ => ActiveNotification('#notification_is-develop')} className="account-wallets__add--btn btn _large-2">
                                 Добавить кошелек
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">

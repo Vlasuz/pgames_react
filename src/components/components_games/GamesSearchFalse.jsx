@@ -10,7 +10,7 @@ const GamesSearchFalse = () => {
                     <div className="online-games__main--wrapper">
                         <div className="online-games__not-found">
                             <div className="online-games__not-found--body">
-                                <img src="../images/online-games/icon.svg" width="93" height="77" loading="lazy"
+                                <img src="images/online-games/icon.svg" width="93" height="77" loading="lazy"
                                      alt="" className="online-games__not-found--icon" />
                                 <h3 className="online-games__not-found--title section-title _center">
                                     Результаты не найдены

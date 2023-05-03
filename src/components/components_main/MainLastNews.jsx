@@ -25,11 +25,11 @@ const MainLastNews = (props) => {
                 <a onClick={OpenPopup} href={"#mini-video-popup"} className="last-news__game large-game" data-aos="fade-in" data-aos-delay="600">
                     <div className="large-game__preview">
                         <picture>
-                            <img src="../images/main-page/news/game.jpg" loading="lazy" alt="" width="300"
+                            <img src="images/main-page/news/game.jpg" loading="lazy" alt="" width="300"
                                  className="large-game__preview--img"/>
                         </picture>
                     </div>
-                    <img src="../images/icons/play.svg" width="42" height="42" alt=""
+                    <img src="images/icons/play.svg" width="42" height="42" alt=""
                          className="large-game__play-icon"/>
                     <h3 className="large-game__title">
                         Шахматные игры

@@ -1,8 +1,19 @@
 import React from 'react';
 import AccountAddCash from "./AccountAddCash";
 import BlockInfoAboutUser from "./blockInfoAboutUser";
+import axios from "axios";
+import {useDispatch} from "react-redux";
+import {popupTitle} from "../../redux/actions";
 
-const MainInner = (props) => {
+const MainInner = () => {
+
+    // const handleDelete = () => {
+    //     axios.delete('https://board-games.sonisapps.com/api/user/confirm_delete_account/?delete_code=213').then(({data}) => {
+    //         console.log('delete', data)
+    //     })
+    // }
+
+    const dispatch = useDispatch()
 
     return (
         <div className="account__main--wrapper">
@@ -13,7 +24,7 @@ const MainInner = (props) => {
 
                         <BlockInfoAboutUser />
 
-                        <button type="button" className="account-remove-btn hide-on-table">
+                        <button type="button" onClick={_ => dispatch(popupTitle(''))} className="account-remove-btn hide-on-table">
                             <svg width="10" height="13" viewBox="0 0 10 13" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path

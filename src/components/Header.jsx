@@ -17,14 +17,9 @@ const Header = (props) => {
         {to: '/games', title: i18next.t('menu_item_name__games')},
         {to: '/rooms', title: i18next.t('menu_item_name__rooms')},
         {to: '/news', title: i18next.t('menu_item_name__news')},
-        // {to: '/#advantages-id', title: 'Преимущества'},
     ]
 
-    const isLogout = useSelector(state => {
-        const {logoutReducer} = state
-        return logoutReducer.auth
-    })
-
+    const userInfo = useSelector(state => state.userInfoReducer.data)
     const dispatch = useDispatch()
 
 
@@ -32,7 +27,7 @@ const Header = (props) => {
         <header className="header">
             <div className="header__container container _large">
                 <Link to={"/"} className="header__logo">
-                    <img src="../images/logo.svg" alt="" width="150" className="header__logo--img"/>
+                    <img src="images/logo.svg" alt="" width="150" className="header__logo--img"/>
                 </Link>
                 <nav className="header__nav">
                     <div className="header__nav--body">
@@ -50,7 +45,7 @@ const Header = (props) => {
                         </ul>
 
                         {
-                            isLogout ?
+                            Object.keys(userInfo).length ?
                                 <div className="header__nav--user-info header__user-info">
                                     <HeaderBalance/>
                                     <HeaderNotifications/>
@@ -60,9 +55,8 @@ const Header = (props) => {
                         <HeaderLanguages/>
 
 
-                        {isLogout ? <HeaderAccount/> :
-                            <a className={'link-to-register btn _gradient _shadow'} onClick={_ => dispatch(popupTitle('login'))}
-                               href={"#login-popup"}>Войти</a>}
+                        {Object.keys(userInfo).length ? <HeaderAccount/> :
+                            <a className={'link-to-register btn _gradient _shadow'} onClick={_ => dispatch(popupTitle('login'))}>Войти</a>}
 
                     </div>
                 </nav>

@@ -1,13 +1,18 @@
 import React from 'react';
 import {NavLink} from "react-router-dom";
 import OpenPopup from "../../hooks/OpenPopup";
+import {useDispatch} from "react-redux";
+import {popupTitle} from "../../redux/actions";
 
 const NotificationNotAuth = ({handleClose}) => {
+
+    const dispatch = useDispatch()
+
     return (
         <li id={"notification_not-auth"} className="notifications__item notification-item">
             <div className="notification-item__body">
                 <div className="notification-item__header _error">
-                    <img src="../images/icons/error.svg" width="20" height="20" alt=""
+                    <img src="images/icons/error.svg" width="20" height="20" alt=""
                          className="notification-item__icon"/>
                     <h3 className="notification-item__title" title="Бонус!">
                         Системное сообщение
@@ -28,7 +33,7 @@ const NotificationNotAuth = ({handleClose}) => {
                 </div>
                 <div className="notification-item__content">
                     <p>
-                        Вы не авторизовались! <br /><a onClick={OpenPopup} href={"#login-popup"}>Авторизуйтесь</a> пожалуйста
+                        Вы не авторизовались! <br /><a onClick={_ => dispatch(popupTitle('login'))}>Авторизуйтесь</a> пожалуйста
                     </p>
                 </div>
             </div>

@@ -11,6 +11,8 @@ import NotificationInDevelop from "./components_notifications/NotificationInDeve
 import NotificationPromoCode404 from "./components_notifications/NotificationPromoCode404";
 import NotificationPromoCode409 from "./components_notifications/NotificationPromoCode409";
 import NotificationPromoCodeSuccess from "./components_notifications/NotificationPromoCodeSuccess";
+import NotificationSuccessPayment from "./components_notifications/NotificationSuccessPayment";
+import NotificationSuccessSubscribe from "./components_notifications/NotificationSuccessSubscribe";
 
 const Notifications = () => {
 
@@ -49,11 +51,13 @@ const Notifications = () => {
                     <NotificationPromoCode404 handleClose={handleClose}/>
                     <NotificationPromoCode409 handleClose={handleClose}/>
                     <NotificationPromoCodeSuccess handleClose={handleClose}/>
+                    <NotificationSuccessPayment handleClose={handleClose}/>
+                    <NotificationSuccessSubscribe handleClose={handleClose}/>
 
                     <li id={"notification_game-is-run"} className="notifications__item notification-item">
                         <div className="notification-item__body">
                             <div className="notification-item__header">
-                                <img src="../images/icons/info.svg" width="20" height="20" alt=""
+                                <img src="images/icons/info.svg" width="20" height="20" alt=""
                                      className="notification-item__icon"/>
                                 <h3 className="notification-item__title" title="Идет игра!">
                                     Идет игра!
@@ -89,7 +93,7 @@ const Notifications = () => {
                     <li className="notifications__item notification-item">
                         <div className="notification-item__body">
                             <div className="notification-item__header _error">
-                                <img src="../images/icons/error.svg" width="20" height="20" alt=""
+                                <img src="images/icons/error.svg" width="20" height="20" alt=""
                                      className="notification-item__icon"/>
                                 <h3 className="notification-item__title" title="Системное сообщение!">
                                     Системное сообщение!
@@ -116,7 +120,7 @@ const Notifications = () => {
                     <li className="notifications__item notification-item">
                         <div className="notification-item__body">
                             <div className="notification-item__header _message">
-                                <img src="../images/icons/bell.svg" width="20" height="20" alt=""
+                                <img src="images/icons/bell.svg" width="20" height="20" alt=""
                                      className="notification-item__icon"/>
                                 <h3 className="notification-item__title" title="Личные данные!">
                                     Личные данные!
@@ -145,7 +149,7 @@ const Notifications = () => {
                     <li className="notifications__item notification-item">
                         <div className="notification-item__body">
                             <div className="notification-item__header _message">
-                                <img src="../images/icons/bell.svg" width="20" height="20" alt=""
+                                <img src="images/icons/bell.svg" width="20" height="20" alt=""
                                      className="notification-item__icon"/>
                                 <h3 className="notification-item__title" title="Личные данные!">
                                     Личные данные!

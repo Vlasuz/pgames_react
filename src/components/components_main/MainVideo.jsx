@@ -14,12 +14,12 @@ const MainVideo = () => {
                     <div className="video__preview--image">
                         <picture>
                             <source srcSet="images/main-page/advantages/video-preview.webp" type="image/webp"/>
-                            <img src="../images/main-page/advantages/video-preview.jpg" alt="" width="300"
+                            <img src="images/main-page/advantages/video-preview.jpg" alt="" width="300"
                                  className="video__preview--img"/>
                         </picture>
                     </div>
                     <div className="video__preview--block">
-                        <img src="../images/icons/play.svg" width="94" height="94" alt=""
+                        <img src="images/icons/play.svg" width="94" height="94" alt=""
                              className="video__preview--play"/>
                         <h2 className="video__preview--text">
                             О том почему вы с нами!

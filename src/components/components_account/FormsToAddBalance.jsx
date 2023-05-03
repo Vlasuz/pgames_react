@@ -2,12 +2,17 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import GlobalLink from "../../GlobalLink";
 import GetCookies from "../../hooks/GetCookies";
+import {useDispatch} from "react-redux";
+import {actionLogout, popupTitle} from "../../redux/actions";
+import ActiveNotification from "../../hooks/ActiveNotification";
+import {setUserInfo} from "../../redux/reducers/userInfoReducer";
 
 const FormsToAddBalance = () => {
 
     const [isOpenVarious, setIsOpenVarious] = useState(false)
     const [isBalanceChips, setIsBalanceChips] = useState('chips')
     const [inputCash, setInputCash] = useState('')
+    const dispatch = useDispatch()
 
     const addCash = (e) => {
         e.preventDefault()
@@ -18,6 +23,14 @@ const FormsToAddBalance = () => {
             "currency_type": isBalanceChips
         }).then(({data}) => {
             console.log('add cash', data)
+            setInputCash('')
+            ActiveNotification('#notification_payment-success')
+
+            axios.defaults.headers.get['Authorization'] = `Bearer ${GetCookies('access_token')}`;
+            axios.get(GlobalLink('/api/user/me/')).then(res => {
+                dispatch(setUserInfo(res.data))
+            })
+
         })
     }
 

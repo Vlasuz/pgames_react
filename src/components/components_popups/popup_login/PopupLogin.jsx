@@ -16,7 +16,7 @@ const PopupLogin = () => {
                     <div className="login-popup__container popup-container">
                         <PopupCross/>
                         <div className="login-popup__logo popup-logo">
-                            <img src="../images/logo.svg" width="100" height="38" alt="" className="popup-logo__img" />
+                            <img src="images/logo.svg" width="100" height="38" alt="" className="popup-logo__img" />
                         </div>
                         <h2 className="login-popup__title popup-title section-title _center">
                             Вход

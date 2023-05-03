@@ -13,7 +13,7 @@ const Footer = () => {
             <div className="footer__bg">
                 <picture>
                     <source srcSet="images/footer/bg.webp" type="image/webp"/>
-                    <img src="../images/footer/bg.png" loading="lazy" alt="" width="0" height="0"
+                    <img src="images/footer/bg.png" loading="lazy" alt="" width="0" height="0"
                          className="footer__bg--img"/>
                 </picture>
             </div>

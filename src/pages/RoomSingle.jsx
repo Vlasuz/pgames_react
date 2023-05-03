@@ -170,11 +170,11 @@ const RoomSingle = () => {
                         <div className="game__main">
                             <div className="game__main--table game__bg">
                                 <picture>
-                                    <img src="../images/game/table.png" alt="" width="300"
+                                    <img src="images/game/table.png" alt="" width="300"
                                          className="game__bg--img"/>
                                 </picture>
                                 <picture className={"table-for-mob"}>
-                                    <img src="../images/game/table-mob.png" alt="" width="300"
+                                    <img src="images/game/table-mob.png" alt="" width="300"
                                          className="game__bg--img"/>
                                 </picture>
                             </div>
@@ -185,7 +185,7 @@ const RoomSingle = () => {
                                             {infoRoom.bet}
                                         </span>
                                         <img
-                                            src={infoRoom.bet_type === 'chips' ? "../images/icons/chip.svg" : "../images/icons/dollar-circle.svg"}
+                                            src={infoRoom.bet_type === 'chips' ? "images/icons/chip.svg" : "images/icons/dollar-circle.svg"}
                                             alt="" className="game__bet--currency"/>
                                     </div>
                                 </div>
@@ -338,7 +338,7 @@ const RoomSingle = () => {
                                                                 className="game-user-cards__item">
                                                                 <div className="game-user-cards__item--body">
                                                                     <img
-                                                                        src={`../images/game/cards/${item.rank}-${item.suit}.svg`}
+                                                                        src={`images/game/cards/${item.rank}-${item.suit}.svg`}
                                                                         alt=""
                                                                         className="game-user-cards__img"/>
                                                                 </div>
@@ -365,7 +365,7 @@ const RoomSingle = () => {
                                         </div>
                                         <div className="game__user--avatar">
                                             <img
-                                                src={user.avatar ? user.avatar : "../images/account/avatar-none.svg"}
+                                                src={user.avatar ? user.avatar : "images/account/avatar-none.svg"}
                                                 alt="" className="game__user--avatar-img"/>
                                         </div>
                                     </div>

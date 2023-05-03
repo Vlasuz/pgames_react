@@ -37,7 +37,7 @@ const GameChat = () => {
                     <ul className="game__chat--list">
                         <li className="game__chat--item">
                             <div className="game__chat--avatar">
-                                <img src="../images/account/avatar.png" width="24"
+                                <img src="images/account/avatar.png" width="24"
                                      height="24"
                                      alt=""/>
                             </div>
@@ -54,7 +54,7 @@ const GameChat = () => {
                         </li>
                         <li className="game__chat--item">
                             <div className="game__chat--avatar">
-                                <img src="../images/account/avatar.png" width="24"
+                                <img src="images/account/avatar.png" width="24"
                                      height="24"
                                      alt=""/>
                             </div>
@@ -71,7 +71,7 @@ const GameChat = () => {
                         </li>
                         <li className="game__chat--item">
                             <div className="game__chat--avatar">
-                                <img src="../images/account/avatar.png" width="24"
+                                <img src="images/account/avatar.png" width="24"
                                      height="24"
                                      alt=""/>
                             </div>
@@ -88,7 +88,7 @@ const GameChat = () => {
                         </li>
                         <li className="game__chat--item">
                             <div className="game__chat--avatar">
-                                <img src="../images/account/avatar.png" width="24"
+                                <img src="images/account/avatar.png" width="24"
                                      height="24"
                                      alt=""/>
                             </div>
@@ -105,7 +105,7 @@ const GameChat = () => {
                         </li>
                         <li className="game__chat--item">
                             <div className="game__chat--avatar">
-                                <img src="../images/account/avatar.png" width="24"
+                                <img src="images/account/avatar.png" width="24"
                                      height="24"
                                      alt=""/>
                             </div>
@@ -122,7 +122,7 @@ const GameChat = () => {
                         </li>
                         <li className="game__chat--item">
                             <div className="game__chat--avatar">
-                                <img src="../images/account/avatar.png" width="24"
+                                <img src="images/account/avatar.png" width="24"
                                      height="24"
                                      alt=""/>
                             </div>
@@ -139,7 +139,7 @@ const GameChat = () => {
                         </li>
                         <li className="game__chat--item">
                             <div className="game__chat--avatar">
-                                <img src="../images/account/avatar.png" width="24"
+                                <img src="images/account/avatar.png" width="24"
                                      height="24"
                                      alt=""/>
                             </div>
@@ -156,7 +156,7 @@ const GameChat = () => {
                         </li>
                         <li className="game__chat--item">
                             <div className="game__chat--avatar">
-                                <img src="../images/account/avatar.png" width="24"
+                                <img src="images/account/avatar.png" width="24"
                                      height="24"
                                      alt=""/>
                             </div>
@@ -173,7 +173,7 @@ const GameChat = () => {
                         </li>
                         <li className="game__chat--item">
                             <div className="game__chat--avatar">
-                                <img src="../images/account/avatar.png" width="24"
+                                <img src="images/account/avatar.png" width="24"
                                      height="24"
                                      alt=""/>
                             </div>
@@ -190,7 +190,7 @@ const GameChat = () => {
                         </li>
                         <li className="game__chat--item">
                             <div className="game__chat--avatar">
-                                <img src="../images/account/avatar.png" width="24"
+                                <img src="images/account/avatar.png" width="24"
                                      height="24"
                                      alt=""/>
                             </div>

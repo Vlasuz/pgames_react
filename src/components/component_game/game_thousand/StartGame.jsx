@@ -56,7 +56,7 @@ const StartGame = ({setStepOfGame}) => {
                     <div className="one-thousand__main">
                         <div className="one-thousand__main--bg one-thousand__bg">
                             <picture>
-                                <img src="../images/game/table.png" alt="" width="300"
+                                <img src="images/game/table.png" alt="" width="300"
                                      className="one-thousand__bg--img"/>
                             </picture>
                         </div>
@@ -64,7 +64,7 @@ const StartGame = ({setStepOfGame}) => {
                             <div className="one-thousand__grid--item">
                                 <div className="game__bet">
                                     <span className="game__bet--value">1500</span>
-                                    <img src="../images/icons/chip.svg" alt="" className="game__bet--currency"/>
+                                    <img src="images/icons/chip.svg" alt="" className="game__bet--currency"/>
                                 </div>
                             </div>
                             <div className="one-thousand__grid--item">
@@ -74,7 +74,7 @@ const StartGame = ({setStepOfGame}) => {
                                 <div className="game__player">
                                     <div className="game__player--body">
                                         <div className="game__player--avatar">
-                                            <img src="../images/account/avatar.png" width="76" height="76" alt=""
+                                            <img src="images/account/avatar.png" width="76" height="76" alt=""
                                                  className="game__player--avatar-img"/>
                                         </div>
                                         <div className="game__player--info">
@@ -94,7 +94,7 @@ const StartGame = ({setStepOfGame}) => {
                                 <div className="game__player">
                                     <div className="game__player--body">
                                         <div className="game__player--avatar">
-                                            <img src="../images/account/avatar.png" width="76" height="76" alt=""
+                                            <img src="images/account/avatar.png" width="76" height="76" alt=""
                                                  className="game__player--avatar-img"/>
                                         </div>
                                         <div className="game__player--info">
@@ -124,7 +124,7 @@ const StartGame = ({setStepOfGame}) => {
                                         </div>
                                     </div>
                                     <div className="game__user--avatar">
-                                        <img src="../images/account/avatar.png" alt=""
+                                        <img src="images/account/avatar.png" alt=""
                                              className="game__user--avatar-img"/>
                                     </div>
                                 </div>
@@ -233,7 +233,7 @@ const StartGame = ({setStepOfGame}) => {
                                             <ul className="game__chat--list">
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">
@@ -248,7 +248,7 @@ const StartGame = ({setStepOfGame}) => {
                                                 </li>
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">
@@ -263,7 +263,7 @@ const StartGame = ({setStepOfGame}) => {
                                                 </li>
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">
@@ -278,7 +278,7 @@ const StartGame = ({setStepOfGame}) => {
                                                 </li>
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">
@@ -293,7 +293,7 @@ const StartGame = ({setStepOfGame}) => {
                                                 </li>
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">
@@ -308,7 +308,7 @@ const StartGame = ({setStepOfGame}) => {
                                                 </li>
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">
@@ -323,7 +323,7 @@ const StartGame = ({setStepOfGame}) => {
                                                 </li>
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">
@@ -338,7 +338,7 @@ const StartGame = ({setStepOfGame}) => {
                                                 </li>
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">
@@ -353,7 +353,7 @@ const StartGame = ({setStepOfGame}) => {
                                                 </li>
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">
@@ -368,7 +368,7 @@ const StartGame = ({setStepOfGame}) => {
                                                 </li>
                                                 <li className="game__chat--item">
                                                     <div className="game__chat--avatar">
-                                                        <img src="../images/account/avatar.png" width="24" height="24"
+                                                        <img src="images/account/avatar.png" width="24" height="24"
                                                              alt=""/>
                                                     </div>
                                                     <div className="game__chat--info">

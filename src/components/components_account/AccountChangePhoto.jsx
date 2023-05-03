@@ -38,13 +38,11 @@ const AccountChangePhoto = () => {
                                          height="116"
                                          alt=""
                                          className="account-settings-element__avatar--img" />
-                                    <input onChange={handleLoadPhoto} required type="file" name="avatar"
-                                           className="account-settings-element__avatar--input" />
+                                    {/*<input onChange={handleLoadPhoto} required type="file" name="avatar"*/}
+                                    {/*       className="account-settings-element__avatar--input" />*/}
                                 </div>
-                                {/*<div type={"button"} className="account-settings-element__avatar--add btn _dark _large-2">*/}
-                                {/*    Добавить*/}
-                                {/*</div>*/}
                                 <div
+                                    onClick={_ => ActiveNotification('#notification_is-develop')}
                                     className={"account-settings-element__avatar--add btn _dark _large-2" + (newPhoto ? " _hidden" : "")}
                                 >
                                     Добавить

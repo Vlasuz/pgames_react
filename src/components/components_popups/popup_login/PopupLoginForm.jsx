@@ -20,14 +20,14 @@ const PopupLoginForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        setIsValid(true)
-
         if (inputEmail && /\S+@\S+\.\S+/.test(inputEmail) && inputPassword) {
 
             axios.defaults.headers.post['platform'] = `pc`;
             axios.post(GlobalLink(`/api/auth/sign_in/?email=${inputEmail}&password=${inputPassword}`)).then(res => {
                 document.cookie = `access_token=${res.data.access_token}`;
                 document.cookie = `refresh_token=${res.data.refresh_token}`;
+
+                setIsValid(false)
 
                 setTimeout(() => {
                     dispatch(setUserInfo(res.data.user))
@@ -44,6 +44,8 @@ const PopupLoginForm = () => {
                 console.log(er)
             })
 
+        } else {
+            setIsValid(true)
         }
     }
 
@@ -71,11 +73,11 @@ const PopupLoginForm = () => {
             <button type="submit" className="login-popup__submit popup-submit btn _large _shadow">
                 Войти
             </button>
-            <a href="#registration-popup" onClick={_ => dispatch(popupTitle('registration'))}
+            <a onClick={_ => dispatch(popupTitle('registration'))}
                className="login-popup__link popup-link popup-close open-popup">
                 Зарегестрироваться
             </a>
-            <a href="#forgot-password-popup" onClick={_ => dispatch(popupTitle('forgot-password'))}
+            <a onClick={_ => dispatch(popupTitle('forgot-password'))}
                className="login-popup__link popup-link popup-close open-popup">
                 Забыли пароль?
             </a>

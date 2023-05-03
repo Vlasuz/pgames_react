@@ -51,6 +51,8 @@ const socketMessages = (
     }
 
     function PlayerTurn() {
+        document.querySelector('.game-user-cards__item._active')?.classList.remove('_active')
+
         setUserTurn({
             id: data.data.player.id,
             event: data.data.role,

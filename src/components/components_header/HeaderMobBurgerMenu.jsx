@@ -14,7 +14,7 @@ const HeaderMobBurgerMenu = () => {
                 <div className="header__nav-mob--bg">
                     <picture>
                         <source srcSet="images/header/bg.webp" type="image/webp"/>
-                        <img src="../images/header/bg.png" alt="" loading="lazy" width="0" height="0"
+                        <img src="images/header/bg.png" alt="" loading="lazy" width="0" height="0"
                              className="header__nav-mob--bg-img"/>
                     </picture>
                 </div>

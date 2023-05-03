@@ -22,14 +22,14 @@ const News = () => {
                     <div className="section-page-bg__element">
                         <picture>
                             <source srcSet="images/news/bg-1.webp" type="image/webp"/>
-                            <img src="../images/news/bg-1.png" loading="lazy" alt="" width="0" height="0"
+                            <img src="images/news/bg-1.png" loading="lazy" alt="" width="0" height="0"
                                  className="section-page-bg__img"/>
                         </picture>
                     </div>
                     <div className="section-page-bg__element">
                         <picture>
                             <source srcSet="images/news/bg-2.webp" type="image/webp"/>
-                            <img src="../images/news/bg-2.png" loading="lazy" alt="" width="0" height="0"
+                            <img src="images/news/bg-2.png" loading="lazy" alt="" width="0" height="0"
                                  className="section-page-bg__img"/>
                         </picture>
                     </div>

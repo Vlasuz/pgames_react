@@ -11,8 +11,8 @@ import GlobalLink from "../GlobalLink";
 import {setGamePlayers} from "../redux/reducers/gamesListPlayersReducer";
 
 const RoomItem = ({ game }) => {
-    const navigate = useNavigate()
 
+    const navigate = useNavigate()
     const dispatch = useDispatch()
 
     const handleEntry = (e) => {
@@ -77,10 +77,10 @@ const RoomItem = ({ game }) => {
                             /
                             {game?.player_slots}
                         </span>
-                        <img src="../images/icons/person.svg" width="10" height="10" alt=""/>
+                        <img src="images/icons/person.svg" width="10" height="10" alt=""/>
                     </div>
                     <div className="room-item__info-elem">
-                        <img src={game?.bet_type === "money" ? "../images/icons/dollar-circle.svg" : "../images/icons/chip.svg"} width="16" height="16" alt=""/>
+                        <img src={game?.bet_type === "money" ? "images/icons/dollar-circle.svg" : "images/icons/chip.svg"} width="16" height="16" alt=""/>
                         <span>&nbsp;{game?.bet}</span>
                     </div>
                     <div className="room-item__info-elem">
@@ -88,11 +88,11 @@ const RoomItem = ({ game }) => {
                             game?.room_type === "public" ?
                                 <>
                                     <span>Открытая игра</span>
-                                    <img src="../images/icons/door-open.svg" width="15" height="13" alt=""/>
+                                    <img src="images/icons/door-open.svg" width="15" height="13" alt=""/>
                                 </> :
                                 <>
                                     <span>Закрытая игра</span>
-                                    <img src="../images/icons/door-lock.svg" width="15" height="13" alt=""/>
+                                    <img src="images/icons/door-lock.svg" width="15" height="13" alt=""/>
                                 </>
                         }
                     </div>

@@ -4,7 +4,7 @@ const FaqFormDecoration = () => {
     return (
         <div className="faq-feedback__image">
             <div className="faq-feedback__image--body">
-                <img src="../images/faq/feedback/image.svg" alt="" width="526" height="288" loading="lazy"
+                <img src="images/faq/feedback/image.svg" alt="" width="526" height="288" loading="lazy"
                      className="faq-feedback__image--img"/>
             </div>
             <div className="faq-feedback__decor-chat">

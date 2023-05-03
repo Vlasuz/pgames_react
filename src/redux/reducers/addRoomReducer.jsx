@@ -20,12 +20,12 @@ const initialState = {
                 {
                     id: 0,
                     name: 'Jared_007',
-                    photo: "../../images/account/avatar.png"
+                    photo: "../images/account/avatar.png"
                 },
                 {
                     id: 1,
                     name: 'MegaGamer',
-                    photo: "../../images/account/avatar.png"
+                    photo: "../images/account/avatar.png"
                 },
             ]
         },
@@ -47,12 +47,12 @@ const initialState = {
                 {
                     id: 0,
                     name: 'Jared_007',
-                    photo: "../../images/account/avatar.png"
+                    photo: "../images/account/avatar.png"
                 },
                 {
                     id: 1,
                     name: 'MegaGamer',
-                    photo: "../../images/account/avatar.png"
+                    photo: "../images/account/avatar.png"
                 },
             ]
         },
@@ -74,12 +74,12 @@ const initialState = {
                 {
                     id: 0,
                     name: 'Jared_007',
-                    photo: "../../images/account/avatar.png"
+                    photo: "../images/account/avatar.png"
                 },
                 {
                     id: 1,
                     name: 'MegaGamer',
-                    photo: "../../images/account/avatar.png"
+                    photo: "../images/account/avatar.png"
                 },
             ]
         },
@@ -101,12 +101,12 @@ const initialState = {
                 {
                     id: 0,
                     name: 'Jared_007',
-                    photo: "../../images/account/avatar.png"
+                    photo: "../images/account/avatar.png"
                 },
                 {
                     id: 1,
                     name: 'MegaGamer',
-                    photo: "../../images/account/avatar.png"
+                    photo: "../images/account/avatar.png"
                 },
             ]
         },
@@ -128,12 +128,12 @@ const initialState = {
                 {
                     id: 0,
                     name: 'Jared_007',
-                    photo: "../../images/account/avatar.png"
+                    photo: "../images/account/avatar.png"
                 },
                 {
                     id: 1,
                     name: 'MegaGamer',
-                    photo: "../../images/account/avatar.png"
+                    photo: "../images/account/avatar.png"
                 },
             ]
         },
@@ -155,12 +155,12 @@ const initialState = {
                 {
                     id: 0,
                     name: 'Jared_007',
-                    photo: "../../images/account/avatar.png"
+                    photo: "../images/account/avatar.png"
                 },
                 {
                     id: 1,
                     name: 'MegaGamer',
-                    photo: "../../images/account/avatar.png"
+                    photo: "../images/account/avatar.png"
                 },
             ]
         },
@@ -182,12 +182,12 @@ const initialState = {
                 {
                     id: 0,
                     name: 'Jared_007',
-                    photo: "../../images/account/avatar.png"
+                    photo: "../images/account/avatar.png"
                 },
                 {
                     id: 1,
                     name: 'MegaGamer',
-                    photo: "../../images/account/avatar.png"
+                    photo: "../images/account/avatar.png"
                 },
             ]
         },

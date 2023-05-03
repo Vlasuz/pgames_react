@@ -6,7 +6,7 @@ const MainAdvantagesList = () => {
             <li className="advantages__item" data-aos="fade-up" data-aos-delay="400">
                 <div className="advantages__item--body">
                     <div className="advantages__item--icon">
-                        <img src="../images/main-page/advantages/icon-1.svg" alt=""
+                        <img src="images/main-page/advantages/icon-1.svg" alt=""
                              className="advantages__item--icon-img"/>
                     </div>
                     <h3 className="advantages__item--title section-title _center">
@@ -22,7 +22,7 @@ const MainAdvantagesList = () => {
             <li className="advantages__item" data-aos="fade-up" data-aos-delay="500">
                 <div className="advantages__item--body">
                     <div className="advantages__item--icon">
-                        <img src="../images/main-page/advantages/icon-2.svg" alt=""
+                        <img src="images/main-page/advantages/icon-2.svg" alt=""
                              className="advantages__item--icon-img"/>
                     </div>
                     <h3 className="advantages__item--title section-title _center">
@@ -38,7 +38,7 @@ const MainAdvantagesList = () => {
             <li className="advantages__item" data-aos="fade-up" data-aos-delay="600">
                 <div className="advantages__item--body">
                     <div className="advantages__item--icon">
-                        <img src="../images/main-page/advantages/icon-3.svg" alt=""
+                        <img src="images/main-page/advantages/icon-3.svg" alt=""
                              className="advantages__item--icon-img"/>
                     </div>
                     <h3 className="advantages__item--title section-title _center">

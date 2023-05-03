@@ -1,12 +1,19 @@
 import React from 'react';
+import ActiveNotification from "../../hooks/ActiveNotification";
 
 const WithdrawalsForm = () => {
+
+    const handleWithdraw = (e) => {
+        e.preventDefault()
+        ActiveNotification('#notification_is-develop')
+    }
+
     return (
         <div className="account__col">
             <div className="account__block" data-aos="fade-in" data-aos-delay="500"
                  data-aos-anchor=".account__main">
                 <div className="account__block--body _none-padding _transparent">
-                    <form action="#" className="account-withdrawals">
+                    <form onSubmit={handleWithdraw} className="account-withdrawals">
                         <fieldset className="account-withdrawals__block">
                             <h3 className="account-withdrawals__title account-min-title">
                                 Выбор вывода средств

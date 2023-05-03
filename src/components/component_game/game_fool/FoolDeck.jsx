@@ -9,14 +9,14 @@ const FoolDeck = ({ allCardsCount, trump }) => {
         <div className="game__grid--item" style={{paddingTop: allCardsCount < 1 ? paddingTopWithoutCards : paddingTopWithCards}}>
             <form action="#" className="game__cards">
                 {allCardsCount < 1 && trump.suit ? <div className="game__cards--symbol">
-                    <img src={`../images/game/cards/symbols/${trump.suit}.svg`} alt=""/>
+                    <img src={`images/game/cards/symbols/${trump.suit}.svg`} alt=""/>
                 </div> : ""}
                 <button className={"game__cards--element" + (allCardsCount > 0 ? "" : " _hidden")}>
                     <div className="game__cards--back">
-                        <img src="../images/game/cards/Back.svg" alt=""/>
+                        <img src="images/game/cards/Back.svg" alt=""/>
                     </div>
                     <div className="game__cards--last">
-                        <img src={`../images/game/cards/${trump.rank}-${trump.suit}.svg`}
+                        <img src={`images/game/cards/${trump.rank}-${trump.suit}.svg`}
                              alt=""/>
                     </div>
                 </button>
