@@ -21,7 +21,7 @@ const RoomItem = ({ game }) => {
         axios.defaults.headers.post['Authorization'] = `Bearer ${GetCookies('access_token')}`;
         axios.post(GlobalLink(`/api/room/join_to_room/${game?.id}/`)).then(res => {
             console.log('join room', res.data)
-            navigate('/rooms/'+game?.id)
+            navigate('/rooms/' + res?.data?.game.slug + "/" + res?.data?.id)
             dispatch(setGamePlayers(res.data.players))
         }).catch(error => {
             if(error.message.includes('401')) {
@@ -29,32 +29,6 @@ const RoomItem = ({ game }) => {
             }
         })
 
-        // if(auth){
-        //     if(data.currency === "money") {
-        //         if(+balance.money >= +data.cost){
-        //             dispatch(addBalance({
-        //                 money: balance.money - data.cost,
-        //                 chips: balance.chips
-        //             }))
-        //             navigate('/rooms/' + data.id)
-        //         } else {
-        //             ActiveNotification('#notification_no-enough-balance')
-        //         }
-        //     }
-        //     if(data.currency === "chips") {
-        //         if(+balance.chips >= +data.cost) {
-        //             dispatch(addBalance({
-        //                 money: balance.money,
-        //                 chips: balance.chips - data.cost
-        //             }))
-        //             navigate('/rooms/' + data.id)
-        //         } else {
-        //             ActiveNotification('#notification_no-enough-balance')
-        //         }
-        //     }
-        // } else {
-        //     ActiveNotification("#notification_not-auth")
-        // }
     }
 
     return (

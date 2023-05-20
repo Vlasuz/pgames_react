@@ -22,6 +22,13 @@ import {myStepReducer} from "../redux_poker/reducers_poker/GameMyStepReducer";
 import {userInfoReducer} from "./userInfoReducer";
 import {gamesListPlayersReducer} from "./gamesListPlayersReducer";
 import {popupReducer} from "./popupReducer";
+import {reducerIsReady} from "../game_reducers/reducerIsReady";
+import {reducerIsGameStart} from "../game_reducers/reducerIsGameStart";
+import {reducerSocketResponse} from "../game_reducers/reducerSocketResponse";
+import {reducerFenTable} from "../game_reducers/reducerChessFenTable";
+import {reducerWebsocket} from "../game_reducers/reducerWebsocket";
+import {reducerPlayerTurn} from "../game_reducers/reducerPlayerTurn";
+import {reducerUserReadyState} from "../game_reducers/reducerUserReadyState";
 
 export const rootReducer = combineReducers({
     logoutReducer,
@@ -38,16 +45,21 @@ export const rootReducer = combineReducers({
     gameResultReducer,
     cardsListLftReducer,
     cardsListRhtReducer,
-
     cardsForPlayer1Reducer,
     cardsForPlayer2Reducer,
     allCardsReducer,
     cardsForPlayerMeReducer,
     potReducer,
     myStepReducer,
-
     userInfoReducer,
-
     gamesListPlayersReducer,
     popupReducer,
+
+    reducerIsReady,
+    reducerIsGameStart,
+    reducerSocketResponse,
+    reducerFenTable,
+    reducerWebsocket,
+    reducerPlayerTurn,
+    reducerUserReadyState,
 })

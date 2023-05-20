@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {setGamePlayers} from "../../../../redux/reducers/gamesListPlayersReducer";
 import {popupTitle} from "../../../../redux/actions";
+import {setIsGameStart} from "../../../../redux/game_reducers/reducerIsGameStart";
 
 const socketMessages = (
     data,
@@ -24,7 +25,7 @@ const socketMessages = (
     setIsCardsBeat,
     setAttacker,
     setDefender,
-    setWhoToWhom
+    setWhoToWhom,
 ) => {
 
     console.log('socket message', data)
@@ -43,6 +44,7 @@ const socketMessages = (
     }
 
     function StartGame() {
+        dispatch(setIsGameStart(true))
         setIsGameStart(true)
     }
 

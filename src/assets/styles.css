@@ -15037,7 +15037,10 @@ a.page-pagination__btn{
 .chess__grid--checker-body {
     position: relative;
     width: 100%;
-    height: 100%
+    height: 100%;
+    top: 0;
+    left: 0;
+    transition: all .2s ease-in-out;
 }
 
 .chess__grid--checker-body>img {

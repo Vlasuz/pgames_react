@@ -21,10 +21,10 @@ import cardEvent from "../components/component_game/game_fool/functions/card_eve
 import setPosition from "../components/component_game/game_fool/functions/set_position";
 import socketMessages from "../components/component_game/game_fool/functions/socket_messages";
 import ActiveNotification from "../hooks/ActiveNotification";
-import FoolTopButtons from "../components/component_game/game_fool/FoolTopButtons";
+import GameTopButtons from "../components/component_game/GameTopButtons";
 import FoolDeck from "../components/component_game/game_fool/FoolDeck";
 
-const RoomSingle = () => {
+const RoomSingleFool = () => {
 
     const [socketClose, setSocketClose] = useState(false)
 
@@ -165,7 +165,7 @@ const RoomSingle = () => {
                                     Дурак
                                 </h2>
                             </div>
-                            <FoolTopButtons/>
+                            <GameTopButtons/>
                         </div>
                         <div className="game__main">
                             <div className="game__main--table game__bg">
@@ -430,4 +430,4 @@ const RoomSingle = () => {
     );
 };
 
-export default RoomSingle;
+export default RoomSingleFool;

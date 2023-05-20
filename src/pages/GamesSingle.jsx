@@ -25,7 +25,6 @@ const GamesSingle = () => {
     }
 
     useEffect(() => {
-        // console.log(thisGame)
         if(thisGame !== undefined) {
             setGame(thisGame[0])
         }

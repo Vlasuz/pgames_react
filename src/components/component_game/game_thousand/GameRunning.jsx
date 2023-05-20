@@ -309,10 +309,10 @@ const GameRunning = ({setStepOfGame}) => {
                         </div>
                         <div className="game__header--col">
                             <div className="game__header--block">
-                                <a href="#game-exit-popup" className="game__header--btn btn _dark open-popup">
+                                <a className="game__header--btn btn _dark open-popup">
                                     Выйти
                                 </a>
-                                <a href="#game-invite-popup" className="game__header--btn btn _red open-popup">
+                                <a className="game__header--btn btn _red open-popup">
                                     Пригласить +
                                 </a>
                             </div>

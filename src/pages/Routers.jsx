@@ -14,10 +14,11 @@ import Error404 from "./Error404";
 import NewsSingle from "./NewsSingle";
 import GamesSingle from "./GamesSingle";
 import ScrollToTop from "../hooks/ScrollToTop";
-import RoomSingle from "./RoomSingle";
+import RoomSingleFool from "./RoomSingleFool";
 import GamesSearch from "./GamesSearch";
 import Faq from "./Faq";
 import TextPage from "./TextPage";
+import RoomSingleChess from "./RoomSingleChess";
 
 const Routers = () => {
     ScrollToTop()
@@ -28,7 +29,9 @@ const Routers = () => {
 
         {path: "/rooms", comp: <Rooms/>},
         {path: "/create-room", comp: <RoomCreate/>},
-        {path: "/rooms/:roomId", comp: <RoomSingle/>},
+        {path: "/rooms/fool/:roomId", comp: <RoomSingleFool/>},
+        {path: "/rooms/chess/:roomId", comp: <RoomSingleChess/>},
+        {path: "/rooms/chess", comp: <RoomSingleChess/>},
 
         {path: "/games", comp: <Games/>},
         {path: "/games/:gamesId", comp: <GamesSingle/>},

@@ -19,7 +19,7 @@ const GamesSingleRooms = ({gamesId}) => {
     const userInfo = useSelector(state => state.userInfoReducer.data)
 
     const handleCreate = (e) => {
-        if(Object.keys(userInfo).length) {
+        if (Object.keys(userInfo).length) {
             setIsActiveCreate(prev => !prev)
         } else {
             ActiveNotification('#notification_not-auth')
@@ -30,15 +30,12 @@ const GamesSingleRooms = ({gamesId}) => {
     const [maxLength, setMaxLength] = useState(2)
     const [isAccess, setIsAccess] = useState(true)
     const [typeOfGame, setTypeOfGame] = useState('Классический')
-    // const [gamers, setGamers] = useState([])
     const [cost, setCost] = useState(0)
     const [title, setTitle] = useState('')
     const navigate = useNavigate()
-    // const [icon, setIcon] = useState(thisGame.icon)
 
     useEffect(() => {
         axios.get(GlobalLink(`/api/game/get/${gamesId}/`)).then(res => {
-            console.log('rooms', res.data)
             setRooms(res.data.room)
         })
     }, [])
@@ -56,13 +53,12 @@ const GamesSingleRooms = ({gamesId}) => {
             "bet": cost
         }).then(game => {
 
-            console.log("ROOM CREATE", new Date().getSeconds())
-
             setIsActiveCreate(true)
             axios.get(GlobalLink(`/api/game/get/${gamesId}/`)).then(res => {
                 setRooms(game.data.room)
-                navigate('/rooms/' + game.data.id)
+                navigate('/rooms/' + res.data.slug + "/" + game.data.id)
             })
+
         }).catch(error => {
             if (error.message.includes('401')) {
                 ActiveNotification('#notification_not-auth')
