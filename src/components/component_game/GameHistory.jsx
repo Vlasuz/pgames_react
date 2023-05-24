@@ -1,9 +1,11 @@
 import React from 'react';
 
-const ChessHistory = () => {
+const GameHistory = () => {
     return (
         <div className="chess__history game__history">
             <div className="game__history--wrapper">
+                {/*_active*/}
+
                 <button type="button" className="game__history--header">
                     <h3 className="game__history--header-title">
                         История ходов
@@ -18,39 +20,34 @@ const ChessHistory = () => {
                     </div>
                 </button>
                 <ul className="chess__history--list game__history--list">
-                    <li className="chess__history--item game__history--item">
-                                                    <span className="chess__history--move">
-                                                        Pe4
-                                                    </span>
-                        <span className="chess__history--move">
-                                                        Nc6
-                                                    </span>
+                    <li className="checkers__history--item game__history--item">
+                        <div className="checkers__history--avatar">
+                            <img src="images/account/avatar.png" alt="" />
+                        </div>
+                        <h4 className="checkers__history--name">
+                            Вы: Евгений
+                        </h4>
+                        <span className="checkers__history--move">E3 - F5</span>
                     </li>
                     <li className="chess__history--item game__history--item">
-                                                    <span className="chess__history--move">
-                                                        Pe4
-                                                    </span>
-                        <span className="chess__history--move">
-                                                        Nc6
-                                                    </span>
+                        <span className="chess__history--move">Pe4</span>
+                        <span className="chess__history--move">Nc6</span>
                     </li>
                     <li className="chess__history--item game__history--item">
-                                                    <span className="chess__history--move">
-                                                        Pe4
-                                                    </span>
-                        <span className="chess__history--move">
-                                                        Nc6
-                                                    </span>
+                        <span className="chess__history--move">Pe4</span>
+                        <span className="chess__history--move">Nc6</span>
                     </li>
                     <li className="chess__history--item game__history--item">
-                                                    <span className="chess__history--move">
-                                                        Pe4
-                                                    </span>
+                        <span className="chess__history--move">Pe4</span>
+                        <span className="chess__history--move">Nc6</span>
+                    </li>
+                    <li className="chess__history--item game__history--item">
+                        <span className="chess__history--move">Pe4</span>
                     </li>
                 </ul>
             </div>
         </div>
-    );
+);
 };
 
-export default ChessHistory;
+export default GameHistory;

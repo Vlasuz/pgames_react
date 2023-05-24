@@ -7,7 +7,7 @@ const ChessTable = () => {
             <div className="chess__table--board">
                 <div className="chess__table--board-body">
                     <picture>
-                        <img src="../images/chess/table.png" alt="" width="300"
+                        <img src="images/chess/table.png" alt="" width="300"
                              height="300"
                              className="chess__table--img"/>
                     </picture>

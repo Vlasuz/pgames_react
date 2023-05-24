@@ -90,9 +90,10 @@ export function resultOfGame(num) {
         num
     }
 }
-export function popupTitle(popup) {
+export function popupTitle(popup, props) {
     return{
         type: SET_POPUP_TITLE,
-        popup
+        popup,
+        props
     }
 }

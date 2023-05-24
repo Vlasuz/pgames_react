@@ -3,11 +3,12 @@ import {useSelector} from "react-redux";
 import GameReadyBlock from "../GameReadyBlock";
 import GameTimerProgress from "../GameTimerProgress";
 
-const ChessOpponent = ({opponent, isGameStart}) => {
+const CheckersOpponent = ({opponent, isGameStart}) => {
 
     const isYourTurn = useSelector(state => state.reducerPlayerTurn.playerTurn)
     const usersReadyState = useSelector(state => state.reducerUserReadyState.usersReadyState)
 
+    console.log('opponent', opponent)
     return (
         <div className="chess__player">
             <div className="game__player">
@@ -19,7 +20,7 @@ const ChessOpponent = ({opponent, isGameStart}) => {
                     </div>
                     <div className="game__player--info">
                         <h3 className="game__player--name">
-                            {opponent?.username}
+                            {opponent?.name}
                         </h3>
                         {
                             isYourTurn.player?.id === opponent?.id ?
@@ -37,4 +38,4 @@ const ChessOpponent = ({opponent, isGameStart}) => {
     );
 };
 
-export default ChessOpponent;
+export default CheckersOpponent;

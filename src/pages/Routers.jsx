@@ -19,6 +19,7 @@ import GamesSearch from "./GamesSearch";
 import Faq from "./Faq";
 import TextPage from "./TextPage";
 import RoomSingleChess from "./RoomSingleChess";
+import RoomSingleCheckers from "./RoomSingleCheckers";
 
 const Routers = () => {
     ScrollToTop()
@@ -31,7 +32,8 @@ const Routers = () => {
         {path: "/create-room", comp: <RoomCreate/>},
         {path: "/rooms/fool/:roomId", comp: <RoomSingleFool/>},
         {path: "/rooms/chess/:roomId", comp: <RoomSingleChess/>},
-        {path: "/rooms/chess", comp: <RoomSingleChess/>},
+        {path: "/rooms/checkers/:roomId", comp: <RoomSingleCheckers/>},
+        // {path: "/rooms/checkers", comp: <RoomSingleCheckers/>},
 
         {path: "/games", comp: <Games/>},
         {path: "/games/:gamesId", comp: <GamesSingle/>},

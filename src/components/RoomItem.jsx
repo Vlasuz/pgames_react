@@ -22,7 +22,7 @@ const RoomItem = ({ game }) => {
         axios.post(GlobalLink(`/api/room/join_to_room/${game?.id}/`)).then(res => {
             console.log('join room', res.data)
             navigate('/rooms/' + res?.data?.game.slug + "/" + res?.data?.id)
-            dispatch(setGamePlayers(res.data.players))
+            // dispatch(setGamePlayers(res.data.players))
         }).catch(error => {
             if(error.message.includes('401')) {
                 ActiveNotification('#notification_not-auth')

@@ -1,7 +1,8 @@
 import {SET_POPUP_TITLE} from "../types";
 
 const initialState = {
-    popup: ''
+    popup: '',
+    props: {}
 }
 
 export const popupReducer = (state = initialState, action) => {
@@ -10,7 +11,8 @@ export const popupReducer = (state = initialState, action) => {
         case SET_POPUP_TITLE:
             return {
                 ...state,
-                popup: action.popup
+                popup: action.popup,
+                props: action.props
             }
         default:
             return state

@@ -29,6 +29,7 @@ import {reducerFenTable} from "../game_reducers/reducerChessFenTable";
 import {reducerWebsocket} from "../game_reducers/reducerWebsocket";
 import {reducerPlayerTurn} from "../game_reducers/reducerPlayerTurn";
 import {reducerUserReadyState} from "../game_reducers/reducerUserReadyState";
+import {reducerEndGame} from "../game_reducers/reducerEndGame";
 
 export const rootReducer = combineReducers({
     logoutReducer,
@@ -62,4 +63,5 @@ export const rootReducer = combineReducers({
     reducerWebsocket,
     reducerPlayerTurn,
     reducerUserReadyState,
+    reducerEndGame,
 })

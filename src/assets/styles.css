@@ -14551,6 +14551,10 @@ a.page-pagination__btn{
     opacity: 1
 }
 
+.checkers__grid--cell._hidden {
+    opacity: 0
+}
+
 .checkers__grid--checker {
     width: 100%;
     height: 100%;
@@ -15034,6 +15038,7 @@ a.page-pagination__btn{
     visibility: hidden
 }
 
+.checkers__grid--checker-body,
 .chess__grid--checker-body {
     position: relative;
     width: 100%;

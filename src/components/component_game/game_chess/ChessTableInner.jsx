@@ -23,19 +23,19 @@ const ChessTableInner = () => {
     })
 
     const chips = {
-        'R': <img src="../images/chess/figures/white-r.svg" alt=""/>,
-        'N': <img src="../images/chess/figures/white-n.svg" alt=""/>,
-        'B': <img src="../images/chess/figures/white-b.svg" alt=""/>,
-        'Q': <img src="../images/chess/figures/white-q.svg" alt=""/>,
-        'K': <img src="../images/chess/figures/white-k.svg" alt=""/>,
-        'P': <img src="../images/chess/figures/white-p.svg" alt=""/>,
+        'R': <img src="images/chess/figures/white-r.svg" alt=""/>,
+        'N': <img src="images/chess/figures/white-n.svg" alt=""/>,
+        'B': <img src="images/chess/figures/white-b.svg" alt=""/>,
+        'Q': <img src="images/chess/figures/white-q.svg" alt=""/>,
+        'K': <img src="images/chess/figures/white-k.svg" alt=""/>,
+        'P': <img src="images/chess/figures/white-p.svg" alt=""/>,
 
-        'r': <img src="../images/chess/figures/black-r.svg" alt=""/>,
-        'n': <img src="../images/chess/figures/black-n.svg" alt=""/>,
-        'b': <img src="../images/chess/figures/black-b.svg" alt=""/>,
-        'q': <img src="../images/chess/figures/black-q.svg" alt=""/>,
-        'k': <img src="../images/chess/figures/black-k.svg" alt=""/>,
-        'p': <img src="../images/chess/figures/black-p.svg" alt=""/>,
+        'r': <img src="images/chess/figures/black-r.svg" alt=""/>,
+        'n': <img src="images/chess/figures/black-n.svg" alt=""/>,
+        'b': <img src="images/chess/figures/black-b.svg" alt=""/>,
+        'q': <img src="images/chess/figures/black-q.svg" alt=""/>,
+        'k': <img src="images/chess/figures/black-k.svg" alt=""/>,
+        'p': <img src="images/chess/figures/black-p.svg" alt=""/>,
     }
     const alphabet = 'abcdefgh'.split('');
     const [selectedFigure, setSelectedFigure] = useState("")
@@ -105,8 +105,14 @@ const ChessTableInner = () => {
         const figureIndex = e.target.closest('.chess__grid--cell').getAttribute('data-index')
 
         if (figure === figure_p[playerColor-1]) {
-            let positionToMove = [8, 16];
+            let positionToMove = [];
             const posItem = e.target.closest('.chess__grid--cell').getAttribute('data-array')[0]
+
+            for(let a = 8; a < 24; a+= 8) {
+                console.log(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img'))
+                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img')) break;
+                positionToMove.push(a)
+            }
 
             if(+posItem !== 6) {
                 positionToMove = [8]
@@ -146,15 +152,19 @@ const ChessTableInner = () => {
             const posItem = e.target.closest('.chess__grid--cell').getAttribute('data-array')
 
             for(let a = 8; a <= posItem[0] * 8; a+=8) {
+                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img')) break;
                 positionToMove.push(a)
             }
-            for(let a = -(posItem[0] * 8); a <= -8; a+=8) {
+            for(let a = -8; a >= -((7 - posItem[0]) * 8); a-=8) {
+                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img')) break;
                 positionToMove.push(a)
             }
             for(let a = 1; a <= posItem[2]; a++) {
+                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img')) break;
                 positionToMove.push(a)
             }
-            for(let a = posItem[2] - 7; a < 0; a++) {
+            for(let a = -1; a >= -(7 - posItem[2]); a--) {
+                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img')) break;
                 positionToMove.push(a)
             }
 
@@ -167,10 +177,20 @@ const ChessTableInner = () => {
             let positionToMove = [];
             const posItem = e.target.closest('.chess__grid--cell').getAttribute('data-array')
 
-            for(let a = 7; a < posItem[0] * (8 - posItem[2]); a += 7) {
+            for(let a = 7; a <= (7 - +posItem[2]) * 7; a += 7) {
+                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`).querySelector('img')) break;
                 positionToMove.push(a)
             }
-            for(let a = 9; a <= posItem[0] * posItem[2] + 10; a += 9) {
+            for(let a = -7; a >= -(+posItem[2] * 7); a -= 7) {
+                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`).querySelector('img')) break;
+                positionToMove.push(a)
+            }
+            for(let a = 9; a <= +posItem[2] * 9; a += 9) {
+                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`).querySelector('img')) break;
+                positionToMove.push(a)
+            }
+            for(let a = -9; a >= -((8 - (+posItem[2] > +posItem[0] ? +posItem[2] : +posItem[0])) * 9); a -= 9) {
+                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`).querySelector('img')) break;
                 positionToMove.push(a)
             }
 
@@ -180,7 +200,6 @@ const ChessTableInner = () => {
             })
         } else if (figure === figure_k[playerColor-1]) {
             let positionToMove = [1, -1, 8, -8, 9, -9, 7, -7];
-            const posItem = e.target.closest('.chess__grid--cell').getAttribute('data-array')
 
             positionToMove.map(item => {
                 // if (document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.querySelector('img')) return null;
@@ -190,22 +209,37 @@ const ChessTableInner = () => {
             let positionToMove = [];
             const posItem = e.target.closest('.chess__grid--cell').getAttribute('data-array')
 
-            for(let a = 7; a < posItem[0] * (8 - posItem[2]); a += 7) {
+            for(let a = 7; a <= (7 - +posItem[2]) * 7; a += 7) {
+                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`).querySelector('img')) break;
                 positionToMove.push(a)
             }
-            for(let a = 9; a <= posItem[0] * posItem[2] + 10; a += 9) {
+            for(let a = -7; a >= -(+posItem[2] * 7); a -= 7) {
+                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`).querySelector('img')) break;
                 positionToMove.push(a)
             }
+            for(let a = 9; a <= +posItem[2] * 9; a += 9) {
+                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`).querySelector('img')) break;
+                positionToMove.push(a)
+            }
+            for(let a = -9; a >= -((8 - (+posItem[2] > +posItem[0] ? +posItem[2] : +posItem[0])) * 9); a -= 9) {
+                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`).querySelector('img')) break;
+                positionToMove.push(a)
+            }
+
             for(let a = 8; a <= posItem[0] * 8; a+=8) {
+                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img')) break;
                 positionToMove.push(a)
             }
-            for(let a = -(posItem[0] * 8); a <= -8; a+=8) {
+            for(let a = -8; a >= -((7 - posItem[0]) * 8); a-=8) {
+                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img')) break;
                 positionToMove.push(a)
             }
             for(let a = 1; a <= posItem[2]; a++) {
+                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img')) break;
                 positionToMove.push(a)
             }
-            for(let a = posItem[2] - 7; a < 0; a++) {
+            for(let a = -1; a >= -(7 - posItem[2]); a--) {
+                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img')) break;
                 positionToMove.push(a)
             }
 

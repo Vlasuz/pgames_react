@@ -23,7 +23,7 @@ import ChessYourUser from "../components/component_game/game_chess/ChessYourUser
 import ChessOpponent from "../components/component_game/game_chess/ChessOpponent";
 import {gamesListPlayersReducer, setGamePlayers} from "../redux/reducers/gamesListPlayersReducer";
 import ChessTable from "../components/component_game/game_chess/ChessTable";
-import ChessHistory from "../components/component_game/game_chess/ChessHistory";
+import GameHistory from "../components/component_game/GameHistory";
 import {reducerSocketResponse, setSocketResponse} from "../redux/game_reducers/reducerSocketResponse";
 import {setIsGameStart} from "../redux/game_reducers/reducerIsGameStart";
 import {setWebsocket} from "../redux/game_reducers/reducerWebsocket";
@@ -31,30 +31,23 @@ import {setPlayerTurn} from "../redux/game_reducers/reducerPlayerTurn";
 import {setUserReadyState} from "../redux/game_reducers/reducerUserReadyState";
 import {setFenLine, setFenTable} from "../redux/game_reducers/reducerChessFenTable";
 import {logDOM} from "@testing-library/react";
+import {reducerEndGame, setEndGame} from "../redux/game_reducers/reducerEndGame";
+import {popupTitle} from "../redux/actions";
 
 const RoomSingleFool = () => {
 
-    const [socketClose, setSocketClose] = useState(false)
-
     const {roomId} = useParams()
     const [isLoad, setIsLoad] = useState(true)
-    const [timer, setTimer] = useState(0)
-    // const [fixedTime, setFixedTime] = useState(0)
-
-    // NEW CONSTS
     const [opponent, setOpponent] = useState({})
-    // NEW CONSTS
-
     const dispatch = useDispatch()
-
-    const isAuth = useSelector(state => state.userInfoReducer.data)
     const players = useSelector(state => state.gamesListPlayersReducer.players)
     const user = useSelector(state => state.userInfoReducer.data)
+    const isAuth = useSelector(state => state.userInfoReducer.data)
     const isReady = useSelector(state => state.reducerIsReady.isReady)
     const isGameStart = useSelector(state => state.reducerIsGameStart.isGameStart)
-    const socketResponse = useSelector(state => state.reducerSocketResponse.socketResponse)
     const websocket = useSelector(state => state.reducerWebsocket.gameWebsocket)
     const tableFen = useSelector(state => state.reducerFenTable.fenTable)
+    const endGameReducer = useSelector(state => state.reducerEndGame.endGame)
     const arrayLines = tableFen.slice(0, tableFen.indexOf(" ")).split('/').map(item => {
         return item.split('').map(item2 => {
             if (!+item2) return item2
@@ -65,19 +58,12 @@ const RoomSingleFool = () => {
     })
     let arr = [];
 
-    // const [figureFrom, setFigureFrom] = useState()
-    // const [figureTo, setFigureTo] = useState()
-
     websocket.onmessage = (e) => {
         const data = JSON.parse(e.data)
 
         dispatch(setSocketResponse(data))
 
-        // data.data?.timeout && setTimer(data.data?.timeout)
-        // data.data?.timeout && setFixedTime(data.data?.timeout)
-        // socketMessages(dispatch)
-
-        if(data.users) {
+        if (data.users) {
             dispatch(setGamePlayers(data.users))
         }
 
@@ -103,24 +89,24 @@ const RoomSingleFool = () => {
         }
         const playerMadeMove = () => {
 
-            let figureFrom, figureTo;
-            let dataArrayCellsFrom, dataArrayCellsTo;
+            var figureFrom, figureTo;
+            var dataArrayCellsFrom, dataArrayCellsTo;
 
             document.querySelectorAll('.chess__grid--cell').forEach(item => {
                 const dataPosition = item.getAttribute('data-position')
-                const codeFrom = data.data.uci[0]+data.data.uci[1]
-                const codeTo = data.data.uci[2]+data.data.uci[3]
+                const codeFrom = data.data.uci[0] + data.data.uci[1]
+                const codeTo = data.data.uci[2] + data.data.uci[3]
 
-                if(dataPosition === codeFrom) {
+                if (dataPosition === codeFrom) {
                     dataArrayCellsFrom = item.getAttribute('data-array').split('/')
-                    return figureFrom = item;
+                    figureFrom = item;
                 }
-                if(dataPosition === codeTo) {
+                if (dataPosition === codeTo) {
                     dataArrayCellsTo = item.getAttribute('data-array').split('/')
-                    return figureTo = item;
+                    figureTo = item;
                 }
 
-                if(figureFrom && figureTo) {
+                if (figureFrom && figureTo) {
 
                     const topSelected = figureFrom.closest('.chess__grid--cell').offsetTop
                     const topFigure = figureTo.closest('.chess__grid--cell').offsetTop
@@ -140,7 +126,7 @@ const RoomSingleFool = () => {
             setTimeout(() => {
                 const maxLength = 7;
 
-                if(players.filter(item => item.id === user.id)[0].position === 2) {
+                if (players.filter(item => item.id === user.id)[0].position === 2) {
                     dataArrayCellsFrom[0] = Math.abs(maxLength - dataArrayCellsFrom[0])
                     dataArrayCellsTo[0] = Math.abs(maxLength - dataArrayCellsTo[0])
                     dataArrayCellsFrom[1] = Math.abs(maxLength - dataArrayCellsFrom[1])
@@ -150,7 +136,7 @@ const RoomSingleFool = () => {
                 arrayLines[+dataArrayCellsTo[0]][+dataArrayCellsTo[1]] = arrayLines[+dataArrayCellsFrom[0]][+dataArrayCellsFrom[1]]
                 arrayLines[+dataArrayCellsFrom[0]][+dataArrayCellsFrom[1]] = ''
 
-                for(let row = 0; row < 8; row++) {
+                for (let row = 0; row < 8; row++) {
                     arr.push(arrayLines[row].map(item => item === '' ? item.replace('', 1) : item).join(''))
                 }
 
@@ -159,6 +145,10 @@ const RoomSingleFool = () => {
                 figureFrom.querySelector('.chess__grid--checker-body').style.left = 0 + "px"
             }, 500)
 
+        }
+        const endGame = () => {
+            dispatch(setEndGame(data.data))
+            dispatch(popupTitle('game-winner', data.data))
         }
 
         console.log('socket message', data)
@@ -169,12 +159,13 @@ const RoomSingleFool = () => {
             "player_turn": playerTurn,
             "user_ready_state": userReadyState,
             "player_made_move": playerMadeMove,
+            "end_game": endGame,
         }
         if (typeof events[data.event] === 'function') events[data.event]();
     }
 
     websocket.onerror = (e) => console.log('GAME socket Error')
-    websocket.onclose = () => setSocketClose(true)
+    websocket.onclose = () => console.log('GAME socket Close')
 
     useEffect(() => {
         if (!(isLoad && Object.keys(isAuth).length)) return;
@@ -213,7 +204,7 @@ const RoomSingleFool = () => {
                         <div className="chess__main">
                             <div className="chess__main--row chess__row">
                                 <div className="chess__col">
-                                    <div className="chess__col--item" />
+                                    <div className="chess__col--item"/>
                                     <div className="chess__col--item">
                                         <div className="chess__communication game__communication">
                                             <GameButtonsChatAndMicro/>
@@ -223,26 +214,28 @@ const RoomSingleFool = () => {
                                 </div>
                                 <div className="chess__col chess__game">
                                     {
-                                        Object.keys(players).length || Object.keys(opponent).length ? <ChessOpponent
-                                            opponent={opponentData}/> :
-                                                <div className="game__player-waiting">
-                                                    <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M5 5.50032C6.57812 5.50032 7.85714 4.26898 7.85714 2.75016C7.85714 1.23134 6.57812 0 5 0C3.42188 0 2.14286 1.23134 2.14286 2.75016C2.14286 4.26898 3.42188 5.50032 5 5.50032ZM6.1317 6.53163H3.8683C1.73237 6.53163 0 8.19892 0 10.2551C0 10.6663 0.346429 11 0.773661 11H9.22679C9.65402 11.0006 10 10.6676 10 10.2551C10 8.19892 8.26786 6.53163 6.1317 6.53163Z"
-                                                            fill="#2D6B67"/>
-                                                    </svg>
-                                                    Ожидание...
-                                                </div>
+                                        opponentData ? <ChessOpponent
+                                                isGameStart={isGameStart}
+                                                opponent={opponentData}/> :
+                                            <div className="game__player-waiting">
+                                                <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M5 5.50032C6.57812 5.50032 7.85714 4.26898 7.85714 2.75016C7.85714 1.23134 6.57812 0 5 0C3.42188 0 2.14286 1.23134 2.14286 2.75016C2.14286 4.26898 3.42188 5.50032 5 5.50032ZM6.1317 6.53163H3.8683C1.73237 6.53163 0 8.19892 0 10.2551C0 10.6663 0.346429 11 0.773661 11H9.22679C9.65402 11.0006 10 10.6676 10 10.2551C10 8.19892 8.26786 6.53163 6.1317 6.53163Z"
+                                                        fill="#2D6B67"/>
+                                                </svg>
+                                                Ожидание...
+                                            </div>
                                     }
                                     <ChessTable/>
-                                    <ChessYourUser user={user}/>
+                                    <ChessYourUser isGameStart={isGameStart} user={user}/>
                                 </div>
                                 <div className="chess__col">
-                                    <ChessHistory/>
+                                    <GameHistory/>
 
                                     {
-                                        !isGameStart && (!isReady ? <FoolButtonReady websocket={websocket}/> : <FoolButtonWaiting/>)
+                                        !isGameStart && (!isReady ? <FoolButtonReady websocket={websocket}/> :
+                                            <FoolButtonWaiting/>)
                                     }
                                 </div>
                             </div>
