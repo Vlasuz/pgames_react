@@ -13,7 +13,7 @@ const FoolButtonTake = ({websocket, timer}) => {
         <div className="game__user-menu--col">
             <div className="game__user-menu--timer">
                 Осталось:
-                <b>{timer} сек</b>
+                <b>{timer.toFixed()} сек</b>
             </div>
             <button className="game__user-menu--main-btn btn _large _shadow _red" type="button" onClick={handleTake}>
                 Взять карты

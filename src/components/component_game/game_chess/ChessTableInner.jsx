@@ -37,7 +37,7 @@ const ChessTableInner = () => {
         'k': <img src="images/chess/figures/black-k.svg" alt=""/>,
         'p': <img src="images/chess/figures/black-p.svg" alt=""/>,
     }
-    const alphabet = 'abcdefgh'.split('');
+    const alphabet = 'abcdefgh';
     const [selectedFigure, setSelectedFigure] = useState("")
     const [selectStep, setSelectStep] = useState(null)
     const [arrayPoints, setArrayPoints] = useState('')
@@ -52,8 +52,6 @@ const ChessTableInner = () => {
 
         setArrayForTable([]);
         const maxLength = 7
-
-        console.log(tableFen)
 
         for (let row = 0; row < arrayLines.length; row++) {
             const color = [row, Math.abs(row - maxLength)];
@@ -126,7 +124,6 @@ const ChessTableInner = () => {
             }
 
             positionToMove.map(item => {
-                // if (document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.querySelector('img')) return null;
                 document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.classList.add('_accent')
             })
         } else if (figure === figure_n[playerColor-1]) {
@@ -144,7 +141,6 @@ const ChessTableInner = () => {
             }
 
             positionToMove.map(item => {
-                // if (document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.querySelector('img')) return null;
                 document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.classList.add('_accent')
             })
         } else if (figure === figure_r[playerColor-1]) {
@@ -152,25 +148,20 @@ const ChessTableInner = () => {
             const posItem = e.target.closest('.chess__grid--cell').getAttribute('data-array')
 
             for(let a = 8; a <= posItem[0] * 8; a+=8) {
-                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img')) break;
                 positionToMove.push(a)
             }
             for(let a = -8; a >= -((7 - posItem[0]) * 8); a-=8) {
-                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img')) break;
                 positionToMove.push(a)
             }
             for(let a = 1; a <= posItem[2]; a++) {
-                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img')) break;
                 positionToMove.push(a)
             }
             for(let a = -1; a >= -(7 - posItem[2]); a--) {
-                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img')) break;
                 positionToMove.push(a)
             }
 
 
             positionToMove.map(item => {
-                // if (document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.querySelector('img')) return null;
                 document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.classList.add('_accent')
             })
         } else if (figure === figure_b[playerColor-1]) {
@@ -178,31 +169,25 @@ const ChessTableInner = () => {
             const posItem = e.target.closest('.chess__grid--cell').getAttribute('data-array')
 
             for(let a = 7; a <= (7 - +posItem[2]) * 7; a += 7) {
-                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`).querySelector('img')) break;
                 positionToMove.push(a)
             }
             for(let a = -7; a >= -(+posItem[2] * 7); a -= 7) {
-                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`).querySelector('img')) break;
                 positionToMove.push(a)
             }
             for(let a = 9; a <= +posItem[2] * 9; a += 9) {
-                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`).querySelector('img')) break;
                 positionToMove.push(a)
             }
             for(let a = -9; a >= -((8 - (+posItem[2] > +posItem[0] ? +posItem[2] : +posItem[0])) * 9); a -= 9) {
-                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`).querySelector('img')) break;
                 positionToMove.push(a)
             }
 
             positionToMove.map(item => {
-                // if (document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.querySelector('img')) return null;
                 document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.classList.add('_accent')
             })
         } else if (figure === figure_k[playerColor-1]) {
             let positionToMove = [1, -1, 8, -8, 9, -9, 7, -7];
 
             positionToMove.map(item => {
-                // if (document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.querySelector('img')) return null;
                 document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.classList.add('_accent')
             })
         } else if (figure === figure_q[playerColor-1]) {
@@ -210,41 +195,32 @@ const ChessTableInner = () => {
             const posItem = e.target.closest('.chess__grid--cell').getAttribute('data-array')
 
             for(let a = 7; a <= (7 - +posItem[2]) * 7; a += 7) {
-                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`).querySelector('img')) break;
                 positionToMove.push(a)
             }
             for(let a = -7; a >= -(+posItem[2] * 7); a -= 7) {
-                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`).querySelector('img')) break;
                 positionToMove.push(a)
             }
             for(let a = 9; a <= +posItem[2] * 9; a += 9) {
-                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`).querySelector('img')) break;
                 positionToMove.push(a)
             }
             for(let a = -9; a >= -((8 - (+posItem[2] > +posItem[0] ? +posItem[2] : +posItem[0])) * 9); a -= 9) {
-                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`).querySelector('img')) break;
                 positionToMove.push(a)
             }
 
             for(let a = 8; a <= posItem[0] * 8; a+=8) {
-                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img')) break;
                 positionToMove.push(a)
             }
             for(let a = -8; a >= -((7 - posItem[0]) * 8); a-=8) {
-                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img')) break;
                 positionToMove.push(a)
             }
             for(let a = 1; a <= posItem[2]; a++) {
-                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img')) break;
                 positionToMove.push(a)
             }
             for(let a = -1; a >= -(7 - posItem[2]); a--) {
-                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img')) break;
                 positionToMove.push(a)
             }
 
             positionToMove.map(item => {
-                // if (document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.querySelector('img')) return null;
                 document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.classList.add('_accent')
             })
         }

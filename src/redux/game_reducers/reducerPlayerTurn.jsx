@@ -7,6 +7,8 @@ const initialState = {
 export const reducerPlayerTurn = (state = initialState, action) => {
     switch(action.type) {
         case SET_PLAYER:
+
+            console.log('ssss', action.playerTurn)
             return {
                 ...state,
                 playerTurn: action.playerTurn

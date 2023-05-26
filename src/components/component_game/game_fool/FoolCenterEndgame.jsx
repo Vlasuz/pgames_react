@@ -1,6 +1,10 @@
 import {NavLink} from "react-router-dom";
+import {useSelector} from "react-redux";
 
-const FoolCenterEndgame = ({ isWinner, userId, infoRoom }) => {
+const FoolCenterEndgame = ({ isWinner, infoRoom }) => {
+
+    const user = useSelector(state => state.userInfoReducer.data)
+
     return (
         <div className="game__main--table game__table">
             <div className="game__table-popup">
@@ -10,7 +14,7 @@ const FoolCenterEndgame = ({ isWinner, userId, infoRoom }) => {
                 <div className="game__table-popup--text">
                     {/*Хотите остаться в комнате и сыграть еще раз?*/}
                     {
-                        isWinner.some(item => item.id === userId) ? "Вы выйграли" : "Вы проиграли"
+                        isWinner.some(item => item.id === user.id) ? "Вы выйграли" : "Вы проиграли"
                     }
                 </div>
                 <div className="game__table-popup--footer">

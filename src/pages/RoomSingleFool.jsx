@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import GetCookies from "../hooks/GetCookies";
 import axios from "axios";
@@ -23,31 +23,29 @@ import socketMessages from "../components/component_game/game_fool/functions/soc
 import ActiveNotification from "../hooks/ActiveNotification";
 import GameTopButtons from "../components/component_game/GameTopButtons";
 import FoolDeck from "../components/component_game/game_fool/FoolDeck";
+import {setWebsocket} from "../redux/game_reducers/reducerWebsocket";
+import {reducerPlayerTurn} from "../redux/game_reducers/reducerPlayerTurn";
 
 const RoomSingleFool = () => {
 
-    const [socketClose, setSocketClose] = useState(false)
-
     const {roomId} = useParams()
-    const [isReady, setIsReady] = useState(false);
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const [socketClose, setSocketClose] = useState(false)
     const [isLoad, setIsLoad] = useState(true)
     const [response, setResponse] = useState({})
     const [trump, setTrump] = useState({})
     const [myCards, setMyCards] = useState([])
-    const [websocket, setWebsocket] = useState({})
-    const [userTurn, setUserTurn] = useState({})
     const [cardsOnTable, setCardsOnTable] = useState([])
     const [selectedCard, setSelectedCard] = useState({})
     const [wrongStep, setWrongStep] = useState(false)
     const [isWinner, setIsWinner] = useState([])
     const [timer, setTimer] = useState(0)
-    const [fixedTime, setFixedTime] = useState(0)
-    const [isEndGame, setIsEndGame] = useState(false)
-    const [isGameStart, setIsGameStart] = useState(false)
+    const [fixedTime, setFixedTime] = useState(70)
     const [infoRoom, setInfoRoom] = useState({})
     const [defenderTake, setDefenderTake] = useState({})
     const [cardsLeft, setCardsLeft] = useState({})
-    const [playersWhoReady, setPlayersWhoReady] = useState([])
     const [playersQuantityCards, setPlayersQuantityCards] = useState([])
     const [allCardsCount, setAllCardsCount] = useState(0)
     const [isCardsBeat, setIsCardsBeat] = useState(false)
@@ -58,8 +56,11 @@ const RoomSingleFool = () => {
     const isAuth = useSelector(state => state.userInfoReducer.data)
     const players = useSelector(state => state.gamesListPlayersReducer.players)
     const user = useSelector(state => state.userInfoReducer.data)
-
-    const dispatch = useDispatch()
+    const websocket = useSelector(state => state.reducerWebsocket.gameWebsocket)
+    const isGameStart = useSelector(state => state.reducerIsGameStart.isGameStart)
+    const usersReady = useSelector(state => state.reducerUserReadyState.usersReadyState)
+    const isEndGame = useSelector(state => state.reducerEndGame.endGame)
+    const userTurn = useSelector(state => state.reducerPlayerTurn.playerTurn)
 
     websocket.onmessage = (e) => {
         const data = JSON.parse(e.data)
@@ -73,12 +74,11 @@ const RoomSingleFool = () => {
         data.data?.timeout && setFixedTime(data.data?.timeout)
 
         socketMessages(
+            navigate,
+            setTimer,
             data,
             setTrump,
-            setUserTurn,
             setIsWinner,
-            setIsEndGame,
-            setIsGameStart,
             dispatch,
             setMyCards,
             myCards,
@@ -88,7 +88,6 @@ const RoomSingleFool = () => {
             user,
             setDefenderTake,
             setCardsLeft,
-            setPlayersWhoReady,
             setPlayersQuantityCards,
             setAllCardsCount,
             setIsCardsBeat,
@@ -109,7 +108,7 @@ const RoomSingleFool = () => {
             socket.onopen = () => {
                 socket.send(JSON.stringify({"command": "auth", "data": {"token": GetCookies('access_token')}}))
 
-                setWebsocket(socket)
+                dispatch(setWebsocket(socket))
 
                 axios.defaults.headers.get['Authorization'] = `Bearer ${GetCookies('access_token')}`;
                 axios.get(GlobalLink(`/api/room/get/${roomId}/`)).then(res => {
@@ -120,14 +119,6 @@ const RoomSingleFool = () => {
         }
 
     }, [isAuth])
-
-    // useEffect(() => {
-    //
-    //     if (!!games.length) {
-    //         games.map(game => game.game.map(room => room))
-    //     }
-    //
-    // }, [games])
 
     useEffect(() => {
 
@@ -148,9 +139,7 @@ const RoomSingleFool = () => {
     }, [timer])
 
     const gameCenter = {
-        'auth': <FoolCenterWaiting/>,
-        'start_game': <FoolCenterStarting/>,
-        'end_game': <FoolCenterEndgame isWinner={isWinner} userId={user.id} infoRoom={infoRoom}/>
+        'end_game': <FoolCenterEndgame isWinner={isWinner} infoRoom={infoRoom}/>
     }
 
     return (
@@ -193,15 +182,12 @@ const RoomSingleFool = () => {
                                     {
                                         Object.keys(players.filter(item => item.position === setPosition(3, players, user))).length ?
                                             <GamePlayer
-                                                userTurn={userTurn}
                                                 fixedTime={fixedTime}
                                                 isWinner={isWinner}
                                                 whoToWhom={whoToWhom}
                                                 timer={timer}
-                                                isEndGame={isEndGame}
                                                 isGameStart={isGameStart}
                                                 cardsLeft={cardsLeft}
-                                                playersWhoReady={playersWhoReady}
                                                 defenderTake={defenderTake}
                                                 playersQuantityCards={playersQuantityCards}
                                                 player={players.filter(item => item.position === setPosition(3, players, user))[0]}/> :
@@ -213,15 +199,12 @@ const RoomSingleFool = () => {
                                     {
                                         Object.keys(players.filter(item => item.position === setPosition(4, players, user))).length ?
                                             <GamePlayer
-                                                userTurn={userTurn}
                                                 fixedTime={fixedTime}
                                                 isWinner={isWinner}
                                                 whoToWhom={whoToWhom}
                                                 timer={timer}
-                                                isEndGame={isEndGame}
                                                 isGameStart={isGameStart}
                                                 cardsLeft={cardsLeft}
-                                                playersWhoReady={playersWhoReady}
                                                 defenderTake={defenderTake}
                                                 playersQuantityCards={playersQuantityCards}
                                                 player={players.filter(item => item.position === setPosition(4, players, user))[0]}/> :
@@ -234,15 +217,12 @@ const RoomSingleFool = () => {
                                     {
                                         Object.keys(players.filter(item => item.position === setPosition(5, players, user))).length ?
                                             <GamePlayer
-                                                userTurn={userTurn}
                                                 fixedTime={fixedTime}
                                                 isWinner={isWinner}
                                                 whoToWhom={whoToWhom}
                                                 timer={timer}
-                                                isEndGame={isEndGame}
                                                 isGameStart={isGameStart}
                                                 cardsLeft={cardsLeft}
-                                                playersWhoReady={playersWhoReady}
                                                 defenderTake={defenderTake}
                                                 playersQuantityCards={playersQuantityCards}
                                                 player={players.filter(item => item.position === setPosition(5, players, user))[0]}/> :
@@ -256,15 +236,12 @@ const RoomSingleFool = () => {
                                     {
                                         Object.keys(players.filter(item => item.position === setPosition(2, players, user))).length ?
                                             <GamePlayer
-                                                userTurn={userTurn}
                                                 fixedTime={fixedTime}
                                                 isWinner={isWinner}
                                                 whoToWhom={whoToWhom}
                                                 timer={timer}
-                                                isEndGame={isEndGame}
                                                 isGameStart={isGameStart}
                                                 cardsLeft={cardsLeft}
-                                                playersWhoReady={playersWhoReady}
                                                 defenderTake={defenderTake}
                                                 playersQuantityCards={playersQuantityCards}
                                                 player={players.filter(item => item.position === setPosition(2, players, user))[0]}/> :
@@ -277,15 +254,12 @@ const RoomSingleFool = () => {
                                     {
                                         Object.keys(players.filter(item => item.position === setPosition(6, players, user))).length ?
                                             <GamePlayer
-                                                userTurn={userTurn}
                                                 fixedTime={fixedTime}
                                                 isWinner={isWinner}
                                                 whoToWhom={whoToWhom}
                                                 timer={timer}
-                                                isEndGame={isEndGame}
                                                 isGameStart={isGameStart}
                                                 cardsLeft={cardsLeft}
-                                                playersWhoReady={playersWhoReady}
                                                 defenderTake={defenderTake}
                                                 playersQuantityCards={playersQuantityCards}
                                                 player={players.filter(item => item.position === setPosition(6, players, user))[0]}/> :
@@ -376,16 +350,13 @@ const RoomSingleFool = () => {
 
                                 {
                                     gameCenter[response.event] ? gameCenter[response.event] :
+                                    !isGameStart ? <FoolCenterWaiting/> :
                                         <FoolCenterRunning cardsOnTable={cardsOnTable}
                                                            setSelectedCard={setSelectedCard}
                                                            selectedCard={selectedCard}
-                                                           websocket={websocket}
                                                            setMyCards={setMyCards}
                                                            trump={trump}
                                                            setWrongStep={setWrongStep}
-                                                           user={user}
-                                                           players={players}
-                                                           userTurn={userTurn}
                                                            defenderTake={defenderTake}
                                                            isCardsBeat={isCardsBeat}
                                                            attacker={attacker}
@@ -412,8 +383,8 @@ const RoomSingleFool = () => {
                                                                 cardsOnTable={cardsOnTable}/> :
                                                 userTurn.id === user.id && userTurn.event === "defender" ?
                                                     <FoolButtonTake timer={timer} websocket={websocket}/> :
-                                                    !isReady ?
-                                                        <FoolButtonReady setIsReady={setIsReady}
+                                                    !usersReady.some(item => item === user.id) && !isGameStart ?
+                                                        <FoolButtonReady
                                                                          websocket={websocket}/> :
                                                         <FoolButtonWaiting/>
                                         }

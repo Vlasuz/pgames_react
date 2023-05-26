@@ -6,7 +6,7 @@ const cardEvent = (item, e, setWrongStep, userTurn, user, cardsOnTable, websocke
     if (userTurn.id === user.id) {
 
         if (((userTurn.event === "attacker" || userTurn.event === "sub_attacker") &&
-                (cardsOnTable.some(card => card.attacker_card?.rank === item.rank) || cardsOnTable.some(card => card.defence_card?.rank === item.rank))) ||
+                (cardsOnTable.some(card => card.entry_card?.rank === item.rank) || cardsOnTable.some(card => card.closing_card?.rank === item.rank))) ||
             cardsOnTable.length === 0) {
 
             const top = e.target.closest('li').getBoundingClientRect().top - document.querySelector('.game__table-cards--card_empty').getBoundingClientRect().top;

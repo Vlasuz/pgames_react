@@ -2,26 +2,26 @@ import React, {useEffect, useState} from 'react';
 import {logDOM} from "@testing-library/react";
 import handleSelect from "./functions/handle_select_card";
 import setPosition from "./functions/set_position";
+import {useSelector} from "react-redux";
+import {reducerPlayerTurn} from "../../../redux/game_reducers/reducerPlayerTurn";
 
 const FoolCenterRunning = ({
                                cardsOnTable,
                                setSelectedCard,
                                selectedCard,
-                               websocket,
                                setMyCards,
                                trump,
                                setWrongStep,
-                               userTurn,
-                               user,
-                               players,
                                defenderTake,
                                isCardsBeat,
                                attacker,
                                defender
                            }) => {
 
-    const [isDefenderTake, setIsDefenderTake] = useState(false);
-    const [classToCards, setClassToCards] = useState('')
+    const userTurn = useSelector(state => state.reducerPlayerTurn.playerTurn)
+    const user = useSelector(state => state.userInfoReducer.data)
+    const websocket = useSelector(state => state.reducerWebsocket.gameWebsocket)
+    const players = useSelector(state => state.gamesListPlayersReducer.players)
 
     useEffect(() => {
 
@@ -32,18 +32,9 @@ const FoolCenterRunning = ({
                     "data": selectedCard
                 })
             )
-        } else {
-            console.log('Select bitted card')
         }
 
     }, [selectedCard])
-
-    useEffect(() => {
-        setIsDefenderTake(true)
-        setTimeout(() => {
-            setIsDefenderTake(false)
-        }, 300)
-    }, [defenderTake])
 
     const getUserPosition = () => {
 
@@ -62,14 +53,11 @@ const FoolCenterRunning = ({
             const yourPosition = players.filter(item => item.user?.id ? item.user?.id === user.id : item.id === user.id)[0]?.position ? players.filter(item => item.user?.id ? item.user?.id === user.id : item.id === user.id)[0]?.position : 1
 
             return userTurnPosition - (yourPosition - 1) > 0 ? userTurnPosition - (yourPosition - 1) : userTurnPosition - (yourPosition - 1) + 6;
-        } else {
-            // console.log('My run')
         }
     }
 
 
     useEffect(() => {
-
 
 
     }, [attacker, defender, defenderTake, isCardsBeat])
@@ -87,19 +75,16 @@ const FoolCenterRunning = ({
         } else if (isCardsBeat) {
             return ` game__table-cards--item_cards-beat`;
         } else if (!!Object.keys(attacker).length) {
-            if(attacker?.player?.id !== user.id && attacker.played_card === card.attacker_card) {
+            if (attacker?.player?.id !== user.id && attacker.played_card === card.entry_card) {
                 return ` game__table-cards--item_attacker game__table-cards--item_attacker-from-position-${getUserPosition()}`;
             }
         } else if (!!Object.keys(defender).length) {
-            if(defender?.player?.id !== user.id && defender.played_card === card.defence_card) {
+            if (defender?.player?.id !== user.id && defender.played_card === card.closing_card) {
                 return ` game__table-cards--item_defender game__table-cards--item_defender-from-position-${getUserPosition()}`;
             }
         }
 
     }
-
-
-    // что если сравнивать все карты и карта которую положилина стол, и если это защита и тому у кого совпадают карты давать класс
 
     return (
         <div className="game__table-cards">
@@ -107,27 +92,27 @@ const FoolCenterRunning = ({
 
                 {
                     cardsOnTable.map((card, index) =>
-                        <li className={"game__table-cards--item _accent _new-card " + classToCards + defenderFunc(card)}
+                        <li className={"game__table-cards--item _accent _new-card " + defenderFunc(card)}
                             key={index}>
                             {
                                 <>
                                     {
-                                        card?.attacker_card?.rank ?
+                                        card?.entry_card?.rank ?
                                             <div className={"game__table-cards--card"}
-                                                 onClick={e => handleSelect(card.attacker_card, e, setWrongStep, selectedCard, trump, setSelectedCard, setMyCards, false)}
-                                                 onMouseMove={e => handleSelect(card.attacker_card, e, setWrongStep, selectedCard, trump, setSelectedCard, setMyCards, true)}
-                                                 onMouseLeave={e => handleSelect(card.attacker_card, e, setWrongStep, selectedCard, trump, setSelectedCard, setMyCards, true)}
+                                                 onClick={e => handleSelect(card.entry_card, e, setWrongStep, selectedCard, trump, setSelectedCard, setMyCards, false)}
+                                                 onMouseMove={e => handleSelect(card.entry_card, e, setWrongStep, selectedCard, trump, setSelectedCard, setMyCards, true)}
+                                                 onMouseLeave={e => handleSelect(card.entry_card, e, setWrongStep, selectedCard, trump, setSelectedCard, setMyCards, true)}
                                             >
                                                 <img
-                                                    src={`images/game/cards/${card.attacker_card.rank}-${card.attacker_card.suit}.svg`}
+                                                    src={`images/game/cards/${card.entry_card.rank}-${card.entry_card.suit}.svg`}
                                                     alt="" className="game__table-cards--img"/>
                                             </div> : ""
                                     }
                                     {
-                                        card?.defence_card?.rank ?
+                                        card?.closing_card?.rank ?
                                             <div className={"game__table-cards--card"}>
                                                 <img
-                                                    src={`images/game/cards/${card.defence_card.rank}-${card.defence_card.suit}.svg`}
+                                                    src={`images/game/cards/${card.closing_card.rank}-${card.closing_card.suit}.svg`}
                                                     alt="" className="game__table-cards--img"/>
                                             </div> : ""
                                     }

@@ -2,13 +2,14 @@ import React from 'react';
 import PopupBgd from "./PopupBgd";
 import PopupCross from "./PopupCross";
 import ClosePopup from "../../hooks/ClosePopup";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import {popupTitle} from "../../redux/actions";
 import {useDispatch} from "react-redux";
 
 const PopupWinnerGame = () => {
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const handleContinue = () => {
         document.querySelector('.popup')?.classList.remove('_active')
@@ -33,7 +34,7 @@ const PopupWinnerGame = () => {
                         <button onClick={handleContinue} className="game-exit-popup__btn btn popup-btn">
                             Остаться
                         </button>
-                        <NavLink to={'/games'} className="game-exit-popup__btn btn popup-btn _red">
+                        <NavLink to={_ => navigate(-1)} className="game-exit-popup__btn btn popup-btn _red">
                             Выйти из игры
                         </NavLink>
                     </div>

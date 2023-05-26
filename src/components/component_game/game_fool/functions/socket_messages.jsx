@@ -1,15 +1,19 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {setGamePlayers} from "../../../../redux/reducers/gamesListPlayersReducer";
+import {leaveGamePlayers, setGamePlayers} from "../../../../redux/reducers/gamesListPlayersReducer";
 import {popupTitle} from "../../../../redux/actions";
 import {setIsGameStart} from "../../../../redux/game_reducers/reducerIsGameStart";
+import {setIsReady} from "../../../../redux/game_reducers/reducerIsReady";
+import {setUsersCards} from "../../../../redux/game_reducers/reducerFoolUsersCards";
+import {setUserReadyState} from "../../../../redux/game_reducers/reducerUserReadyState";
+import {setEndGame} from "../../../../redux/game_reducers/reducerEndGame";
+import {setPlayerTurn} from "../../../../redux/game_reducers/reducerPlayerTurn";
 
 const socketMessages = (
+    navigate,
+    setTimer,
     data,
     setTrump,
-    setUserTurn,
     setIsWinner,
-    setIsEndGame,
-    setIsGameStart,
     dispatch,
     setMyCards,
     myCards,
@@ -19,7 +23,6 @@ const socketMessages = (
     user,
     setDefenderTake,
     setCardsLeft,
-    setPlayersWhoReady,
     setPlayersQuantityCards,
     setAllCardsCount,
     setIsCardsBeat,
@@ -37,6 +40,14 @@ const socketMessages = (
         })
     }
 
+    if(data.status === 'Waiting') {
+        dispatch(setGamePlayers(data.users))
+        data.users.map(item => item.ready && dispatch(setUserReadyState(item.id)))
+    } else if (data.status === 'Game in progress') {
+        dispatch(setGamePlayers(data.users))
+        dispatch(setIsReady(true))
+    }
+
     function CardDistribution() {
         setAllCardsCount(data.data.deck_cards_count)
         setTrump(data.data.trump)
@@ -45,7 +56,6 @@ const socketMessages = (
 
     function StartGame() {
         dispatch(setIsGameStart(true))
-        setIsGameStart(true)
     }
 
     function NewPlayer() {
@@ -55,16 +65,20 @@ const socketMessages = (
     function PlayerTurn() {
         document.querySelector('.game-user-cards__item._active')?.classList.remove('_active')
 
-        setUserTurn({
+        // setUserTurn({
+        //     id: data.data.player.id,
+        //     event: data.data.role,
+        // })
+        dispatch(setPlayerTurn({
             id: data.data.player.id,
             event: data.data.role,
-        })
+        }))
     }
 
     function AttackerPlayed() {
         setCardsOnTable(prev => [...prev, {
-            attacker_card: data.data.played_card,
-            defence_card: {}
+            entry_card: data.data.played_card,
+            closing_card: {}
         }])
         setDefender({})
         setAttacker(data.data)
@@ -84,8 +98,8 @@ const socketMessages = (
 
     function SubAttackerPlayed() {
         setCardsOnTable(prev => [...prev, {
-            attacker_card: data.data.played_card,
-            defence_card: {}
+            entry_card: data.data.played_card,
+            closing_card: {}
         }])
         setDefender({})
         setAttacker(data.data)
@@ -108,13 +122,13 @@ const socketMessages = (
         setDefender(data.data)
 
         const newObjectWithCards = {
-            attacker_card: data.data.entry_card,
-            defence_card: data.data.played_card
+            entry_card: data.data.entry_card,
+            closing_card: data.data.played_card
         }
 
         let index = 0;
         cardsOnTable.some((item, idx) => {
-            if (item.attacker_card.rank === data.data.entry_card.rank && item.attacker_card.suit === data.data.entry_card.suit) {
+            if (item.entry_card.rank === data.data.entry_card.rank && item.entry_card.suit === data.data.entry_card.suit) {
                 index = idx
             }
         })
@@ -175,25 +189,60 @@ const socketMessages = (
     }
 
     function EndGame() {
-        setIsEndGame(true)
+        dispatch(setEndGame(true))
     }
 
     function UserReadyState() {
-        setPlayersWhoReady(prev => [...prev, data.data.user_id])
+        dispatch(setUserReadyState(data.data.user_id))
     }
 
     const PlayersNewCardsQuantity = () => {
         setAllCardsCount(data.data.deck_cards_count)
         setPlayersQuantityCards(data.data.players)
+        console.log('111', data.data)
     }
 
     const NewRound = () => {
         setWhoToWhom(data.data)
     }
 
+    const GameState = () => {
+        setMyCards(data.data.game.cards)
+        setAllCardsCount(data.data.game.deck.cards_remaining)
+        setTrump(data.data.game.deck.trump_card)
+        setCardsOnTable(data.data.game.desk.card_row)
+        setWhoToWhom({
+            attacker: {
+                id: data.data.game.players.filter(item => item.role === 'attacker')[0].id
+            },
+            defender: {
+                id: data.data.game.players.filter(item => item.role === 'defender')[0].id
+            }
+        })
+        // setUserTurn({
+        //     id: data.data.game.players.filter(item => data.data.game.state.toLowerCase().includes(item.role))[0].id,
+        //     event: data.data.game.players.filter(item => data.data.game.state.toLowerCase().includes(item.role))[0].role,
+        // })
+
+        setTimer(70 - data.data.game.players.filter(item => item.timer !== null)[0].timer)
+
+        dispatch(setPlayerTurn({
+            id: data.data.game.players.filter(item => data.data.game.state.toLowerCase().includes(item.role))[0].id,
+            event: data.data.game.players.filter(item => data.data.game.state.toLowerCase().includes(item.role))[0].role,
+        }))
+        dispatch(setIsGameStart(true))
+        dispatch(setUsersCards(data.data.game.players))
+    }
+
+    const PlayerLeave = () => {
+        if(user.id === data.data.player.id) navigate(-1)
+        dispatch(leaveGamePlayers(data.data.player))
+    }
+
     const events = {
         "card_distribution": CardDistribution,
         "start_game": StartGame,
+        "game_state": GameState,
         "new_player": NewPlayer,
         "player_turn": PlayerTurn,
         "attacker_played": AttackerPlayed,
@@ -207,6 +256,7 @@ const socketMessages = (
         "user_ready_state": UserReadyState,
         "players_new_cards_quantity": PlayersNewCardsQuantity,
         "new_round": NewRound,
+        "player_leave": PlayerLeave,
     }
 
     if (typeof events[data.event] === 'function') events[data.event]();

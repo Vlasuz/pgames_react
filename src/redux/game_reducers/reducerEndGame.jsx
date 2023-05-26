@@ -1,7 +1,7 @@
 import {SET_END_GAME} from "../types";
 
 const initialState = {
-    endGame: {}
+    endGame: false
 }
 
 export const reducerEndGame = (state = initialState, action) => {

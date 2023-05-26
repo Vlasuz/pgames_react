@@ -33,6 +33,7 @@ import {setFenLine, setFenTable} from "../redux/game_reducers/reducerChessFenTab
 import {logDOM} from "@testing-library/react";
 import {reducerEndGame, setEndGame} from "../redux/game_reducers/reducerEndGame";
 import {popupTitle} from "../redux/actions";
+import {setHistoryItem} from "../redux/game_reducers/reducerHistory";
 
 const RoomSingleFool = () => {
 
@@ -140,6 +141,11 @@ const RoomSingleFool = () => {
                     arr.push(arrayLines[row].map(item => item === '' ? item.replace('', 1) : item).join(''))
                 }
 
+                dispatch(setHistoryItem({
+                    code: `${figureFrom.getAttribute('data-position')} - ${figureTo.getAttribute('data-position')}`,
+                    userId: data.data.player.id
+                }))
+
                 dispatch(setFenLine(arr.join('/')))
                 figureFrom.querySelector('.chess__grid--checker-body').style.top = 0 + "px"
                 figureFrom.querySelector('.chess__grid--checker-body').style.left = 0 + "px"
@@ -175,14 +181,7 @@ const RoomSingleFool = () => {
         socket.onopen = () => {
             dispatch(setWebsocket(socket))
             socket.send(JSON.stringify({"command": "auth", "data": {"token": GetCookies('access_token')}}))
-            // axios.defaults.headers.get['Authorization'] = `Bearer ${GetCookies('access_token')}`;
-            // axios.get(GlobalLink(`/api/room/get/${roomId}/`)).then(res => {
-            //     console.log('info about room', res.data)
-            //     Object.keys(res?.data?.players).length && setOpponent(res.data.players.filter(item => item.user.id !== user.id))
-            // })
         }
-
-
     }, [isAuth])
 
     const opponentData = Object.keys(opponent).length ? opponent : players?.filter(item => item?.user?.id !== user?.id)[0]?.user

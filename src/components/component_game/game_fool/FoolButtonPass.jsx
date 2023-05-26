@@ -25,13 +25,13 @@ const FoolButtonPass = ({ websocket, cardsOnTable, timer }) => {
             </h3>
             <div className="game__user-menu--timer">
                 Осталось:
-                <b>{timer} сек</b>
+                <b>{timer.toFixed()} сек</b>
             </div>
             {
                 cardsOnTable.length ?
                     <button className="game__user-menu--main-btn btn _large _shadow _red" type="button" onClick={handlePass}>
                         {
-                            cardsOnTable.some(item => Object.keys(item.defence_card).length) ? "Бито" : "Принять"
+                            cardsOnTable.some(item => !(item.closing_card === null || !Object.keys(item.closing_card).length)) ? "Бито" : "Принять"
                         }
                     </button> : ""
             }
