@@ -30,6 +30,7 @@ import {reducerWebsocket} from "../game_reducers/reducerWebsocket";
 import {reducerPlayerTurn} from "../game_reducers/reducerPlayerTurn";
 import {reducerUserReadyState} from "../game_reducers/reducerUserReadyState";
 import {reducerEndGame} from "../game_reducers/reducerEndGame";
+import {reducerHistory} from "../game_reducers/reducerHistory";
 
 export const rootReducer = combineReducers({
     logoutReducer,
@@ -64,4 +65,5 @@ export const rootReducer = combineReducers({
     reducerPlayerTurn,
     reducerUserReadyState,
     reducerEndGame,
+    reducerHistory
 })

@@ -20,7 +20,7 @@ const CheckersOpponent = ({opponent, isGameStart}) => {
                     </div>
                     <div className="game__player--info">
                         <h3 className="game__player--name">
-                            {opponent?.name}
+                            {opponent?.name ? opponent?.name : opponent?.username}
                         </h3>
                         {
                             isYourTurn.player?.id === opponent?.id ?

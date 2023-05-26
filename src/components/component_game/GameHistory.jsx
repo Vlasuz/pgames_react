@@ -1,12 +1,21 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {useSelector} from "react-redux";
 
 const GameHistory = () => {
+
+    const [isOpenHistory, setIsOpenHistory] = useState(false)
+    const history = useSelector(state => state.reducerHistory.history)
+    const players = useSelector(state => state.gamesListPlayersReducer.players)
+    const user = useSelector(state => state.userInfoReducer.data)
+
+    const handleOpen = () => {
+        setIsOpenHistory(prev => !prev)
+    }
+
     return (
         <div className="chess__history game__history">
-            <div className="game__history--wrapper">
-                {/*_active*/}
-
-                <button type="button" className="game__history--header">
+            <div className={"game__history--wrapper" + (isOpenHistory ? " _active" : "")}>
+                <button type="button" className="game__history--header" onClick={handleOpen}>
                     <h3 className="game__history--header-title">
                         История ходов
                     </h3>
@@ -20,30 +29,33 @@ const GameHistory = () => {
                     </div>
                 </button>
                 <ul className="chess__history--list game__history--list">
-                    <li className="checkers__history--item game__history--item">
-                        <div className="checkers__history--avatar">
-                            <img src="images/account/avatar.png" alt="" />
-                        </div>
-                        <h4 className="checkers__history--name">
-                            Вы: Евгений
-                        </h4>
-                        <span className="checkers__history--move">E3 - F5</span>
-                    </li>
-                    <li className="chess__history--item game__history--item">
-                        <span className="chess__history--move">Pe4</span>
-                        <span className="chess__history--move">Nc6</span>
-                    </li>
-                    <li className="chess__history--item game__history--item">
-                        <span className="chess__history--move">Pe4</span>
-                        <span className="chess__history--move">Nc6</span>
-                    </li>
-                    <li className="chess__history--item game__history--item">
-                        <span className="chess__history--move">Pe4</span>
-                        <span className="chess__history--move">Nc6</span>
-                    </li>
-                    <li className="chess__history--item game__history--item">
-                        <span className="chess__history--move">Pe4</span>
-                    </li>
+
+                    {
+                        history.map((historyItem, index) => {
+                            const historyUser = players.filter(user => historyItem.userId !== user.id)[0]
+                            const isYou = user.id === historyUser.id
+
+                            return (
+                                <li key={index} className="checkers__history--item game__history--item">
+                                    <div className="checkers__history--avatar">
+                                        <img src="images/account/avatar.png" alt="" />
+                                    </div>
+                                    <h4 className="checkers__history--name">
+                                        {
+                                            isYou ? 'Вы: ' : ''
+                                        }
+                                        {
+                                            historyUser.name ? historyUser.name : historyUser.username
+                                        }
+                                    </h4>
+                                    <span className="checkers__history--move">
+                                        {historyItem.code.toUpperCase()}
+                                    </span>
+                                </li>
+                            )
+                        })
+                    }
+
                 </ul>
             </div>
         </div>

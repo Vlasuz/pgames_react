@@ -14534,7 +14534,12 @@ a.page-pagination__btn{
 }
 
 .checkers__grid--cell {
-    border: 1px solid transparent
+    border: 1px solid transparent;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
 }
 
 .checkers__grid--cell._possible-move {
@@ -14551,8 +14556,11 @@ a.page-pagination__btn{
     opacity: 1
 }
 
+.checkers__grid--cell._set-king {
+    transform: scaleX(0);
+}
 .checkers__grid--cell._hidden {
-    opacity: 0
+    opacity: 0;
 }
 
 .checkers__grid--checker {

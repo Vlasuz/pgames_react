@@ -4,7 +4,7 @@ import GameButtonsChatAndMicro from "../components/component_game/GameButtonsCha
 import CheckersTable from "../components/component_game/game_checkers/CheckersTable";
 import GameHistory from "../components/component_game/GameHistory";
 import {useDispatch, useSelector} from "react-redux";
-import {changeFenCheckers, setFenLine, setFenTable} from "../redux/game_reducers/reducerChessFenTable";
+import {changeFenCheckers, isKingCheckers, setFenLine, setFenTable} from "../redux/game_reducers/reducerChessFenTable";
 import GlobalSocket from "../GlobalSocket";
 import {setWebsocket} from "../redux/game_reducers/reducerWebsocket";
 import GetCookies from "../hooks/GetCookies";
@@ -25,6 +25,7 @@ import ChessOpponent from "../components/component_game/game_chess/ChessOpponent
 import ChessYourUser from "../components/component_game/game_chess/ChessYourUser";
 import CheckersYourUser from "../components/component_game/game_checkers/CheckersYourUser";
 import CheckersOpponent from "../components/component_game/game_checkers/CheckersOpponent";
+import {setHistoryItem} from "../redux/game_reducers/reducerHistory";
 
 const RoomSingleCheckers = () => {
 
@@ -201,7 +202,10 @@ const RoomSingleCheckers = () => {
         const gameState = () => {
             dispatch(setFenTable(data.data.game.pieces))
             dispatch(setIsGameStart(true))
-            dispatch(setPlayerTurn({player: {id: data.data.game.players.filter(item=>item.is_player_turn)[0].id}, time_remaining: data.data.game.players.filter(item=>item.is_player_turn)[0].timer}))
+            dispatch(setPlayerTurn({
+                player: {id: data.data.game.players.filter(item => item.is_player_turn)[0].id},
+                time_remaining: data.data.game.players.filter(item => item.is_player_turn)[0].timer
+            }))
         }
         const playerTurn = () => {
             dispatch(setPlayerTurn(data.data))
@@ -244,12 +248,17 @@ const RoomSingleCheckers = () => {
 
             })
 
+            dispatch(setHistoryItem({
+                code: `${codeFrom} - ${codeTo}`,
+                userId: data.data.player.id
+            }))
+
             setTimeout(() => {
 
                 let indexElem = 0;
                 let elemFrom = {};
                 tableFen.filter((item, index) => {
-                    if(+item.position === +positionFrom) {
+                    if (+item.position === +positionFrom) {
                         elemFrom = item;
                         return indexElem = index;
                     }
@@ -258,26 +267,45 @@ const RoomSingleCheckers = () => {
                 const deleteItemNumber = (figureFrom.getAttribute('data-index-arr') - figureTo.getAttribute('data-index-arr')) / 2
                 let deleteItem = 0;
 
-                if(deleteItemNumber === 7) {
+                if (deleteItemNumber === 7) {
                     deleteItem = +figureFrom.getAttribute('data-index-arr') - 7
-                } else if(deleteItemNumber === 9) {
+                } else if (deleteItemNumber === 9) {
                     deleteItem = +figureFrom.getAttribute('data-index-arr') - 9
-                } else if(deleteItemNumber === -9) {
+                } else if (deleteItemNumber === -9) {
                     deleteItem = +figureFrom.getAttribute('data-index-arr') + 9
-                } else if(deleteItemNumber === -7) {
+                } else if (deleteItemNumber === -7) {
                     deleteItem = +figureFrom.getAttribute('data-index-arr') + 7
                 }
 
-                dispatch(changeFenCheckers(indexElem, elemFrom, positionTo, document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.getAttribute('data-index')))
+                document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.classList.add('_hidden')
 
-                figureFrom.querySelector('.checkers__grid--checker-body').style.top = 0 + "px"
-                figureFrom.querySelector('.checkers__grid--checker-body').style.left = 0 + "px"
-            }, 500)
+                if (elemFrom.owner === 'white' && positionTo > 28) {
+                    document.querySelector(`.checkers__grid--cell[data-index="${positionTo}"]`).classList.add('_set-king')
+                } else if (elemFrom.owner === 'black' && positionTo < 5) {
+                    document.querySelector(`.checkers__grid--cell[data-index="${positionTo}"]`).classList.add('_set-king')
+                }
+
+                setTimeout(() => {
+                    dispatch(changeFenCheckers(indexElem, elemFrom, positionTo, document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.getAttribute('data-index')))
+
+                    document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.classList.remove('_hidden')
+                    figureFrom.querySelector('.checkers__grid--checker-body').style.top = 0 + "px"
+                    figureFrom.querySelector('.checkers__grid--checker-body').style.left = 0 + "px"
+                    dispatch(isKingCheckers(indexElem, elemFrom, positionTo))
+
+                    setTimeout(() => {
+                        document.querySelector(`.checkers__grid--cell._set-king`)?.classList.remove('_set-king')
+                    }, 300)
+
+                }, 300)
+            }, 300)
 
         }
         const endGame = () => {
-            dispatch(setEndGame(data.data))
-            dispatch(popupTitle('game-winner', data.data))
+            setTimeout(() => {
+                dispatch(setEndGame(data.data))
+                dispatch(popupTitle('game-winner', data.data))
+            }, 300)
         }
 
         console.log('socket message', data)
@@ -295,6 +323,7 @@ const RoomSingleCheckers = () => {
 
     const opponentData = players.filter(item => item.id !== user.id)[0]
 
+    console.log('qqq', players)
     console.log(opponentData)
 
     return (
