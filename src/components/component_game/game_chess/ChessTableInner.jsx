@@ -1,19 +1,32 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {reducerSocketResponse} from "../../../redux/game_reducers/reducerSocketResponse";
-import {reducerFenTable, setFenLine} from "../../../redux/game_reducers/reducerChessFenTable";
+import {reducerFenTable, setFenLine, setFenTable} from "../../../redux/game_reducers/reducerChessFenTable";
 import {logDOM} from "@testing-library/react";
 
 const ChessTableInner = () => {
 
+    const dispatch = useDispatch()
+
     const websocket = useSelector(state => state.reducerWebsocket.gameWebsocket)
     const players = useSelector(state => state.gamesListPlayersReducer.players)
     const user = useSelector(state => state.userInfoReducer.data)
-    const [playerColor, setPlayerColor] = useState(1)
     const tableFen = useSelector(state => state.reducerFenTable.fenTable)
+    const [playerColor, setPlayerColor] = useState(1)
     const [arrayForTable, setArrayForTable] = useState([])
-    const dispatch = useDispatch()
-    const arrayLines = tableFen.slice(0, tableFen.indexOf(" ")).split('/').map(item => {
+
+    // useEffect(() => {
+    //     if(tableFen.fenTable && !tableFen.fenTable.length && !Object.keys(tableFen.fenTable).length) {
+    //
+    //     }
+    // }, [tableFen])
+
+    useEffect(() => {
+        dispatch(setFenTable('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'))
+    }, [])
+
+
+    const arrayLines = tableFen && Object.keys(tableFen).length && tableFen.slice(0, tableFen.indexOf(" ")).split('/').map(item => {
         return item.split('').map(item2 => {
             if (!+item2) return item2
 
@@ -53,7 +66,7 @@ const ChessTableInner = () => {
         setArrayForTable([]);
         const maxLength = 7
 
-        for (let row = 0; row < arrayLines.length; row++) {
+        for (let row = 0; row < arrayLines?.length; row++) {
             const color = [row, Math.abs(row - maxLength)];
 
             const colorIndex = color[playerColor - 1];

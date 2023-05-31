@@ -30,31 +30,31 @@ const GameHistory = () => {
                 </button>
                 <ul className="chess__history--list game__history--list">
 
-                    {
-                        history.map((historyItem, index) => {
-                            const historyUser = players.filter(user => historyItem.userId !== user.id)[0]
-                            const isYou = user.id === historyUser.id
+                    {/*{*/}
+                    {/*    history.map((historyItem, index) => {*/}
+                    {/*        const historyUser = players.filter(user => historyItem.userId !== user.id)[0]*/}
+                    {/*        const isYou = user.id === historyUser.id*/}
 
-                            return (
-                                <li key={index} className="checkers__history--item game__history--item">
-                                    <div className="checkers__history--avatar">
-                                        <img src="images/account/avatar.png" alt="" />
-                                    </div>
-                                    <h4 className="checkers__history--name">
-                                        {
-                                            isYou ? 'Вы: ' : ''
-                                        }
-                                        {
-                                            historyUser.name ? historyUser.name : historyUser.username
-                                        }
-                                    </h4>
-                                    <span className="checkers__history--move">
-                                        {historyItem.code.toUpperCase()}
-                                    </span>
-                                </li>
-                            )
-                        })
-                    }
+                    {/*        return (*/}
+                    {/*            <li key={index} className="checkers__history--item game__history--item">*/}
+                    {/*                <div className="checkers__history--avatar">*/}
+                    {/*                    <img src="images/account/avatar.png" alt="" />*/}
+                    {/*                </div>*/}
+                    {/*                <h4 className="checkers__history--name">*/}
+                    {/*                    {*/}
+                    {/*                        isYou ? 'Вы: ' : ''*/}
+                    {/*                    }*/}
+                    {/*                    {*/}
+                    {/*                        historyUser.name ? historyUser.name : historyUser.username*/}
+                    {/*                    }*/}
+                    {/*                </h4>*/}
+                    {/*                <span className="checkers__history--move">*/}
+                    {/*                    {historyItem.code.toUpperCase()}*/}
+                    {/*                </span>*/}
+                    {/*            </li>*/}
+                    {/*        )*/}
+                    {/*    })*/}
+                    {/*}*/}
 
                 </ul>
             </div>

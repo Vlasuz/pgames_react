@@ -49,7 +49,7 @@ const RoomSingleFool = () => {
     const websocket = useSelector(state => state.reducerWebsocket.gameWebsocket)
     const tableFen = useSelector(state => state.reducerFenTable.fenTable)
     const endGameReducer = useSelector(state => state.reducerEndGame.endGame)
-    const arrayLines = tableFen.slice(0, tableFen.indexOf(" ")).split('/').map(item => {
+    const arrayLines = tableFen && Object.keys(tableFen).length && tableFen.slice(0, tableFen.indexOf(" ")).split('/').map(item => {
         return item.split('').map(item2 => {
             if (!+item2) return item2
 
@@ -77,8 +77,8 @@ const RoomSingleFool = () => {
             dispatch(setGamePlayers(data.data))
         }
         const gameState = () => {
-            console.log(data.data?.players)
-            dispatch(setFenTable(data.data.fen))
+            console.log(data)
+            dispatch(setFenTable(data.data.game.fen))
             dispatch(setIsGameStart(true))
             // setOpponent(data.data?.players?.filter(item => item?.user?.id !== user?.id)[0]?.user)
         }

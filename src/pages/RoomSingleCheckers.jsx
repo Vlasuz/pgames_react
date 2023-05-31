@@ -26,6 +26,9 @@ import ChessYourUser from "../components/component_game/game_chess/ChessYourUser
 import CheckersYourUser from "../components/component_game/game_checkers/CheckersYourUser";
 import CheckersOpponent from "../components/component_game/game_checkers/CheckersOpponent";
 import {setHistoryItem} from "../redux/game_reducers/reducerHistory";
+import axios from "axios";
+import GlobalLink from "../GlobalLink";
+import {setBeaten} from "../redux/game_reducers/reducerCheckersBeaten";
 
 const RoomSingleCheckers = () => {
 
@@ -36,11 +39,16 @@ const RoomSingleCheckers = () => {
     const websocket = useSelector(state => state.reducerWebsocket.gameWebsocket)
     const isGameStart = useSelector(state => state.reducerIsGameStart.isGameStart)
     const players = useSelector(state => state.gamesListPlayersReducer.players)
-    const [opponent, setOpponent] = useState({})
     const [isLoad, setIsLoad] = useState(true)
     const user = useSelector(state => state.userInfoReducer.data)
     const tableFen = useSelector(state => state.reducerFenTable.fenTable)
+    const [infoRoom, setInfoRoom] = useState({})
+    const [playerColor, setPlayerColor] = useState(0)
+    const color = ['white', 'black']
 
+    useEffect(() => {
+        setPlayerColor(players?.filter(item => item?.id === user?.id)[0]?.position)
+    }, [players])
 
     useEffect(() => {
 
@@ -177,6 +185,12 @@ const RoomSingleCheckers = () => {
         socket.onopen = () => {
             dispatch(setWebsocket(socket))
             socket.send(JSON.stringify({"command": "auth", "data": {"token": GetCookies('access_token')}}))
+
+            axios.defaults.headers.get['Authorization'] = `Bearer ${GetCookies('access_token')}`;
+            axios.get(GlobalLink(`/api/room/get/${roomId}/`)).then(res => {
+                console.log('info about room', res.data)
+                setInfoRoom(res.data)
+            })
         }
     }, [isAuth])
 
@@ -196,7 +210,6 @@ const RoomSingleCheckers = () => {
         }
         const newPlayer = () => {
             console.log('JOIN NEW PLAYER', data.data)
-            setOpponent(data.data)
             dispatch(setGamePlayers([data.data]))
         }
         const gameState = () => {
@@ -277,6 +290,11 @@ const RoomSingleCheckers = () => {
                     deleteItem = +figureFrom.getAttribute('data-index-arr') + 7
                 }
 
+                if(!document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.querySelector('img')?.getAttribute('src').includes(color[playerColor - 1]) && document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.querySelector('img')) {
+                    dispatch(setBeaten('card', null))
+                } else if(document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.querySelector('img')?.getAttribute('src').includes(color[playerColor - 1]) && document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.querySelector('img')) {
+                    dispatch(setBeaten(null, 'card'))
+                }
                 document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.classList.add('_hidden')
 
                 if (elemFrom.owner === 'white' && positionTo > 28) {
@@ -323,9 +341,6 @@ const RoomSingleCheckers = () => {
 
     const opponentData = players.filter(item => item.id !== user.id)[0]
 
-    console.log('qqq', players)
-    console.log(opponentData)
-
     return (
         <main className="main" style={{overflow: 'visible'}}>
             <section className="checkers page-padding-top">
@@ -343,7 +358,9 @@ const RoomSingleCheckers = () => {
                             <div className="checkers__col">
                                 <div className="checkers__col--item">
                                     <div className="game__bet">
-                                        <span className="game__bet--value">1500</span>
+                                        <span className="game__bet--value">
+                                            {infoRoom.bet}
+                                        </span>
                                         <img src="images/icons/chip.svg" alt="" className="game__bet--currency"/>
                                     </div>
                                 </div>
@@ -380,16 +397,16 @@ const RoomSingleCheckers = () => {
                                 }
                             </div>
                         </div>
-                        {/*<div className="checkers__main--message game__message">*/}
-                        {/*    <div className="game__message--body">*/}
-                        {/*        <h3 className="game__message--title section-title _center">*/}
-                        {/*            Ожидаем готовность комнаты*/}
-                        {/*        </h3>*/}
-                        {/*        <div className="game__message--text">*/}
-                        {/*            Оставайтесь и одержите победу!*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
+                        {!isGameStart && <div className="checkers__main--message game__message">
+                            <div className="game__message--body">
+                                <h3 className="game__message--title section-title _center">
+                                    Ожидаем готовность комнаты
+                                </h3>
+                                <div className="game__message--text">
+                                    Оставайтесь и одержите победу!
+                                </div>
+                            </div>
+                        </div>}
                     </div>
                 </div>
             </section>

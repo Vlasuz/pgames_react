@@ -77,8 +77,7 @@ const GamePlayer = ({
                     </h3>
                     {
                         playerHere?.id === userTurn.id && !isEndGame ?
-                            <progress className="game__user--progress" max="100"
-                                      value={timer * 100 / fixedTime}></progress> : ""
+                            <progress className="game__user--progress" max="100" value={timer * 100 / fixedTime}></progress> : ""
                     }
                 </div>
                 <div className="game__player--block">

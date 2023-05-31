@@ -5,13 +5,15 @@ import {changeFenCheckers, isKingCheckers} from "../../../redux/game_reducers/re
 
 const CheckersTableInner = () => {
 
+    const dispatch = useDispatch()
+
     const websocket = useSelector(state => state.reducerWebsocket.gameWebsocket)
     const user = useSelector(state => state.userInfoReducer.data)
     const players = useSelector(state => state.gamesListPlayersReducer.players)
-    const [playerColor, setPlayerColor] = useState(0)
     const tableFen = useSelector(state => state.reducerFenTable.fenTable)
+
+    const [playerColor, setPlayerColor] = useState(0)
     const [arrayForTable, setArrayForTable] = useState([])
-    const dispatch = useDispatch()
     const [switchedPieces, setSwitchedPieces] = useState(0)
 
     useEffect(() => {

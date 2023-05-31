@@ -1,7 +1,15 @@
-import {SET_FEN_TABLE, SET_FEN_LINE, SET_FEN_CHECKERS, SET_KING_CHECKERS} from "../types";
+import {
+    SET_FEN_TABLE,
+    SET_FEN_LINE,
+    SET_FEN_CHECKERS,
+    SET_KING_CHECKERS,
+    SET_SELECT_DOMINOES,
+    SET_DOMINO
+} from "../types";
 
+// rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
 const initialState = {
-    fenTable: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+    fenTable: ''
 }
 
 export const reducerFenTable = (state = initialState, action) => {
@@ -39,7 +47,6 @@ export const reducerFenTable = (state = initialState, action) => {
                 })
             }
         case SET_KING_CHECKERS:
-
             return {
                 ...state,
                 fenTable: state.fenTable.filter(item => {
@@ -53,6 +60,18 @@ export const reducerFenTable = (state = initialState, action) => {
                         return item;
                     }
                 })
+            }
+        case SET_SELECT_DOMINOES:
+            return {
+                ...state,
+                fenTable: state.fenTable,
+                selectArray: [action.left, action.right]
+            }
+        case SET_DOMINO:
+            return {
+                ...state,
+                fenTable: action.position ? [action.domino, ...state.fenTable] : [...state.fenTable, action.domino],
+                selectArray: []
             }
         default:
             return state
@@ -84,5 +103,19 @@ export function isKingCheckers(isKing) {
     return {
         type: SET_KING_CHECKERS,
         isKing
+    }
+}
+
+export function setSelectDominoes(left, right) {
+    return {
+        type: SET_SELECT_DOMINOES,
+        left, right
+    }
+}
+
+export function setDomino(domino, position) {
+    return {
+        type: SET_DOMINO,
+        domino, position
     }
 }

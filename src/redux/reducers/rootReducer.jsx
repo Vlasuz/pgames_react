@@ -32,6 +32,7 @@ import {reducerUserReadyState} from "../game_reducers/reducerUserReadyState";
 import {reducerEndGame} from "../game_reducers/reducerEndGame";
 import {reducerHistory} from "../game_reducers/reducerHistory";
 import {reducerFoolUsersCards} from "../game_reducers/reducerFoolUsersCards";
+import {reducerCheckersBeaten} from "../game_reducers/reducerCheckersBeaten";
 
 export const rootReducer = combineReducers({
     logoutReducer,
@@ -67,5 +68,6 @@ export const rootReducer = combineReducers({
     reducerUserReadyState,
     reducerEndGame,
     reducerHistory,
-    reducerFoolUsersCards
+    reducerFoolUsersCards,
+    reducerCheckersBeaten
 })

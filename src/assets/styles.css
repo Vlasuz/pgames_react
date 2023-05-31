@@ -9020,7 +9020,7 @@ a.page-pagination__btn{
     .game__domino-block--list {
         left: 0;
         bottom: 0;
-        width: 300px;
+        width: 57vw;
         -webkit-transform: translateX(-35%);
         transform: translateX(-35%)
     }
@@ -9028,7 +9028,7 @@ a.page-pagination__btn{
 
 @media(min-width:900px) {
     .game__domino-block--list {
-        width: 400px
+        width: 57vw
     }
 }
 
@@ -9044,7 +9044,7 @@ a.page-pagination__btn{
 
 @media(min-width:650px) {
     .game__domino-block--item {
-        max-width: 15.25%
+        max-width: 60px;
     }
 }
 
@@ -9064,7 +9064,7 @@ a.page-pagination__btn{
     width: 100%;
     padding-top: 200%;
     position: relative;
-    border-radius: 4px;
+    border-radius: 8px;
     transition: background .2s ease-in-out
 }
 
@@ -9368,6 +9368,26 @@ a.page-pagination__btn{
     justify-content: center;
     position: relative;
 }
+
+.game__table_small .domino__table--place{
+    margin-top: -350px;
+    -webkit-transform: scale(.8);
+    -moz-transform: scale(.8);
+    -ms-transform: scale(.8);
+    -o-transform: scale(.8);
+    transform: scale(.8);
+}
+/*.game__table_small .domino__table--element-body{*/
+/*    width: 30px;*/
+/*    height: 60px;*/
+/*}*/
+/*.game__table_small .domino__table--element.non-rotate .domino__table--element-body{*/
+/*    width: 30px;*/
+/*    height: 30px;*/
+/*}*/
+/*.game__table_small .domino__table--element{*/
+/*    margin: 15px;*/
+/*}*/
 
 .game__table_defence{
     z-index: 2;
@@ -14484,8 +14504,8 @@ a.page-pagination__btn{
 
 .checkers__table--lost {
     display: none;
-    -ms-grid-column-align: start;
-    justify-self: start
+    -ms-grid-column-align: end;
+    justify-self: end
 }
 
 @media(min-width:500px) {
@@ -14634,8 +14654,17 @@ a.page-pagination__btn{
 }
 
 .checkers__lost {
-    padding: 10% 9% 9%;
-    max-height: 85%
+    padding: 8% 9% 9%;
+    max-height: 100%
+}
+
+.checkers__lost.checkers__lost_opponent {
+    justify-self: start;
+    z-index: 2;
+    padding: 8% 11% 9%;
+}
+.checkers__lost.checkers__lost_opponent .checkers__lost--list {
+    flex-direction: column-reverse;
 }
 
 @media(min-width:992px) {
@@ -14650,18 +14679,15 @@ a.page-pagination__btn{
 }
 
 .checkers__lost--list {
-    display: -ms-grid;
-    display: grid;
-    -ms-grid-columns: 100%;
-    grid-template-columns: 100%;
-    -ms-grid-rows: (1fr) [12];
-    grid-template-rows: repeat(12,1fr);
-    width: 30px;
-    height: 100%
+    width: 36px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .checkers__lost--item {
-    width: 100%;
+    width: 36px;
+    height: 36px;
     position: relative;
     transition: opacity .2s ease-in-out
 }
@@ -14670,8 +14696,8 @@ a.page-pagination__btn{
     position: absolute;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
+    width: 36px;
+    height: 36px;
     -o-object-fit: contain;
     object-fit: contain;
     -moz-user-select: none;
@@ -15984,19 +16010,38 @@ a.page-pagination__btn{
     margin-bottom: -95px
 }
 
+.domino__main--table{
+    z-index: 2;
+}
+.domino__table--place {
+    display: flex;
+    z-index: 3;
+}
 .domino__table--element {
-    position: absolute
+    transform-origin: center;
+    transform: rotate(90deg);
+    margin: 25px;
+}
+.domino__table--element.non-rotate {
+    transform: rotate(0deg);
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .domino__table--element._accent .domino__table--element-body {
-    background: rgba(97,200,175,.6)
+    background: rgba(97,200,175,.6);
+    cursor: pointer;
 }
 
 .domino__table--element-body {
+    height: 104px;
+    width: 52px;
+    position: relative;
+    border-radius: 8px;
+}
+.domino__table--element.non-rotate .domino__table--element-body {
     width: 52px;
     padding-top: 200%;
-    position: relative;
-    border-radius: 3px
 }
 
 .domino__table--element-img {
@@ -17471,5 +17516,64 @@ label._error .popup-input-placeholder{
         display: block;
     }
 }
+
+
+
+
+/*.rotation-wrapper-outer {*/
+/*    display: table;*/
+/*}*/
+/*.rotation-wrapper-inner {*/
+/*    padding: 50% 0;*/
+/*    height: 0;*/
+/*}*/
+/*.element-to-rotate {*/
+/*    display: block;*/
+/*    transform-origin: top left;*/
+/*    transform: rotate(90deg) translate(-100%);*/
+/*    margin-top: -50%;*/
+/*}*/
+/*.go-from-line .rotation-wrapper-outer {*/
+/*    display: block;*/
+/*}*/
+/*.go-from-line .rotation-wrapper-inner {*/
+/*    padding: 0% 0;*/
+/*    height: 50px;*/
+/*    width: 100px;*/
+/*}*/
+/*.go-from-line .element-to-rotate {*/
+/*    display: block;*/
+/*    transform-origin: top left;*/
+/*    transform: rotate(0deg) translate(0%);*/
+/*    margin-top: 0%;*/
+/*}*/
+
+/*.domino__table--element {*/
+/*    width: 100px;*/
+/*    height: 50px;*/
+/*}*/
+
+.domino__table--place{
+    counter-reset: ooo;
+}
+.domino__table--element.go-from-line-right,
+.domino__table--element.go-from-line-left,
+.domino__table--element.go-from-line-right + .domino__table--element.go-from-line-right,
+.domino__table--element.go-from-line-left + .domino__table--element.go-from-line-left {
+    /*opacity: .2;*/
+    transform: rotate(0);
+    margin-left: 0;
+    margin-right: 0;
+    counter-increment: ooo;
+    position: relative;
+    top: 100px;
+}
+/*.domino__table--place {*/
+/*    display: grid;*/
+/*    grid-template-columns: repeat(7, 1fr);*/
+/*}*/
+/*.domino__table--element{*/
+/*    margin: 0;*/
+/*}*/
 
 /*NEW STYLE*/

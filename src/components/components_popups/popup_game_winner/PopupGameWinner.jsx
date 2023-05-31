@@ -9,6 +9,7 @@ const PopupGameWinner = ({props}) => {
     const dispatch = useDispatch()
     const [text, setText] = useState('')
     const user = useSelector(state => state.userInfoReducer.data)
+    const players = useSelector(state => state.gamesListPlayersReducer.players)
     const handleClosePopup = () => {
         document.querySelector('.popup')?.classList.remove('_active')
         setTimeout(() => {
@@ -31,8 +32,9 @@ const PopupGameWinner = ({props}) => {
         'black': 'Победили черные',
         'draw': 'Ничья',
     }
+    const colors = ['white', 'black']
 
-    const isYouWinner = user.id === props.winner_player_id ? "Поздравляем! Вы выиграли" : "К сожалению, вы проиграли"
+    const isYouWinner = props?.game_result_status === colors[players.filter(item => item.id === user.id)[0].position - 1] ? "Поздравляем! Вы выиграли" : "К сожалению, вы проиграли"
 
     return (
         <div className={"chess-win-popup popup"}>
