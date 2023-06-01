@@ -9369,13 +9369,9 @@ a.page-pagination__btn{
     position: relative;
 }
 
-.game__table_small .domino__table--place{
-    margin-top: -350px;
-    -webkit-transform: scale(.8);
-    -moz-transform: scale(.8);
-    -ms-transform: scale(.8);
-    -o-transform: scale(.8);
-    transform: scale(.8);
+.domino__table--place{
+    max-width: 1230px;
+    position: relative;
 }
 /*.game__table_small .domino__table--element-body{*/
 /*    width: 30px;*/
@@ -17560,20 +17556,30 @@ label._error .popup-input-placeholder{
 .domino__table--element.go-from-line-left,
 .domino__table--element.go-from-line-right + .domino__table--element.go-from-line-right,
 .domino__table--element.go-from-line-left + .domino__table--element.go-from-line-left {
-    /*opacity: .2;*/
     transform: rotate(0);
     margin-left: 0;
     margin-right: 0;
-    counter-increment: ooo;
     position: relative;
     top: 100px;
 }
-/*.domino__table--place {*/
-/*    display: grid;*/
-/*    grid-template-columns: repeat(7, 1fr);*/
-/*}*/
-/*.domino__table--element{*/
-/*    margin: 0;*/
-/*}*/
+
+.game__table_small .domino__table--place{
+    margin-top: -450px;
+    -webkit-transform: scale(.8);
+    -moz-transform: scale(.8);
+    -ms-transform: scale(.8);
+    -o-transform: scale(.8);
+    transform: scale(.8);
+    width: 100%;
+    max-width: 1070px;
+}
+.domino__table--element.go-from-line-right + .domino__table--element.go-from-line-right,
+.domino__table--element.go-from-line-right{
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
 
 /*NEW STYLE*/

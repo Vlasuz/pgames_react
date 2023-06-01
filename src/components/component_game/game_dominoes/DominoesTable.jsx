@@ -19,7 +19,8 @@ const DominoesTable = () => {
         if (table?.fenTable?.length >= 2) {
             setTimeout(() => {
                 if (!isWidthBig) {
-                    setIsWidthBig(document.querySelector('.domino__main--table')?.clientWidth / 1.4 <= document.querySelector('.domino__table--place')?.clientWidth)
+                    setIsWidthBig(document.querySelector('.domino__main--table')?.clientWidth / 1.8 <= document.querySelector('.domino__table--place')?.clientWidth)
+                    // setIsWidthBig(1070 <= document.querySelector('.domino__table--place')?.clientWidth)
                 }
             }, 100)
         } else {
@@ -27,6 +28,7 @@ const DominoesTable = () => {
         }
         setTableParse(table.fenTable)
     }, [table.fenTable])
+
 
     useEffect(() => {
         if (!isLoad || table?.selectArray === undefined) return;
@@ -65,6 +67,9 @@ const DominoesTable = () => {
 
     }
 
+    const forLeftSide = Math.ceil((tableParse.length - 10) / 2)
+    const forRightsSide = tableParse.length - Math.floor((tableParse.length - 10) / 2)
+
     return (
         <div className={"domino__main--table domino__table game__table" + (isWidthBig ? " game__table_small" : "")}>
             <div className="domino__table--place">
@@ -74,24 +79,33 @@ const DominoesTable = () => {
 
                         if (!item || !item.length) return null;
 
-                        // const moreItems = tableParse.length > 10 && index > (tableParse.length / tableParse.length) + 2 && index < (tableParse.length - 4) ? " go-from-line" : ""
-                        const moreItemsLeft = index > (tableParse.length - 1 - 4) ? " go-from-line-right" : ""
-                        const moreItemsRight = tableParse.length > 10 && (index < 4) ? " go-from-line-left" : ""
-                        // const isTrue = tableParse.length > 10 && (index < 4 || index > (tableParse.length - 1 - 4))
+                        const tableLength = tableParse.length - 1
+
+                        const isTrue = tableLength > 5
+                        const isLeftItem = forLeftSide > index
+                        const isRightItem = forRightsSide < index
+                        const moreItemsLeft = isTrue && isLeftItem ? " go-from-line-left" : ""
+                        const moreItemsRight = isTrue && isRightItem ? " go-from-line-right" : ""
+
                         const styleForLeft = {
-                            left: moreItemsLeft === "" ? (4 - index) * 52 + 'px' : 0,
-                            top: moreItemsLeft === "" ? (4 - index) * 104 + 'px' : 0
+                            // left: isLeftItem ? (4 - index) * 52 + 'px' : 0,
+                            left: 0,
+                            top: isLeftItem ? -(index - forLeftSide) * 104 + 'px' : 0,
+                            position: "absolute"
                         }
                         const styleForRight = {
-                            left: moreItemsRight === "" ? (11 - index) * 52 + 'px' : 0,
-                            top: moreItemsRight === "" ? (index - 11.25) * 104 + 'px' : 0
+                            // right: isRightItem ? (tableParse.length - 4.05 - index) * 51 + 'px' : 0,
+                            right: 0,
+                            // top: isRightItem ? -(index - tableParse.length) * 104 + 'px' : 0,
+                            top: isRightItem ? (index - forRightsSide) * 104 + 'px' : 0,
+                            position: "absolute"
                         }
 
                         return (
                             <div data-first={item[0]} data-second={item[1]}
                                  onClick={_ => handleMove(item[0], item[1], index)}
-                                 className={"domino__table--element" + moreItemsLeft + moreItemsRight + (typeof item[0] === 'number' ? " _accent" : "") + (item[0] === item[1] ? " non-rotate" : "")}
-                                 key={index} style={moreItemsLeft === "" ? styleForLeft : styleForRight}>
+                                 className={"domino__table--element" + (moreItemsLeft + moreItemsRight) + (typeof item[0] === 'number' ? " _accent" : "") + (item[0] === item[1] ? " non-rotate" : "")}
+                                 key={index} style={isLeftItem ? styleForLeft : isRightItem ? styleForRight : {}}>
                                 <div className="rotation-wrapper-outer">
                                     <div className="rotation-wrapper-inner">
                                         <div className="domino__table--element-body">

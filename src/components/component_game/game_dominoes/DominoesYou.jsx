@@ -15,6 +15,8 @@ const DominoesYou = () => {
 
     const cardSelect = (first, second, e) => {
 
+        // if(playerTurn.player !== user.id) return null;
+
         document.querySelector('.game__domino-block--item._accent')?.classList.remove('_accent')
         e.target.closest('.game__domino-block--item').classList.add('_accent')
 
