@@ -1032,9 +1032,9 @@ function resize() {
   },
   function () {  // screen < 768px
 
-    if(onlineGamesSlider) {
-      onlineGamesSlider.destroy(true, true);
-    }
+    // if(onlineGamesSlider) {
+    //   onlineGamesSlider.destroy(true, true);
+    // }
 
 
   });
