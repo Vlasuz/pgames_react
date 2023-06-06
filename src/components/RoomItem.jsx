@@ -9,6 +9,7 @@ import axios from "axios";
 import GetCookies from "../hooks/GetCookies";
 import GlobalLink from "../GlobalLink";
 import {setGamePlayers} from "../redux/reducers/gamesListPlayersReducer";
+import SetCookies from "../hooks/SetCookies";
 
 const RoomItem = ({ game }) => {
 
@@ -22,7 +23,11 @@ const RoomItem = ({ game }) => {
         axios.post(GlobalLink(`/api/room/join_to_room/${game?.id}/`)).then(res => {
             console.log('join room', res.data)
             navigate('/rooms/' + res?.data?.game.slug + "/" + res?.data?.id)
-            // dispatch(setGamePlayers(res.data.players))
+
+            SetCookies('gameHistory', null)
+            SetCookies('CheckersYourBeaten', [])
+            SetCookies('CheckersOpponentBeaten', [])
+
         }).catch(error => {
             if(error.message.includes('401')) {
                 ActiveNotification('#notification_not-auth')

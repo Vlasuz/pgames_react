@@ -7,28 +7,22 @@ import {addRoomAction} from "../redux/actions";
 import GamesSingleRooms from "../components/components_games_single/GamesSingleRooms";
 import JsCustomSelect from "../components/JS_CustomSelect";
 import GlobalLink from "../GlobalLink";
+import axios from "axios";
 
 const GamesSingle = () => {
 
     const {gamesId} = useParams()
-
-    const games = useSelector(state => state.gamesListReducer.list)
-    const thisGame = games?.map(item => item.game.filter(game => game.slug === gamesId))[0]
     const [game, setGame] = useState({})
-
     const [isShowMoreText, setIsShowMoreText] = useState(false)
 
+    axios.get(`https://board-games.sonisapps.com/api/game/get/${gamesId}/`).then(({data}) => {
+        setGame(data)
+    })
 
     const handleMoreText = (e) => {
         e.preventDefault()
         setIsShowMoreText(prev => !prev)
     }
-
-    useEffect(() => {
-        if(thisGame !== undefined) {
-            setGame(thisGame[0])
-        }
-    }, [thisGame])
 
     return (
         <main className="main">
@@ -81,17 +75,17 @@ const GamesSingle = () => {
                                         Как играть?
                                     </h3>
                                     <div className={"page-game__descr--text" + (isShowMoreText ? " _visible" : "")}>
-                                        {/*{thisGame.data.text}*/}
+                                        {game.description}
                                     </div>
-                                    {/*{*/}
-                                    {/*    thisGame.data.text.length > 450 ?*/}
-                                    {/*        <button*/}
-                                    {/*            className={"page-game__descr--text-more-btn" + (isShowMoreText ? " _active" : "")} type="button"*/}
-                                    {/*            onClick={handleMoreText}*/}
-                                    {/*        >*/}
-                                    {/*            {isShowMoreText ? "скрыть" : "больше..."}*/}
-                                    {/*        </button> : ''*/}
-                                    {/*}*/}
+                                    {
+                                        game.description > 450 ?
+                                            <button
+                                                className={"page-game__descr--text-more-btn" + (isShowMoreText ? " _active" : "")} type="button"
+                                                onClick={handleMoreText}
+                                            >
+                                                {isShowMoreText ? "скрыть" : "больше..."}
+                                            </button> : ''
+                                    }
 
                                 </div>
                                 <ul className="page-game__base-info">
@@ -102,7 +96,7 @@ const GamesSingle = () => {
                                         <div className="page-game__param--row">
                                             <div className="page-game__param--element">
                                                 <span>
-                                                    {/*{thisGame.data.max_gamers}*/}
+                                                    {game.max_players}
                                                 </span>
                                                 <img src="images/icons/person.svg" width="13" height="13" alt=""/>
                                             </div>
@@ -113,18 +107,18 @@ const GamesSingle = () => {
                                             Валюты игры
                                         </h4>
                                         <div className="page-game__param--row">
-                                            {/*{*/}
-                                            {/*    thisGame.data.currency.money ?*/}
-                                            {/*        <div className="page-game__param--element">*/}
-                                            {/*            <img src="images/icons/dollar-circle.svg" width="15" height="15" alt=""/>*/}
-                                            {/*        </div> : ""*/}
-                                            {/*}*/}
-                                            {/*{*/}
-                                            {/*    thisGame.data.currency.chips ?*/}
-                                            {/*        <div className="page-game__param--element">*/}
-                                            {/*            <img src="images/icons/chip.svg" width="15" height="15" alt=""/>*/}
-                                            {/*        </div> : ""*/}
-                                            {/*}*/}
+                                            {
+                                                game.game_currencies?.some(item => item === 'money') ?
+                                                    <div className="page-game__param--element">
+                                                        <img src="images/icons/dollar-circle.svg" width="15" height="15" alt=""/>
+                                                    </div> : ""
+                                            }
+                                            {
+                                                game.game_currencies?.some(item => item === 'chips') ?
+                                                    <div className="page-game__param--element">
+                                                        <img src="images/icons/chip.svg" width="15" height="15" alt=""/>
+                                                    </div> : ""
+                                            }
                                         </div>
                                     </li>
                                     <li className="page-game__param">
@@ -132,27 +126,26 @@ const GamesSingle = () => {
                                             Тип комнат
                                         </h4>
                                         <div className="page-game__param--row">
-                                            {/*{*/}
-                                            {/*    thisGame.data.type_rooms.open_rooms ?*/}
-                                            {/*        <div className="page-game__param--element">*/}
-                                            {/*            <span>Открытая игра</span>*/}
-                                            {/*            <img src="images/icons/door-open.svg" width="17" height="17" alt=""/>*/}
-                                            {/*        </div> : ""*/}
-                                            {/*}*/}
-                                            {/*{*/}
-                                            {/*    thisGame.data.type_rooms.close_rooms ?*/}
-                                            {/*        <div className="page-game__param--element">*/}
-                                            {/*            <span>Закрытая игра</span>*/}
-                                            {/*            <img src="images/icons/door-lock.svg" width="17" height="17" alt=""/>*/}
-                                            {/*        </div> : ""*/}
-                                            {/*}*/}
-
+                                            {
+                                                game.room_types?.some(item => item === 'public') ?
+                                                    <div className="page-game__param--element">
+                                                        <span>Открытая игра</span>
+                                                        <img src="images/icons/door-open.svg" width="17" height="17" alt=""/>
+                                                    </div> : ""
+                                            }
+                                            {
+                                                game.room_types?.some(item => item === 'private') ?
+                                                    <div className="page-game__param--element">
+                                                        <span>Закрытая игра</span>
+                                                        <img src="images/icons/door-lock.svg" width="17" height="17" alt=""/>
+                                                    </div> : ""
+                                            }
                                         </div>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <GamesSingleRooms gamesId={gamesId} />
+                        <GamesSingleRooms game={game} />
                     </div>
                 </div>
             </section>

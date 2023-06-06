@@ -1,20 +1,37 @@
 import React, {useEffect, useState} from 'react';
 import CheckersTableInner from "./CheckersTableInner";
-import {useSelector} from "react-redux";
-import {reducerCheckersBeaten} from "../../../redux/game_reducers/reducerCheckersBeaten";
+import {useDispatch, useSelector} from "react-redux";
+import {reducerCheckersBeaten, setAllBeaten, setBeaten} from "../../../redux/game_reducers/reducerCheckersBeaten";
+import SetCookies from "../../../hooks/SetCookies";
+import GetCookies from "../../../hooks/GetCookies";
+import {setHistoryItem} from "../../../redux/game_reducers/reducerHistory";
 
 const CheckersTable = () => {
 
+    const dispatch = useDispatch()
     const players = useSelector(state => state.gamesListPlayersReducer.players)
     const user = useSelector(state => state.userInfoReducer.data)
     const beatenYour = useSelector(state => state.reducerCheckersBeaten.your)
     const beatenOpponent = useSelector(state => state.reducerCheckersBeaten.opponent)
     const [playerColor, setPlayerColor] = useState(0)
     const color = ['white', 'black']
+    const [isLoad, setIsLoad] = useState(false)
 
     useEffect(() => {
         setPlayerColor(players?.filter(item => item?.id === user?.id)[0]?.position)
     }, [players])
+
+    useEffect(() => {
+
+        if(!isLoad && GetCookies('CheckersOpponentBeaten')) {
+            dispatch(setAllBeaten(null, JSON.parse(GetCookies('CheckersOpponentBeaten'))))
+        }
+        if(!isLoad && GetCookies('CheckersYourBeaten')) {
+            dispatch(setAllBeaten(JSON.parse(GetCookies('CheckersYourBeaten')), null))
+        }
+        setIsLoad(true)
+
+    }, [])
 
     return (
         <div className="checkers__table">

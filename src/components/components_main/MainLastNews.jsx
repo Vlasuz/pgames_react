@@ -2,10 +2,11 @@ import React from 'react';
 import {NavLink} from "react-router-dom";
 import MainLastNewsList from "./MainLastNewsList";
 import OpenPopup from "../../hooks/OpenPopup";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {popupTitle} from "../../redux/actions";
 
-const MainLastNews = (props) => {
-
+const MainLastNews = () => {
+    const dispatch = useDispatch()
     return (
         <section className="last-news section-padding">
             <div className="last-news__container container">
@@ -22,7 +23,7 @@ const MainLastNews = (props) => {
                     <MainLastNewsList />
 
                 </div>
-                <a onClick={OpenPopup} href={"#mini-video-popup"} className="last-news__game large-game" data-aos="fade-in" data-aos-delay="600">
+                <a onClick={_ => dispatch(popupTitle('mini-video'))} className="last-news__game large-game" data-aos="fade-in" data-aos-delay="600">
                     <div className="large-game__preview">
                         <picture>
                             <img src="images/main-page/news/game.jpg" loading="lazy" alt="" width="300"

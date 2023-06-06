@@ -17,6 +17,13 @@ const PopupWinnerGame = () => {
             dispatch(popupTitle(''))
         }, 300)
     }
+    const handleExit = () => {
+        navigate(-1)
+        document.querySelector('.popup')?.classList.remove('_active')
+        setTimeout(() => {
+            dispatch(popupTitle(''))
+        }, 300)
+    }
 
     return (
         <div className="game-exit-popup popup" id="game-exit-popup">
@@ -34,7 +41,7 @@ const PopupWinnerGame = () => {
                         <button onClick={handleContinue} className="game-exit-popup__btn btn popup-btn">
                             Остаться
                         </button>
-                        <NavLink to={_ => navigate(-1)} className="game-exit-popup__btn btn popup-btn _red">
+                        <NavLink to={handleExit} className="game-exit-popup__btn btn popup-btn _red">
                             Выйти из игры
                         </NavLink>
                     </div>

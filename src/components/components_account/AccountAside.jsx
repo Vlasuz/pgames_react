@@ -4,6 +4,10 @@ import OpenPopup from "../../hooks/OpenPopup";
 import {useDispatch, useSelector} from "react-redux";
 import {logoutReducer} from "../../redux/reducers/logoutReducer";
 import {actionLogout, popupTitle} from "../../redux/actions";
+import axios from "axios";
+import GetCookies from "../../hooks/GetCookies";
+import GlobalLink from "../../GlobalLink";
+import {setUserInfo} from "../../redux/reducers/userInfoReducer";
 
 const AccountAside = () => {
 
@@ -13,8 +17,22 @@ const AccountAside = () => {
 
     const handleExit = (e) => {
         e.preventDefault()
-        dispatch(actionLogout(prev => !prev))
-        navigate('/')
+
+        axios.defaults.headers.post['platform'] = `pc`;
+        axios.defaults.headers.post['Authorization'] = `Bearer ${GetCookies('refresh_token')}`;
+        axios.post(GlobalLink(`/api/user/logout/`)).then(({data}) => {
+            dispatch(setUserInfo({}))
+            document.cookie = "access_token=; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+            GetCookies('access_token')
+            navigate('/')
+        }).catch(error => {
+            if(error.response.status === '498') {
+                dispatch(setUserInfo({}))
+                document.cookie = "access_token=; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+                GetCookies('access_token')
+            }
+
+        })
     }
 
     return (

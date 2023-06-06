@@ -339,7 +339,7 @@ const RoomSingleFool = () => {
                                         </div>
                                         <div className="game__user--avatar">
                                             <img
-                                                src={user.avatar ? user.avatar : "images/account/avatar-none.svg"}
+                                                src={user.avatar ? GlobalLink('/'+user.avatar) : "images/account/avatar-none.svg"}
                                                 alt="" className="game__user--avatar-img"/>
                                         </div>
                                     </div>

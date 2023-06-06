@@ -1,12 +1,24 @@
-import React, {useState} from 'react';
-import {useSelector} from "react-redux";
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from "react-redux";
+import GetCookies from "../../hooks/GetCookies";
+import {setHistoryItem} from "../../redux/game_reducers/reducerHistory";
+import SetCookies from "../../hooks/SetCookies";
 
 const GameHistory = () => {
 
+    const dispatch = useDispatch()
     const [isOpenHistory, setIsOpenHistory] = useState(false)
     const history = useSelector(state => state.reducerHistory.history)
     const players = useSelector(state => state.gamesListPlayersReducer.players)
     const user = useSelector(state => state.userInfoReducer.data)
+
+    useEffect(() => {
+        if (history.length) {
+            SetCookies('gameHistory', history)
+        } else if (GetCookies('gameHistory')) {
+            dispatch(setHistoryItem(JSON.parse(GetCookies('gameHistory'))))
+        }
+    }, [history])
 
     const handleOpen = () => {
         setIsOpenHistory(prev => !prev)
@@ -30,36 +42,38 @@ const GameHistory = () => {
                 </button>
                 <ul className="chess__history--list game__history--list">
 
-                    {/*{*/}
-                    {/*    history.map((historyItem, index) => {*/}
-                    {/*        const historyUser = players.filter(user => historyItem.userId !== user.id)[0]*/}
-                    {/*        const isYou = user.id === historyUser.id*/}
+                    {
+                        history && history.map((historyItem, index) => {
+                            const historyUser = players.filter(user => historyItem.userId === user?.id)[0]
+                            const isYou = user?.id === historyUser?.id
 
-                    {/*        return (*/}
-                    {/*            <li key={index} className="checkers__history--item game__history--item">*/}
-                    {/*                <div className="checkers__history--avatar">*/}
-                    {/*                    <img src="images/account/avatar.png" alt="" />*/}
-                    {/*                </div>*/}
-                    {/*                <h4 className="checkers__history--name">*/}
-                    {/*                    {*/}
-                    {/*                        isYou ? 'Вы: ' : ''*/}
-                    {/*                    }*/}
-                    {/*                    {*/}
-                    {/*                        historyUser.name ? historyUser.name : historyUser.username*/}
-                    {/*                    }*/}
-                    {/*                </h4>*/}
-                    {/*                <span className="checkers__history--move">*/}
-                    {/*                    {historyItem.code.toUpperCase()}*/}
-                    {/*                </span>*/}
-                    {/*            </li>*/}
-                    {/*        )*/}
-                    {/*    })*/}
-                    {/*}*/}
+                            if (historyUser === undefined) return null;
+
+                            return (
+                                <li key={index} className="checkers__history--item game__history--item">
+                                    <div className="checkers__history--avatar">
+                                        <img src="images/account/avatar.png" alt=""/>
+                                    </div>
+                                    <h4 className="checkers__history--name">
+                                        {
+                                            isYou ? 'Вы: ' : ''
+                                        }
+                                        {
+                                            historyUser.name ? historyUser.name : historyUser.username
+                                        }
+                                    </h4>
+                                    <span className="checkers__history--move">
+                                        {historyItem.code.toUpperCase()}
+                                    </span>
+                                </li>
+                            )
+                        })
+                    }
 
                 </ul>
             </div>
         </div>
-);
+    );
 };
 
 export default GameHistory;

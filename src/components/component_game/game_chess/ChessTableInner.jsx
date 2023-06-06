@@ -11,15 +11,10 @@ const ChessTableInner = () => {
     const websocket = useSelector(state => state.reducerWebsocket.gameWebsocket)
     const players = useSelector(state => state.gamesListPlayersReducer.players)
     const user = useSelector(state => state.userInfoReducer.data)
+    const isYourTurn = useSelector(state => state.reducerPlayerTurn.playerTurn)
     const tableFen = useSelector(state => state.reducerFenTable.fenTable)
     const [playerColor, setPlayerColor] = useState(1)
     const [arrayForTable, setArrayForTable] = useState([])
-
-    // useEffect(() => {
-    //     if(tableFen.fenTable && !tableFen.fenTable.length && !Object.keys(tableFen.fenTable).length) {
-    //
-    //     }
-    // }, [tableFen])
 
     useEffect(() => {
         dispatch(setFenTable('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'))
@@ -90,6 +85,8 @@ const ChessTableInner = () => {
         const figure_b = ["B", "b"]
         const figure_k = ["K", "k"]
         const figure_q = ["Q", "q"]
+
+        if(isYourTurn.player.id !== user.id) return null;
 
         if(selectedFigure && key && e?.target.closest('._accent')) {
 

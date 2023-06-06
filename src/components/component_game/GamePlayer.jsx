@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useSelector} from "react-redux";
 import {logDOM} from "@testing-library/react";
 import {reducerEndGame} from "../../redux/game_reducers/reducerEndGame";
+import GlobalLink from "../../GlobalLink";
 
 const GamePlayer = ({
                         player,
@@ -65,7 +66,7 @@ const GamePlayer = ({
         <div className="game__player">
             <div className="game__player--body">
                 <div className="game__player--avatar">
-                    <img src="images/account/avatar.png" width="76" height="76" alt=""
+                    <img src={player.avatar ? GlobalLink('/'+player.avatar) : 'images/account/avatar-none.svg'} width="76" height="76" alt=""
                          className="game__player--avatar-img"/>
                 </div>
                 <div

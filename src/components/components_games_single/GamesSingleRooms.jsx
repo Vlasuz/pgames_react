@@ -3,29 +3,38 @@ import JsCustomSelect from "../JS_CustomSelect";
 import RoomItem from "../RoomItem";
 import axios from "axios";
 import GetCookies from "../../hooks/GetCookies";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import GlobalLink from "../../GlobalLink";
 import ActiveNotification from "../../hooks/ActiveNotification";
 import {useSelector} from "react-redux";
+import SetCookies from "../../hooks/SetCookies";
 
-const GamesSingleRooms = ({gamesId}) => {
+const GamesSingleRooms = ({game}) => {
 
-    useEffect(() => {
-        JsCustomSelect()
-    })
+    const {gamesId} = useParams()
 
     const [isActiveCreate, setIsActiveCreate] = useState(true)
     const [rooms, setRooms] = useState([])
     const userInfo = useSelector(state => state.userInfoReducer.data)
 
+    const [maxPlayers, setMaxPlayers] = useState([])
+
+    useEffect(() => {
+        setMaxPlayers(Array(game.max_players).fill(''))
+    }, [game])
+
     const handleCreate = (e) => {
         if (Object.keys(userInfo).length) {
             setIsActiveCreate(prev => !prev)
+            setTimeout(() => {
+                JsCustomSelect()
+            }, 10)
         } else {
             ActiveNotification('#notification_not-auth')
         }
     }
 
+    const [isLoad, setIsLoad] = useState(false)
     const [currency, setCurreny] = useState('chips')
     const [maxLength, setMaxLength] = useState(2)
     const [isAccess, setIsAccess] = useState(true)
@@ -35,9 +44,12 @@ const GamesSingleRooms = ({gamesId}) => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        axios.get(GlobalLink(`/api/game/get/${gamesId}/`)).then(res => {
-            setRooms(res.data.room)
-        })
+        if(!isLoad) {
+            axios.get(GlobalLink(`/api/game/get/${gamesId}/`)).then(res => {
+                setRooms(res.data.room)
+                setIsLoad(true)
+            })
+        }
     }, [])
 
     const handleCreateRoom = (e) => {
@@ -53,6 +65,10 @@ const GamesSingleRooms = ({gamesId}) => {
             "bet": cost
         }).then(game => {
 
+            SetCookies('gameHistory', null)
+            SetCookies('CheckersYourBeaten', [])
+            SetCookies('CheckersOpponentBeaten', [])
+
             setIsActiveCreate(true)
             axios.get(GlobalLink(`/api/game/get/${gamesId}/`)).then(res => {
                 setRooms(game.data.room)
@@ -66,7 +82,6 @@ const GamesSingleRooms = ({gamesId}) => {
         })
 
     }
-
 
     return (
         <div className="page-game__rooms">
@@ -105,19 +120,19 @@ const GamesSingleRooms = ({gamesId}) => {
                     :
                     <form onSubmit={handleCreateRoom} action="src/components/components_games#"
                           className="page-rooms__create">
-                        <fieldset className="page-rooms__create--fieldset">
-                            <legend className="page-rooms__create--legend">
-                                Название комнаты
-                            </legend>
-                            <label className="page-rooms__label form-label">
-                                <input onChange={e => setTitle(e.target.value)} value={title} type="text"
-                                       name="sum" required placeholder="Сумма"
-                                       className="page-rooms__input form-input _add-bg"/>
-                                <span className="page-rooms__input-placeholder form-input-placeholder">
-                                        Название
-                                    </span>
-                            </label>
-                        </fieldset>
+                        {/*<fieldset className="page-rooms__create--fieldset">*/}
+                        {/*    <legend className="page-rooms__create--legend">*/}
+                        {/*        Название комнаты*/}
+                        {/*    </legend>*/}
+                        {/*    <label className="page-rooms__label form-label">*/}
+                        {/*        <input onChange={e => setTitle(e.target.value)} value={title} type="text"*/}
+                        {/*               name="sum" required placeholder="Сумма"*/}
+                        {/*               className="page-rooms__input form-input _add-bg"/>*/}
+                        {/*        <span className="page-rooms__input-placeholder form-input-placeholder">*/}
+                        {/*                Название*/}
+                        {/*            </span>*/}
+                        {/*    </label>*/}
+                        {/*</fieldset>*/}
                         <fieldset className="page-rooms__create--fieldset">
                             <legend className="page-rooms__create--legend">
                                 Создание комнаты
@@ -127,12 +142,18 @@ const GamesSingleRooms = ({gamesId}) => {
                                     <div className="page-rooms__select-wrapper">
                                         <select onChange={e => setCurreny(e.target.value)} name="currency"
                                                 className="page-rooms__select custom-select">
-                                            <option value="chips" data-image="images/icons/chip.svg">
-                                                Фишки
-                                            </option>
-                                            <option value="money" data-image="images/icons/dollar-circle.svg">
-                                                Деньги
-                                            </option>
+                                            {
+                                                game.game_currencies.some(item => item === 'chips') &&
+                                                <option value="chips" data-image="images/icons/chip.svg">
+                                                    Фишки
+                                                </option>
+                                            }
+                                            {
+                                                game.game_currencies.some(item => item === 'money') &&
+                                                <option value="money" data-image="images/icons/dollar-circle.svg">
+                                                    Деньги
+                                                </option>
+                                            }
                                         </select>
                                     </div>
                                 </div>
@@ -150,21 +171,24 @@ const GamesSingleRooms = ({gamesId}) => {
                                     <div className="page-rooms__select-wrapper">
                                         <select onChange={e => setMaxLength(e.target.value)} name="players-length"
                                                 className="page-rooms__select custom-select">
-                                            <option value="2">
-                                                2 Игрока
-                                            </option>
-                                            <option value="3">
-                                                3 Игрока
-                                            </option>
-                                            <option value="4">
-                                                4 Игрока
-                                            </option>
-                                            <option value="5">
-                                                5 Игроков
-                                            </option>
-                                            <option value="6">
-                                                6 Игроков
-                                            </option>
+                                            {
+                                                maxPlayers.map((item, index) => {
+                                                    index++
+                                                    let text = 'Игрока';
+
+                                                    if (index === 5 || index === 6) {
+                                                        text = 'Игроков'
+                                                    }
+
+                                                    if (index < 2) return null;
+
+                                                    return (
+                                                        <option key={index} value={index}>
+                                                            {index} {text}
+                                                        </option>
+                                                    )
+                                                })
+                                            }
                                         </select>
                                     </div>
                                 </div>
@@ -172,57 +196,64 @@ const GamesSingleRooms = ({gamesId}) => {
                                     <div className="page-rooms__select-wrapper">
                                         <select onChange={e => setIsAccess(e.target.value === 'open')}
                                                 name="status-game" className="page-rooms__select custom-select">
-                                            <option value="open">
-                                                Открытая игра
-                                            </option>
-                                            <option value="lock">
-                                                Закрытая игра
-                                            </option>
+
+                                            {
+                                                game.room_types.some(item => item === 'private') &&
+                                                <option value="open">
+                                                    Открытая игра
+                                                </option>
+                                            }
+                                            {
+                                                game.room_types.some(item => item === 'private') &&
+                                                <option value="lock">
+                                                    Закрытая игра
+                                                </option>
+                                            }
                                         </select>
                                     </div>
                                 </div>
-                                <div className="page-rooms__create--col">
-                                    <div className="page-rooms__select-wrapper">
-                                        <select onChange={e => setTypeOfGame(e.target.value)} name="mode-game"
-                                                className="page-rooms__select custom-select">
-                                            <option value="классический">
-                                                Классический
-                                            </option>
-                                            <option value="переводной">
-                                                Переводной
-                                            </option>
-                                            <option value="другой режим">
-                                                Другой режим
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
+                                {/*<div className="page-rooms__create--col">*/}
+                                {/*    <div className="page-rooms__select-wrapper">*/}
+                                {/*        <select onChange={e => setTypeOfGame(e.target.value)} name="mode-game"*/}
+                                {/*                className="page-rooms__select custom-select">*/}
+                                {/*            <option value="классический">*/}
+                                {/*                Классический*/}
+                                {/*            </option>*/}
+                                {/*            <option value="переводной">*/}
+                                {/*                Переводной*/}
+                                {/*            </option>*/}
+                                {/*            <option value="другой режим">*/}
+                                {/*                Другой режим*/}
+                                {/*            </option>*/}
+                                {/*        </select>*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
                             </div>
 
                         </fieldset>
-                        <fieldset className="page-rooms__create--fieldset">
-                            <legend className="page-rooms__create--legend">
-                                Игроки
-                            </legend>
-                            <div className="page-rooms__select-wrapper">
-                                <select onChange={e => console.log(e.target.value)} name="players" multiple
-                                        className="page-rooms__select custom-multiple-select"
-                                        data-placeholder="Добавить игрока">
-                                    <option value="player-1">
-                                        Jane_3245
-                                    </option>
-                                    <option value="player-2">
-                                        Player 2
-                                    </option>
-                                    <option value="player-3">
-                                        Player 3
-                                    </option>
-                                </select>
-                            </div>
-                            <div className="page-rooms__create--text">
-                                После создания игры пользователям будет отправлено предложение войти в игру
-                            </div>
-                        </fieldset>
+                        {/*<fieldset className="page-rooms__create--fieldset">*/}
+                        {/*    <legend className="page-rooms__create--legend">*/}
+                        {/*        Игроки*/}
+                        {/*    </legend>*/}
+                        {/*    <div className="page-rooms__select-wrapper">*/}
+                        {/*        <select onChange={e => console.log(e.target.value)} name="players" multiple*/}
+                        {/*                className="page-rooms__select custom-multiple-select"*/}
+                        {/*                data-placeholder="Добавить игрока">*/}
+                        {/*            <option value="player-1">*/}
+                        {/*                Jane_3245*/}
+                        {/*            </option>*/}
+                        {/*            <option value="player-2">*/}
+                        {/*                Player 2*/}
+                        {/*            </option>*/}
+                        {/*            <option value="player-3">*/}
+                        {/*                Player 3*/}
+                        {/*            </option>*/}
+                        {/*        </select>*/}
+                        {/*    </div>*/}
+                        {/*    <div className="page-rooms__create--text">*/}
+                        {/*        После создания игры пользователям будет отправлено предложение войти в игру*/}
+                        {/*    </div>*/}
+                        {/*</fieldset>*/}
                         <button className="page-rooms__create--submit btn _large" type="submit">
                             Создать и присоедениться
                         </button>

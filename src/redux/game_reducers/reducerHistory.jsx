@@ -9,7 +9,7 @@ export const reducerHistory = (state = initialState, action) => {
         case SET_HISTORY_ITEM:
             return {
                 ...state,
-                history: [...state.history, action.historyItem].reverse()
+                history: action.historyItem.length > 1 ? action.historyItem : [action.historyItem, ...state.history]
             }
         default: return state
     }

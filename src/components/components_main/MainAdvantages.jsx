@@ -3,8 +3,11 @@ import MainAdvantagesDecorLeft from "./MainAdvantagesDecorLeft";
 import MainAdvantagesDecorRight from "./MainAdvantagesDecorRight";
 import MainAdvantagesList from "./MainAdvantagesList";
 import OpenPopup from "../../hooks/OpenPopup";
+import {popupTitle} from "../../redux/actions";
+import {useDispatch} from "react-redux";
 
 const MainAdvantages = () => {
+    const dispatch = useDispatch()
     return (
         <section className="advantages section-padding" id={"advantages-id"}>
             <div className="advantages__bg">
@@ -29,7 +32,7 @@ const MainAdvantages = () => {
                     <MainAdvantagesDecorRight/>
                 </div>
                 <MainAdvantagesList />
-                <a onClick={OpenPopup} href={"#mini-video-popup"} className="advantages__game large-game" data-aos="fade-in">
+                <a onClick={_ => dispatch(popupTitle('mini-video'))} className="advantages__game large-game" data-aos="fade-in">
                     <div className="large-game__preview">
                         <picture>
                             <img src="images/main-page/advantages/super-game.jpg" loading="lazy" alt="" width="300"

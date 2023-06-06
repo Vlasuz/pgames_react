@@ -1,9 +1,10 @@
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 
 const FoolCenterEndgame = ({ isWinner, infoRoom }) => {
 
     const user = useSelector(state => state.userInfoReducer.data)
+    const navigate = useNavigate()
 
     return (
         <div className="game__main--table game__table">
@@ -21,9 +22,9 @@ const FoolCenterEndgame = ({ isWinner, infoRoom }) => {
                     {/*<a href="#" className="game__table-popup--btn btn _red">*/}
                     {/*    Да*/}
                     {/*</a>*/}
-                    <NavLink to={`/games/${infoRoom.game}`} className="game__table-popup--btn alt-btn _min _transparent">
+                    <button onClick={_ => navigate(-1)} className="game__table-popup--btn alt-btn _min _transparent">
                         Выйти
-                    </NavLink>
+                    </button>
                 </div>
             </div>
         </div>

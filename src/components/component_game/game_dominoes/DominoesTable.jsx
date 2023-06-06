@@ -48,7 +48,6 @@ const DominoesTable = () => {
 
     const handleMove = (first, second, index) => {
 
-
         console.log({
             "command": "make_move",
             "data": {

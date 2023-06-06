@@ -1,7 +1,8 @@
 import React from 'react';
 import {useSelector} from "react-redux";
 import GameReadyBlock from "../GameReadyBlock";
-import GameTimerProgress from "../GameTimerProgress";
+import GlobalLink from "../../../GlobalLink";
+import CheckersTimerProgress from "./CheckersTimerProgress";
 
 const ChessYourUser = ({user, isGameStart}) => {
 
@@ -18,12 +19,12 @@ const ChessYourUser = ({user, isGameStart}) => {
                         </h3>
                         {
                             isYourTurn.player?.id === user.id ?
-                                <GameTimerProgress time={isYourTurn.time_remaining}/> : ""
+                                <CheckersTimerProgress time={isYourTurn.time_remaining}/> : ""
                         }
                     </div>
                 </div>
                 <div className="game__user--avatar">
-                    <img src={user.avatar ? user.avatar : "../images/account/avatar.png"} alt=""
+                    <img src={user.avatar ? GlobalLink('/'+user.avatar) : "images/account/avatar-none.svg"} alt=""
                          className="game__user--avatar-img"/>
                 </div>
                 <div className="game__player--block">

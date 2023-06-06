@@ -2,24 +2,31 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import ActiveNotification from "../../hooks/ActiveNotification";
 import {accountInformation} from "../../redux/actions";
+import axios from "axios";
+import GetCookies from "../../hooks/GetCookies";
 
 const AccountChangeInformation = ({ userInfo }) => {
 
     const [inputEmail, setInputEmail] = useState('')
     const [inputName, setInputName] = useState('')
     const [isActiveInputsForInformation, setIsActiveInputsForInformation] = useState(false)
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setInputEmail(userInfo?.email ? userInfo?.email : "")
         setInputName(userInfo?.username ? userInfo?.username : "")
     }, [userInfo])
 
-    const dispatch = useDispatch();
 
     const handleChangeInformation = (e) => {
         e.preventDefault()
         setIsActiveInputsForInformation(false)
         e.target.closest('form').querySelectorAll('input').forEach(input => input.disabled = true);
+
+        axios.defaults.headers.put['Authorization'] = `Bearer ${GetCookies('access_token')}`;
+        axios.put(`https://board-games.sonisapps.com/api/user/change_email/?email=${userInfo?.email}`).then(({data}) => {
+            console.log('email', data)
+        })
 
         ActiveNotification('#notification_change-account')
     }

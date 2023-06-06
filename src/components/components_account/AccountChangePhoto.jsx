@@ -2,24 +2,45 @@ import React, {useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import ActiveNotification from "../../hooks/ActiveNotification";
 import {accountPhoto} from "../../redux/actions";
+import axios from "axios";
+import GetCookies from "../../hooks/GetCookies";
+import GlobalLink from "../../GlobalLink";
+import {setUserInfo} from "../../redux/reducers/userInfoReducer";
 
 const AccountChangePhoto = () => {
 
     const dispatch = useDispatch();
+    const userInfo = useSelector(state => state.userInfoReducer.data)
 
-    const photo = useSelector(state => {
-        const { accountPhotoReducer } = state;
-        return accountPhotoReducer.photo;
-    })
     const [newPhoto, setNewPhoto] = useState('')
     const handleLoadPhoto = (e) => {
-        setNewPhoto(e.target.value)
+        var preview = document.querySelector('img');
+        var file    = e.target.closest('label').querySelector('input').files[0];
+        var reader  = new FileReader();
+
+        reader.onloadend = function () {
+            setNewPhoto(reader.result)
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = "";
+        }
     }
+
     const handleChangePhoto = (e) => {
         e.preventDefault()
-        ActiveNotification('#notification_change-account')
-        dispatch(accountPhoto({photo: newPhoto}))
-        setNewPhoto('')
+
+        var formData = new FormData();
+        var imagefile = document.querySelector('.account-settings-element__avatar--input');
+        formData.append("image", imagefile.files[0]);
+        axios.defaults.headers.post['Authorization'] = `Bearer ${GetCookies('access_token')}`;
+        axios.post('https://board-games.sonisapps.com/api/user/avatar/', formData).then(({data}) => {
+            dispatch(setUserInfo(data))
+            ActiveNotification('#notification_change-account')
+            setNewPhoto('')
+        })
     }
 
     return (
@@ -34,15 +55,14 @@ const AccountChangePhoto = () => {
                         <form action="#" className="account-settings-element__avatar">
                             <label className="account-settings-element__avatar--body">
                                 <div className="account-settings-element__avatar--label">
-                                    <img src={photo || photo !== newPhoto ? photo : "images/account/avatar-none.svg"} width="116"
+                                    <img src={newPhoto !== "" ? newPhoto : userInfo.avatar ? GlobalLink('/'+userInfo.avatar) : "images/account/avatar-none.svg"} width="116"
                                          height="116"
                                          alt=""
                                          className="account-settings-element__avatar--img" />
-                                    {/*<input onChange={handleLoadPhoto} required type="file" name="avatar"*/}
-                                    {/*       className="account-settings-element__avatar--input" />*/}
+                                    <input onChange={handleLoadPhoto} required type="file" name="avatar"
+                                           className="account-settings-element__avatar--input" />
                                 </div>
                                 <div
-                                    onClick={_ => ActiveNotification('#notification_is-develop')}
                                     className={"account-settings-element__avatar--add btn _dark _large-2" + (newPhoto ? " _hidden" : "")}
                                 >
                                     Добавить

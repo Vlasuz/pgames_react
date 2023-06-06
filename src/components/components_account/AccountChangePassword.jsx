@@ -16,19 +16,21 @@ const AccountChangePassword = ({userInfo}) => {
     const handleChangePassword = (e) => {
         e.preventDefault()
 
-        axios.defaults.headers.put['platform'] = `pc`;
+        console.log(`/api/user/change_password/?old_password=${oldPassword}&password=${newPassword}&confirm_password=${repeatNewPassword}`)
+
         axios.defaults.headers.put['Authorization'] = `Bearer ${GetCookies('access_token')}`;
         axios.put(GlobalLink(`/api/user/change_password/?old_password=${oldPassword}&password=${newPassword}&confirm_password=${repeatNewPassword}`)).then(res => {
-            console.log(res.data)
-            setPassword(newPassword)
+            console.log('success', res.data)
 
             ActiveNotification('#notification_change-password')
-            setIsActiveChange(prev => !prev)
+            setIsActiveChange(false)
 
+            setPassword(newPassword)
             setOldPassword('')
             setNewPassword('')
             setRepeatNewPassword('')
         }).catch(error => {
+            console.log(error)
             ActiveNotification('#notification_change-password-error')
         })
 
@@ -44,10 +46,10 @@ const AccountChangePassword = ({userInfo}) => {
                         </h3>
                         {
                             isActiveChange ?
-                                <form onSubmit={handleChangePassword} action="#"
-                                      className="account-settings-element__form account-settings-element__form_password">
+                                <form className="account-settings-element__form account-settings-element__form_password">
+                                    {/*(password === oldPassword ? "" : " _error")*/}
                                     <div
-                                        className={"account-settings-element__form--list form-list" + (password === oldPassword ? "" : " _error")}>
+                                        className={"account-settings-element__form--list form-list"}>
                                         <label className="account-settings-element__label form-label">
                                             <input type="password" name="password"
                                                    placeholder="Введите старый пароль"
@@ -83,8 +85,8 @@ const AccountChangePassword = ({userInfo}) => {
                                         </label>
                                     </div>
                                     <button
-                                        className="account-settings-element__submit btn _dark _large-2"
-                                        type="submit">
+                                        onClick={handleChangePassword}
+                                        className="account-settings-element__submit btn _dark _large-2">
                                         Изменить
                                     </button>
                                 </form>
@@ -101,7 +103,7 @@ const AccountChangePassword = ({userInfo}) => {
                                     <button
                                         className="account-settings-element__submit btn _dark _large-2"
                                         type="submit"
-                                        onClick={() => setIsActiveChange(prev => !prev)}
+                                        onClick={() => setIsActiveChange(true)}
                                     >
                                         Изменить
                                     </button>

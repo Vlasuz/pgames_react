@@ -95,7 +95,7 @@ const DominoesYou = () => {
                         <h3 className="game__user--name">
                             Вы: {user.username}
                         </h3>
-                        {playerTurn?.player === user?.id ? <progress className="game__player--progress" max="100" value={!isNaN(timer) && (timer * 100 / 100)}/> : ""}
+                        {playerTurn?.player === user?.id ? <progress className="game__player--progress" max="100" value={!isNaN(timer) && (timer * 100 / 60)}/> : ""}
                     </div>
                 </div>
                 <div className="game__user--avatar">

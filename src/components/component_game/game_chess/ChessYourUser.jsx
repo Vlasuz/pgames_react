@@ -2,11 +2,14 @@ import React from 'react';
 import {useSelector} from "react-redux";
 import GameReadyBlock from "../GameReadyBlock";
 import GameTimerProgress from "../GameTimerProgress";
+import GlobalLink from "../../../GlobalLink";
 
 const ChessYourUser = ({user, isGameStart}) => {
 
     const isYourTurn = useSelector(state => state.reducerPlayerTurn.playerTurn)
     const usersReadyState = useSelector(state => state.reducerUserReadyState.usersReadyState)
+
+    console.log(usersReadyState)
 
     return (
         <div className="chess__user">
@@ -23,7 +26,7 @@ const ChessYourUser = ({user, isGameStart}) => {
                     </div>
                 </div>
                 <div className="game__user--avatar">
-                    <img src={user.avatar ? user.avatar : "../images/account/avatar.png"} alt=""
+                    <img src={user.avatar ? GlobalLink('/'+user.avatar) : "images/account/avatar-none.svg"} alt=""
                          className="game__user--avatar-img"/>
                 </div>
                 <div className="game__player--block">

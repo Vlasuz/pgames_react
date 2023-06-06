@@ -9,6 +9,7 @@ const CheckersTableInner = () => {
 
     const websocket = useSelector(state => state.reducerWebsocket.gameWebsocket)
     const user = useSelector(state => state.userInfoReducer.data)
+    const isYourTurn = useSelector(state => state.reducerPlayerTurn.playerTurn)
     const players = useSelector(state => state.gamesListPlayersReducer.players)
     const tableFen = useSelector(state => state.reducerFenTable.fenTable)
 
@@ -64,6 +65,12 @@ const CheckersTableInner = () => {
 
     const handleMove = (e, index) => {
         const color = ['white', 'black'];
+
+        if(!e.target.closest('.checkers__grid--cell').classList.contains('_possible-move')) {
+            document.querySelectorAll('.checkers__grid--cell').forEach(item => item.classList.remove('_possible-move'))
+        }
+
+        if(isYourTurn.player.id !== user.id) return null;
 
         const arrIndex = e.target.closest('.checkers__grid--cell').getAttribute('data-index-arr');
         const isKing = e.target.closest('.checkers__grid--cell').classList.contains('_king');

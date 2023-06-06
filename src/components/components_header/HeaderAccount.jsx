@@ -43,7 +43,7 @@ const HeaderAccount = () => {
             >
 
                 <picture>
-                    <img src={userInfo.avatar ? userInfo.avatar :  "images/account/avatar-none.svg"} alt="" width="27" height="27" alt="Ваш аватар" loading="lazy"
+                    <img src={userInfo.avatar ? GlobalLink('/'+userInfo.avatar) :  "images/account/avatar-none.svg"} alt="" width="27" height="27" alt="Ваш аватар" loading="lazy"
                          className="header__account--avatar"/>
                 </picture>
                 <span className="header__account--name">

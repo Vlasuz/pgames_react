@@ -104,7 +104,7 @@ const RoomSingleDominoes = () => {
             dispatch(setIsGameStart(true))
             dispatch(setPlayerTurn({
                 player: data.data.game.players.filter(item => item.is_player_turn)[0].id,
-                time_remaining: data.data.game.players.filter(item => item.is_player_turn)[0].timer
+                time_remaining: 60 - data.data.game.players.filter(item => item.is_player_turn)[0].timer
             }))
         }
         const playerTurn = () => {
@@ -117,9 +117,54 @@ const RoomSingleDominoes = () => {
             const domino = [String(data.data.domino.first_side), String(data.data.domino.second_side)];
             const position = data.data.left_side;
 
-            dispatch(setDomino(domino, position))
-            dispatch(removeUserDomino(domino))
+            const selectedBone = document.querySelector('.game__domino-block--item._accent')
+            const selectedBoneTable = document.querySelector('.domino__table--element._accent')
+
+            if (!selectedBone || !selectedBoneTable) {
+
+                setTimeout(() => {
+                    dispatch(setDomino(domino, position))
+                    dispatch(removeUserDomino(domino))
+                    document.querySelector('.game__domino-block--item._accent')?.classList.remove('_accent')
+                }, 300)
+
+                return null;
+
+            }
+
+            selectedBoneTable.classList.add('_hidden')
+            selectedBone?.classList.add('_transition')
+
+            // if(data.data.domino.first_side !== data.data.domino.second_side) {
+            //     selectedBone?.classList.add('_rotate')
+            // }
+
             document.querySelector('.game__domino-block--item._accent')?.classList.remove('_accent')
+
+            const countToTop = selectedBone?.getBoundingClientRect().top - selectedBoneTable?.getBoundingClientRect().top
+            const countToLeft = selectedBone?.getBoundingClientRect().left - selectedBoneTable?.getBoundingClientRect().left
+            const widthTableItem = selectedBoneTable.innerWidth
+            const heightTableItem = selectedBoneTable.innerHTML
+
+            console.log('selectedBone selectedBoneTable', selectedBone?.getBoundingClientRect().left, selectedBoneTable?.getBoundingClientRect().left)
+            console.log('countToLeft', -countToLeft)
+
+            selectedBone.style.top = -countToTop + 'px'
+            selectedBone.style.left = -countToLeft + 'px'
+            selectedBone.style.width = widthTableItem + 'px'
+            selectedBone.style.height = heightTableItem + 'px'
+
+            setTimeout(() => {
+                selectedBoneTable.classList.remove('_hidden')
+                selectedBone.classList.remove('_transition')
+                // selectedBone?.classList.remove('_rotate')
+                selectedBone.style.top = '0px'
+                selectedBone.style.left = '0px'
+                selectedBone.style.width = document.querySelector('.game__domino-block--item').innerWidth + "px"
+                selectedBone.style.height = document.querySelector('.game__domino-block--item').innerHeight + "px"
+                dispatch(setDomino(domino, position))
+                dispatch(removeUserDomino(domino))
+            }, 300)
         }
         const endGame = () => {
             setTimeout(() => {
@@ -138,8 +183,15 @@ const RoomSingleDominoes = () => {
         }
 
         const endRound = () => {
-            dispatch(setFenTable([]))
             dispatch(setUsersCards([]))
+            setTimeout(() => {
+                dispatch(setFenTable([]))
+            }, 500)
+        }
+        const newRound = () => {
+            dispatch(setPlayerTurn(
+                {player: data.data.beginner_player_id, time_remaining: 60}
+            ))
         }
 
         console.log('socket message', data)
@@ -151,6 +203,7 @@ const RoomSingleDominoes = () => {
             "domino_distribution": dominoDistribution,
             "picked_domino": pickedDomino,
             "end_round": endRound,
+            "new_round": newRound,
             "user_ready_state": userReadyState,
             "player_made_move": playerMadeMove,
             "end_game": endGame,
@@ -188,19 +241,25 @@ const RoomSingleDominoes = () => {
                             <div className="domino__grid--item _top">
                                 {
                                     Object.keys(players.filter(item => item.position === setPosition(3, players, user))).length ?
-                                        <DominoesUser player={players.filter(item => item.position === setPosition(3, players, user))[0]} /> : <GamePlayerWaiting/>
+                                        <DominoesUser
+                                            player={players.filter(item => item.position === setPosition(3, players, user))[0]}/> :
+                                        <GamePlayerWaiting/>
                                 }
                             </div>
                             <div className="domino__grid--item _top">
                                 {
                                     Object.keys(players.filter(item => item.position === setPosition(2, players, user))).length ?
-                                        <DominoesUser player={players.filter(item => item.position === setPosition(2, players, user))[0]} /> : <GamePlayerWaiting/>
+                                        <DominoesUser
+                                            player={players.filter(item => item.position === setPosition(2, players, user))[0]}/> :
+                                        <GamePlayerWaiting/>
                                 }
                             </div>
                             <div className="domino__grid--item _top">
                                 {
                                     Object.keys(players.filter(item => item.position === setPosition(4, players, user))).length ?
-                                        <DominoesUser player={players.filter(item => item.position === setPosition(4, players, user))[0]} /> : <GamePlayerWaiting/>
+                                        <DominoesUser
+                                            player={players.filter(item => item.position === setPosition(4, players, user))[0]}/> :
+                                        <GamePlayerWaiting/>
                                 }
                             </div>
                             <DominoesYou/>
@@ -215,7 +274,8 @@ const RoomSingleDominoes = () => {
                             </div>
                             <div className="game__user-menu--col">
                                 {
-                                    !isGameStart && (!usersReady.some(item => item === user.id) ? <FoolButtonReady websocket={websocket}/> :
+                                    !isGameStart && (!usersReady.some(item => item === user.id) ?
+                                        <FoolButtonReady websocket={websocket}/> :
                                         <FoolButtonWaiting/>)
                                 }
                             </div>

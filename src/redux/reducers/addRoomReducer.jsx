@@ -195,7 +195,6 @@ const initialState = {
 }
 
 export const addRoomReducer = (state = initialState, action) => {
-
     switch(action.type) {
         case ADD_ROOM_FOR_GAME:
             return {

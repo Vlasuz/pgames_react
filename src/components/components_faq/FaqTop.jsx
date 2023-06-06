@@ -27,7 +27,7 @@ const FaqTop = (props) => {
                     </li>
                 </ul>
             </div>
-            <form action="#" className="faq__search page-header__search">
+            <div className="faq__search page-header__search">
                 <label className="page-header__search--label">
                     <input onChange={e => props.setSearchQuestion(e.target.value)} value={props.searchQuestion} type="text" name="search" placeholder="Поиск" required
                            className="page-header__search--input"/>
@@ -40,7 +40,7 @@ const FaqTop = (props) => {
                             fill="#F9F1DF"/>
                     </svg>
                 </button>
-            </form>
+            </div>
         </div>
     );
 };

@@ -39,16 +39,14 @@ const RoomSingleFool = () => {
 
     const {roomId} = useParams()
     const [isLoad, setIsLoad] = useState(true)
-    const [opponent, setOpponent] = useState({})
     const dispatch = useDispatch()
     const players = useSelector(state => state.gamesListPlayersReducer.players)
     const user = useSelector(state => state.userInfoReducer.data)
     const isAuth = useSelector(state => state.userInfoReducer.data)
-    const isReady = useSelector(state => state.reducerIsReady.isReady)
     const isGameStart = useSelector(state => state.reducerIsGameStart.isGameStart)
     const websocket = useSelector(state => state.reducerWebsocket.gameWebsocket)
     const tableFen = useSelector(state => state.reducerFenTable.fenTable)
-    const endGameReducer = useSelector(state => state.reducerEndGame.endGame)
+    const usersReadyState = useSelector(state => state.reducerUserReadyState.usersReadyState)
     const arrayLines = tableFen && Object.keys(tableFen).length && tableFen.slice(0, tableFen.indexOf(" ")).split('/').map(item => {
         return item.split('').map(item2 => {
             if (!+item2) return item2
@@ -68,21 +66,27 @@ const RoomSingleFool = () => {
             dispatch(setGamePlayers(data.users))
         }
 
+        if (data.status === 'Waiting') {
+            dispatch(setUserReadyState(...data.users.filter(user => user.ready).map(item => item.id)))
+        }
+
         const startGame = () => {
             dispatch(setIsGameStart(true))
         }
         const newPlayer = () => {
             console.log('JOIN NEW PLAYER', data.data)
-            setOpponent(data.data)
-            dispatch(setGamePlayers(data.data))
+            dispatch(setGamePlayers([data.data]))
         }
         const gameState = () => {
-            console.log(data)
             dispatch(setFenTable(data.data.game.fen))
             dispatch(setIsGameStart(true))
-            // setOpponent(data.data?.players?.filter(item => item?.user?.id !== user?.id)[0]?.user)
+            dispatch(setPlayerTurn({
+                player: {id: data.data.game.players.filter(user => data.data.game.state.includes(user.color))[0].id},
+                time_remaining: data.data.game.players.filter(user => data.data.game.state.includes(user.color))[0].timer
+            }))
         }
         const playerTurn = () => {
+            console.log(data.data)
             dispatch(setPlayerTurn(data.data))
         }
         const userReadyState = () => {
@@ -90,8 +94,7 @@ const RoomSingleFool = () => {
         }
         const playerMadeMove = () => {
 
-            var figureFrom, figureTo;
-            var dataArrayCellsFrom, dataArrayCellsTo;
+            let figureFrom, figureTo, dataArrayCellsFrom, dataArrayCellsTo;
 
             document.querySelectorAll('.chess__grid--cell').forEach(item => {
                 const dataPosition = item.getAttribute('data-position')
@@ -170,7 +173,7 @@ const RoomSingleFool = () => {
         if (typeof events[data.event] === 'function') events[data.event]();
     }
 
-    websocket.onerror = (e) => console.log('GAME socket Error')
+    websocket.onerror = () => console.log('GAME socket Error')
     websocket.onclose = () => console.log('GAME socket Close')
 
     useEffect(() => {
@@ -184,7 +187,7 @@ const RoomSingleFool = () => {
         }
     }, [isAuth])
 
-    const opponentData = Object.keys(opponent).length ? opponent : players?.filter(item => item?.user?.id !== user?.id)[0]?.user
+    const opponentData = players?.filter(item => item?.id !== user?.id)[0]
 
     return (
         <>
@@ -233,7 +236,8 @@ const RoomSingleFool = () => {
                                     <GameHistory/>
 
                                     {
-                                        !isGameStart && (!isReady ? <FoolButtonReady websocket={websocket}/> :
+                                        !isGameStart && (!usersReadyState.some(item => item === user.id) ?
+                                            <FoolButtonReady websocket={websocket}/> :
                                             <FoolButtonWaiting/>)
                                     }
                                 </div>

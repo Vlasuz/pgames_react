@@ -4,14 +4,17 @@ import BlockInfoAboutUser from "./blockInfoAboutUser";
 import axios from "axios";
 import {useDispatch} from "react-redux";
 import {popupTitle} from "../../redux/actions";
+import GetCookies from "../../hooks/GetCookies";
 
 const MainInner = () => {
 
-    // const handleDelete = () => {
-    //     axios.delete('https://board-games.sonisapps.com/api/user/confirm_delete_account/?delete_code=213').then(({data}) => {
-    //         console.log('delete', data)
-    //     })
-    // }
+    const handleDelete = () => {
+        axios.defaults.headers.post['Authorization'] = `Bearer ${GetCookies('access_token')}`;
+        axios.post('https://board-games.sonisapps.com/api/user/delete_account/').then(({data}) => {
+            dispatch(popupTitle('delete-account', {data}))
+            console.log('delete', data)
+        })
+    }
 
     const dispatch = useDispatch()
 
@@ -24,7 +27,7 @@ const MainInner = () => {
 
                         <BlockInfoAboutUser />
 
-                        <button type="button" onClick={_ => dispatch(popupTitle(''))} className="account-remove-btn hide-on-table">
+                        <button type="button" onClick={handleDelete} className="account-remove-btn hide-on-table">
                             <svg width="10" height="13" viewBox="0 0 10 13" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path

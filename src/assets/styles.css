@@ -5175,7 +5175,7 @@ a.page-pagination__btn{
 }
 
 .advantages__game {
-    margin-top: 52px
+    margin-top: 52px;
 }
 
 .large-game {
@@ -5184,7 +5184,8 @@ a.page-pagination__btn{
     justify-content: flex-end;
     position: relative;
     padding: 20px;
-    min-height: 170px
+    min-height: 170px;
+    cursor: pointer;
 }
 
 .large-game__preview,.large-game__preview::before {
@@ -6984,7 +6985,8 @@ a.page-pagination__btn{
 .page-rooms__select-wrapper {
     min-height: 57px;
     display: flex;
-    width: 100%
+    width: 100%;
+    position: relative;
 }
 
 .page-rooms__label {
@@ -8630,7 +8632,8 @@ a.page-pagination__btn{
 .game__player--avatar-img {
     border-radius: 50%;
     width: 47px;
-    height: 47px
+    height: 47px;
+    object-fit: cover;
 }
 
 .game__player--info {
@@ -9166,12 +9169,15 @@ a.page-pagination__btn{
     text-overflow: ellipsis
 }
 
-.game__user--progress {
+progress.game__user--progress {
     height: 7px;
     border-radius: 15px;
     margin-top: 5px;
-    width: 70px;
-    background: #0e0e0e
+    /*width: 70px;*/
+    width: 100%;
+    background: #0e0e0e;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 @media(min-width:1150px) {
@@ -9268,7 +9274,8 @@ a.page-pagination__btn{
 .game__user--avatar-img {
     border-radius: 50%;
     width: 47px;
-    height: 47px
+    height: 47px;
+    object-fit: cover;
 }
 
 @media(min-width:900px) {
@@ -14559,7 +14566,8 @@ a.page-pagination__btn{
 }
 
 .checkers__grid--cell._possible-move {
-    border: 1px solid #000;
+    /*border: 1px solid #000;*/
+    background: rgba(97,200,174,.4);
     cursor: pointer
 }
 
@@ -17552,6 +17560,26 @@ label._error .popup-input-placeholder{
 .domino__table--place{
     counter-reset: ooo;
 }
+.game__domino-block--item{
+    position: relative;
+    top: 0;
+    left: 0;
+}
+.domino__table--element._accent._hidden{
+    opacity: 0;
+}
+.game__domino-block--item._rotate{
+    /*transform-origin: center;*/
+    transform: rotate(90deg) translate(-10px, -12px);
+}
+.game__domino-block--item._transition{
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
 .domino__table--element.go-from-line-right,
 .domino__table--element.go-from-line-left,
 .domino__table--element.go-from-line-right + .domino__table--element.go-from-line-right,

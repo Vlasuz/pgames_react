@@ -32,7 +32,7 @@ const DominoesUser = ({player}) => {
                     <h3 className="game__player--name">
                         {player.name ? player.name : player.username}
                     </h3>
-                    {playerTurn?.player === player?.id ? <progress className="game__player--progress" max="100" value={!isNaN(timer) && (timer * 100 / 100)}/> : ""}
+                    {playerTurn?.player === player?.id ? <progress className="game__player--progress" max="100" value={!isNaN(timer) && (timer * 100 / 60)}/> : ""}
                 </div>
                 <div className="game__player--block">
                     {

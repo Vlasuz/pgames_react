@@ -29,13 +29,14 @@ import {setHistoryItem} from "../redux/game_reducers/reducerHistory";
 import axios from "axios";
 import GlobalLink from "../GlobalLink";
 import {setBeaten} from "../redux/game_reducers/reducerCheckersBeaten";
+import SetCookies from "../hooks/SetCookies";
 
 const RoomSingleCheckers = () => {
 
     const {roomId} = useParams()
     const dispatch = useDispatch()
     const isAuth = useSelector(state => state.userInfoReducer.data)
-    const isReady = useSelector(state => state.reducerIsReady.isReady)
+    const usersReadyState = useSelector(state => state.reducerUserReadyState.usersReadyState)
     const websocket = useSelector(state => state.reducerWebsocket.gameWebsocket)
     const isGameStart = useSelector(state => state.reducerIsGameStart.isGameStart)
     const players = useSelector(state => state.gamesListPlayersReducer.players)
@@ -201,6 +202,7 @@ const RoomSingleCheckers = () => {
 
         if (data.status === 'Waiting') {
             dispatch(setGamePlayers(data.users))
+            dispatch(setUserReadyState(...data.users.filter(user => user.ready).map(item => item.id)))
         } else if (data.status === 'Game in progress') {
             dispatch(setGamePlayers(data.users))
         }
@@ -292,8 +294,12 @@ const RoomSingleCheckers = () => {
 
                 if(!document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.querySelector('img')?.getAttribute('src').includes(color[playerColor - 1]) && document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.querySelector('img')) {
                     dispatch(setBeaten('card', null))
+                    const oldBeaten = GetCookies('CheckersYourBeaten') ? JSON.parse(GetCookies('CheckersYourBeaten')) : []
+                    SetCookies('CheckersYourBeaten', [...oldBeaten, 'card'])
                 } else if(document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.querySelector('img')?.getAttribute('src').includes(color[playerColor - 1]) && document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.querySelector('img')) {
                     dispatch(setBeaten(null, 'card'))
+                    const oldBeaten = GetCookies('CheckersOpponentBeaten') ? JSON.parse(GetCookies('CheckersOpponentBeaten')) : []
+                    SetCookies('CheckersOpponentBeaten', [...oldBeaten, 'card'])
                 }
                 document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.classList.add('_hidden')
 
@@ -392,7 +398,7 @@ const RoomSingleCheckers = () => {
                             <div className="checkers__col">
                                 <GameHistory/>
                                 {
-                                    !isGameStart && (!isReady ? <FoolButtonReady websocket={websocket}/> :
+                                    !isGameStart && (!usersReadyState.some(item => item === user.id) ? <FoolButtonReady websocket={websocket}/> :
                                         <FoolButtonWaiting/>)
                                 }
                             </div>

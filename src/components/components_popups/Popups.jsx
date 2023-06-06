@@ -10,6 +10,7 @@ import CombinationCards from "./popup_combination_cards/CombinationCards";
 import PopupWinnerGame from "./PopupWinnerGame";
 import {useSelector} from "react-redux";
 import PopupGameWinner from "./popup_game_winner/PopupGameWinner";
+import PopupDeleteAccount from "./popup_delete_account/PopupDeleteAccount";
 
 const Popups = () => {
 
@@ -24,6 +25,8 @@ const Popups = () => {
         'promo-code': <PopupPromocode/>,
         'subscribe': <PopupSubscribe/>,
         'game-winner': <PopupGameWinner props={popup_title.props}/>,
+        'mini-video': <PopupMiniVideo/>,
+        'delete-account': <PopupDeleteAccount props={popup_title.props}/>,
     }
 
     useEffect(() => {
