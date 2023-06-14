@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import ClosePopup from "../../../hooks/ClosePopup";
-import ActiveNotification from "../../../hooks/ActiveNotification";
 import {useDispatch, useSelector} from "react-redux";
 import {accountBalanceReducer} from "../../../redux/reducers/accountBalanceReducer";
 import {addBalance, popupTitle} from "../../../redux/actions";
 import axios from "axios";
 import GetCookies from "../../../hooks/GetCookies";
+import {setTimeoutNotice} from "../../../redux/reducers/notificationReducer";
 
 const PopupPromocodeForm = () => {
 
@@ -19,15 +19,15 @@ const PopupPromocodeForm = () => {
         axios.defaults.headers.post['Authorization'] = `Bearer ${GetCookies('access_token')}`;
         axios.post(`https://board-games.sonisapps.com/api/finance/promo_code/?code=${inputValue}`).then(res => {
             console.log(res.data)
-            ActiveNotification('#notification_promocode-success')
+            dispatch(setTimeoutNotice('notification_promocode-success'))
             setInputValue('')
             dispatch(popupTitle(''))
         }).catch(er => {
 
             if(er.response.status === 404) {
-                ActiveNotification('#notification-promo-404')
+                dispatch(setTimeoutNotice('notification-promo-404'))
             } else if (er.response.status === 409) {
-                ActiveNotification('#notification-promo-409')
+                dispatch(setTimeoutNotice('notification-promo-409'))
             }
 
         })

@@ -24,7 +24,7 @@ import {setPlayerTurn} from "../redux/game_reducers/reducerPlayerTurn";
 import {setUserReadyState} from "../redux/game_reducers/reducerUserReadyState";
 import {setEndGame} from "../redux/game_reducers/reducerEndGame";
 import {popupTitle} from "../redux/actions";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import FoolButtonReady from "../components/component_game/game_fool/FoolButtonReady";
 import FoolButtonWaiting from "../components/component_game/game_fool/FoolButtonWaiting";
 import {addUserDomino, removeUserDomino, setUsersCards} from "../redux/game_reducers/reducerFoolUsersCards";
@@ -42,14 +42,16 @@ const RoomSingleDominoes = () => {
     const websocket = useSelector(state => state.reducerWebsocket.gameWebsocket)
     const usersReady = useSelector(state => state.reducerUserReadyState.usersReadyState)
     const isGameStart = useSelector(state => state.reducerIsGameStart.isGameStart)
+    const navigate = useNavigate()
 
     const [isLoad, setIsLoad] = useState(true)
     const [infoRoom, setInfoRoom] = useState({})
+    const [isEndRound, setIsEndRound] = useState(false)
 
-    const setPosition = (num, players, user) => {
+    const setPosition = (num, players, user, maxPlayers) => {
         const yourPosition = players.filter(item => item.user?.id ? item.user?.id === user.id : item.id === user.id)[0]?.position
         if (yourPosition !== 1 && yourPosition !== undefined) {
-            return yourPosition - 1 + num > 4 ? (yourPosition - 1 + num) - 4 : yourPosition - 1 + num
+            return yourPosition - 1 + num > maxPlayers ? (yourPosition - 1 + num) - maxPlayers : yourPosition - 1 + num
         } else {
             return num;
         }
@@ -74,6 +76,7 @@ const RoomSingleDominoes = () => {
 
     websocket.onmessage = (e) => {
         const data = JSON.parse(e.data)
+        let isEndRound = false;
 
         dispatch(setSocketResponse(data))
 
@@ -114,11 +117,23 @@ const RoomSingleDominoes = () => {
             dispatch(setUserReadyState(data.data.user_id))
         }
         const playerMadeMove = () => {
-            const domino = [String(data.data.domino.first_side), String(data.data.domino.second_side)];
-            const position = data.data.left_side;
 
-            const selectedBone = document.querySelector('.game__domino-block--item._accent')
-            const selectedBoneTable = document.querySelector('.domino__table--element._accent')
+            let selectedBone    = document.querySelector('.game__domino-block--item._accent');
+            let selectedBoneTable;
+            const domino        = [String(data.data.domino.first_side), String(data.data.domino.second_side)];
+            const dominoSelect  = selectedBone && [selectedBone.getAttribute('data-first'), selectedBone.getAttribute('data-second')]
+            const position      = data.data.left_side;
+            const twins         = data.data.domino.first_side === data.data.domino.second_side
+
+            if(data.event === 'end_round') {
+                isEndRound = true
+            }
+
+            if(document.querySelectorAll('.domino__table--element._accent').length > 1) {
+                selectedBoneTable = position ? document.querySelectorAll('.domino__table--element._accent')[0] : document.querySelectorAll('.domino__table--element._accent')[1]
+            } else {
+                selectedBoneTable = document.querySelectorAll('.domino__table--element._accent')[0]
+            }
 
             if (!selectedBone || !selectedBoneTable) {
 
@@ -135,9 +150,28 @@ const RoomSingleDominoes = () => {
             selectedBoneTable.classList.add('_hidden')
             selectedBone?.classList.add('_transition')
 
-            // if(data.data.domino.first_side !== data.data.domino.second_side) {
-            //     selectedBone?.classList.add('_rotate')
-            // }
+            const numLeftDomino = document.querySelector('.domino__table--element:nth-child(2)')?.getAttribute('data-first')
+            const numRightDomino = document.querySelector('.domino__table--element:nth-last-child(2)')?.getAttribute('data-second')
+            const isTopLeft = dominoSelect[0] === numLeftDomino
+            const isBottomLeft = dominoSelect[1] === numLeftDomino
+            const isTopRight = dominoSelect[0] === numRightDomino
+            const isBottomRight = dominoSelect[1] === numRightDomino
+
+            if (!twins && !(selectedBoneTable.classList.contains('go-from-line-left') || selectedBoneTable.classList.contains('go-from-line-right'))) {
+                if (position) {
+                    if (isTopLeft) {
+                        selectedBone?.classList.add('_rotate_tl90')
+                    } else if (isBottomLeft) {
+                        selectedBone?.classList.add('_rotate_bl90')
+                    }
+                } else {
+                    if (isTopRight) {
+                        selectedBone?.classList.add('_rotate_tr90')
+                    } else if (isBottomRight) {
+                        selectedBone?.classList.add('_rotate_br90')
+                    }
+                }
+            }
 
             document.querySelector('.game__domino-block--item._accent')?.classList.remove('_accent')
 
@@ -145,9 +179,6 @@ const RoomSingleDominoes = () => {
             const countToLeft = selectedBone?.getBoundingClientRect().left - selectedBoneTable?.getBoundingClientRect().left
             const widthTableItem = selectedBoneTable.innerWidth
             const heightTableItem = selectedBoneTable.innerHTML
-
-            console.log('selectedBone selectedBoneTable', selectedBone?.getBoundingClientRect().left, selectedBoneTable?.getBoundingClientRect().left)
-            console.log('countToLeft', -countToLeft)
 
             selectedBone.style.top = -countToTop + 'px'
             selectedBone.style.left = -countToLeft + 'px'
@@ -157,13 +188,17 @@ const RoomSingleDominoes = () => {
             setTimeout(() => {
                 selectedBoneTable.classList.remove('_hidden')
                 selectedBone.classList.remove('_transition')
-                // selectedBone?.classList.remove('_rotate')
+                selectedBone?.classList.remove('_rotate_tl90')
+                selectedBone?.classList.remove('_rotate_tr90')
+                selectedBone?.classList.remove('_rotate_br90')
+                selectedBone?.classList.remove('_rotate_bl90')
+                selectedBone.classList.remove('non-rotate')
                 selectedBone.style.top = '0px'
                 selectedBone.style.left = '0px'
-                selectedBone.style.width = document.querySelector('.game__domino-block--item').innerWidth + "px"
-                selectedBone.style.height = document.querySelector('.game__domino-block--item').innerHeight + "px"
+                selectedBone.style.width = document.querySelector('.game__domino-block--item')?.innerWidth + "px"
+                selectedBone.style.height = document.querySelector('.game__domino-block--item')?.innerHeight + "px"
                 dispatch(setDomino(domino, position))
-                dispatch(removeUserDomino(domino))
+                if(!isEndRound) dispatch(removeUserDomino(domino))
             }, 300)
         }
         const endGame = () => {
@@ -171,18 +206,25 @@ const RoomSingleDominoes = () => {
                 dispatch(setEndGame(data.data))
                 dispatch(popupTitle('game-winner', data.data))
             }, 300)
+
+            setTimeout(() => {
+                navigate(-1)
+            }, 5000)
         }
 
         const dominoDistribution = () => {
             dispatch(setUsersCards(data.data.dominoes))
+            setTimeout(() => {
+                dispatch(setUsersCards(data.data.dominoes))
+            }, 310)
         }
 
         const pickedDomino = () => {
-            console.log('data.data.domino', data.data.domino)
             dispatch(addUserDomino(data.data.domino))
         }
 
         const endRound = () => {
+            setIsEndRound(true)
             dispatch(setUsersCards([]))
             setTimeout(() => {
                 dispatch(setFenTable([]))
@@ -210,6 +252,8 @@ const RoomSingleDominoes = () => {
         }
         if (typeof events[data.event] === 'function') events[data.event]();
     }
+
+    console.log(infoRoom.player_slots)
 
     return (
         <main className="main">
@@ -240,26 +284,26 @@ const RoomSingleDominoes = () => {
 
                             <div className="domino__grid--item _top">
                                 {
-                                    Object.keys(players.filter(item => item.position === setPosition(3, players, user))).length ?
+                                     infoRoom.player_slots >= 3 && (Object.keys(players.filter(item => item.position === setPosition(3, players, user, infoRoom.player_slots))).length ?
                                         <DominoesUser
-                                            player={players.filter(item => item.position === setPosition(3, players, user))[0]}/> :
-                                        <GamePlayerWaiting/>
+                                            player={players.filter(item => item.position === setPosition(3, players, user, infoRoom.player_slots))[0]}/> :
+                                        <GamePlayerWaiting/>)
                                 }
                             </div>
                             <div className="domino__grid--item _top">
                                 {
-                                    Object.keys(players.filter(item => item.position === setPosition(2, players, user))).length ?
+                                     infoRoom.player_slots >= 2 && (Object.keys(players.filter(item => item.position === setPosition(2, players, user, infoRoom.player_slots))).length ?
                                         <DominoesUser
-                                            player={players.filter(item => item.position === setPosition(2, players, user))[0]}/> :
-                                        <GamePlayerWaiting/>
+                                            player={players.filter(item => item.position === setPosition(2, players, user, infoRoom.player_slots))[0]}/> :
+                                        <GamePlayerWaiting/>)
                                 }
                             </div>
                             <div className="domino__grid--item _top">
                                 {
-                                    Object.keys(players.filter(item => item.position === setPosition(4, players, user))).length ?
+                                     infoRoom.player_slots >= 4 && (Object.keys(players.filter(item => item.position === setPosition(4, players, user, infoRoom.player_slots))).length ?
                                         <DominoesUser
-                                            player={players.filter(item => item.position === setPosition(4, players, user))[0]}/> :
-                                        <GamePlayerWaiting/>
+                                            player={players.filter(item => item.position === setPosition(4, players, user, infoRoom.player_slots))[0]}/> :
+                                        <GamePlayerWaiting/>)
                                 }
                             </div>
                             <DominoesYou/>

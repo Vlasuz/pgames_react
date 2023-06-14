@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import ActiveNotification from "../../hooks/ActiveNotification";
+import {useDispatch} from "react-redux";
+import {setTimeoutNotice} from "../../redux/reducers/notificationReducer";
 
 const FaqForm = () => {
 
@@ -7,6 +8,8 @@ const FaqForm = () => {
     const [inputName, setInputName] = useState('')
     const [inputTextarea, setInputTextarea] = useState('')
     const [isValidate, setIsValidate] = useState(false)
+    const dispatch = useDispatch()
+
     const handleSubmit = (e) => {
         e.preventDefault()
 
@@ -25,7 +28,7 @@ const FaqForm = () => {
 
             setIsValidate(false)
 
-            ActiveNotification('#notification_send-an-email')
+            dispatch(setTimeoutNotice('notification_send-an-email'))
 
             setInputEmail('')
             setInputName('')

@@ -15,38 +15,55 @@ const PopupLoginForm = () => {
 
     const [inputEmail, setInputEmail] = useState('');
     const [inputPassword, setInputPassword] = useState('');
-    const [isValid, setIsValid] = useState(false)
+    const [isValidEP, setIsValidEP] = useState(true)
+    const [isValidData, setIsValidData] = useState(true)
+    const [isValidEmail, setIsValidEmail] = useState(true)
+    const [isValidPass, setIsValidPass] = useState(true)
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        setIsValidEP(true)
+        setIsValidEmail(true)
+        setIsValidPass(true)
+        setIsValidData(true)
 
-        if (inputEmail && /\S+@\S+\.\S+/.test(inputEmail) && inputPassword) {
 
-            axios.defaults.headers.post['platform'] = `pc`;
-            axios.post(GlobalLink(`/api/auth/sign_in/?email=${inputEmail}&password=${inputPassword}`)).then(res => {
-                document.cookie = `access_token=${res.data.access_token}`;
-                document.cookie = `refresh_token=${res.data.refresh_token}`;
-
-                setIsValid(false)
-
-                setTimeout(() => {
-                    dispatch(setUserInfo(res.data.user))
-                    dispatch(actionLogout(prev => !prev))
-                }, 100)
-                document.querySelector('.popup')?.classList.remove('_active')
-                setTimeout(() => {
-                    dispatch(popupTitle(''))
-                }, 300)
-
-                setInputEmail('')
-                setInputPassword('')
-            }).catch(er => {
-                console.log(er)
-            })
-
-        } else {
-            setIsValid(true)
+        if (!inputPassword.length) {
+            setIsValidPass(false)
+            return null;
         }
+        if (!/\S+@\S+\.\S+/.test(inputEmail)) {
+            setIsValidEmail(false)
+            return null;
+        }
+
+
+        axios.defaults.headers.post['platform'] = `pc`;
+        axios.post(GlobalLink(`/api/auth/sign_in/?email=${inputEmail}&password=${inputPassword}`)).then(res => {
+            document.cookie = `access_token=${res.data.access_token}`;
+            document.cookie = `refresh_token=${res.data.refresh_token}`;
+
+            setTimeout(() => {
+                dispatch(setUserInfo(res.data.user))
+                dispatch(actionLogout(prev => !prev))
+            }, 100)
+            document.querySelector('.popup')?.classList.remove('_active')
+            setTimeout(() => {
+                dispatch(popupTitle(''))
+            }, 300)
+
+            setInputEmail('')
+            setInputPassword('')
+        }).catch(er => {
+            console.log(er)
+
+            if (er.response.data.detail === "Incorrect username or password") {
+                setIsValidEP(false)
+            } else if (er.response.data.detail === "Could not validate credentials") {
+                setIsValidData(false)
+            }
+        })
+
     }
 
     return (
@@ -66,9 +83,10 @@ const PopupLoginForm = () => {
                 </label>
             </div>
             <ul className="errors-form">
-                {!isValid || inputEmail.length > 0 && /\S+@\S+\.\S+/.test(inputEmail) ? "" :
-                    <li>Пожалуйста, укажите верно почту</li>}
-                {!isValid || inputPassword.length > 0 ? "" : <li>Пожалуйста, заполните все поля</li>}
+                {!isValidEmail && <li>Пожалуйста, укажите верно почту</li>}
+                {!isValidPass && <li>Пожалуйста, заполните все поля</li>}
+                {!isValidEP && <li>Неверный пароль</li>}
+                {!isValidData && <li>Неверные данные</li>}
             </ul>
             <button type="submit" className="login-popup__submit popup-submit btn _large _shadow">
                 Войти

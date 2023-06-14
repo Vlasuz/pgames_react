@@ -1,11 +1,12 @@
 import React from 'react';
-import ActiveNotification from "../../hooks/ActiveNotification";
+import {useDispatch} from "react-redux";
+import {setTimeoutNotice} from "../../redux/reducers/notificationReducer";
 
 const WithdrawalsForm = () => {
-
+    const dispatch = useDispatch()
     const handleWithdraw = (e) => {
         e.preventDefault()
-        ActiveNotification('#notification_is-develop')
+        dispatch(setTimeoutNotice('notification_is-develop'))
     }
 
     return (

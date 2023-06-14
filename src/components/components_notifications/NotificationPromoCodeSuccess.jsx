@@ -1,8 +1,8 @@
 import React from 'react';
 
-const NotificationPromoCodeSuccess = ({handleClose}) => {
+const NotificationPromoCodeSuccess = ({handleClose, isActive}) => {
     return (
-        <li id={"notification_promocode-success"} className="notifications__item notification-item">
+        <li id={"notification_promocode-success"} className={"notifications__item notification-item" + (isActive ? " notification-item_show" : "")}>
             <div className="notification-item__body">
                 <div className="notification-item__header _message">
                     <img src="images/icons/bell.svg" width="20" height="20" alt=""

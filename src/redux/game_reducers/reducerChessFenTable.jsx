@@ -9,7 +9,7 @@ import {
 
 // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
 const initialState = {
-    fenTable: ''
+    fenTable: []
 }
 
 export const reducerFenTable = (state = initialState, action) => {
@@ -62,15 +62,43 @@ export const reducerFenTable = (state = initialState, action) => {
                 })
             }
         case SET_SELECT_DOMINOES:
+
+            let arrayClone = [];
+            let array = [];
+
+            state?.fenTable?.map(item => {
+                if(item !== null && item.length < 3) {
+                    arrayClone = [...arrayClone, item]
+                }
+            })
+
+            const leftDomino = action.left && [action.left[0], action.left[1], true]
+            const rightDomino = action.right && [action.right[0], action.right[1], true]
+
+            if(action.left && action.right) {
+                array = [leftDomino, ...arrayClone, rightDomino]
+            } else if(action.left) {
+                array = [leftDomino, ...arrayClone]
+            } else if(action.right) {
+                array = [...arrayClone, rightDomino]
+            } else {
+                array = arrayClone
+            }
+
             return {
                 ...state,
-                fenTable: state.fenTable,
-                selectArray: [action.left, action.right]
+                fenTable: array
             }
         case SET_DOMINO:
+            const arr = action.position ? [action.domino, ...state.fenTable] : [...state.fenTable, action.domino]
+            const newArray1 = arr.filter(item => {
+                if(item !== null && !item[2]) {
+                    return item;
+                }
+            })
             return {
                 ...state,
-                fenTable: action.position ? [action.domino, ...state.fenTable] : [...state.fenTable, action.domino],
+                fenTable: newArray1,
                 selectArray: []
             }
         default:

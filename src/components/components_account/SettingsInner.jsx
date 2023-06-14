@@ -1,14 +1,17 @@
 import React, {useState} from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { accountInformation, accountPhoto } from "../../redux/actions";
-import ActiveNotification from "../../hooks/ActiveNotification";
 import AccountChangePhoto from "./AccountChangePhoto";
 import AccountChangeInformation from "./AccountChangeInformation";
 import AccountChangePassword from "./AccountChangePassword";
+import {setTimeoutNotice} from "../../redux/reducers/notificationReducer";
 
 const SettingsInner = () => {
 
     const userInfo = useSelector(state => state.userInfoReducer.data)
+    const dispatch = useDispatch()
+
+    // dispatch(setTimeoutNotice('notification_is-develop'))
 
     return (
         <div className="account__main--wrapper">
@@ -23,7 +26,7 @@ const SettingsInner = () => {
                             Ввод кошелька
                         </h3>
                         <div className="account-wallets__add">
-                            <a onClick={_ => ActiveNotification('#notification_is-develop')} className="account-wallets__add--btn btn _large-2">
+                            <a onClick={_ => dispatch(setTimeoutNotice('notification_is-develop'))} className="account-wallets__add--btn btn _large-2">
                                 Добавить кошелек
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">

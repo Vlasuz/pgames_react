@@ -3,6 +3,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {reducerSocketResponse} from "../../../redux/game_reducers/reducerSocketResponse";
 import {reducerFenTable, setFenLine, setFenTable} from "../../../redux/game_reducers/reducerChessFenTable";
 import {logDOM} from "@testing-library/react";
+import FIGURE_B from "./FigureSteps/figure_b";
+import FIGURE_K from "./FigureSteps/figure_k";
+import FIGURE_Q from "./FigureSteps/figure_q";
+import FIGURE_R from "./FigureSteps/figure_r";
+import FIGURE_P from "./FigureSteps/figure_p";
+import FIGURE_N from "./FigureSteps/figure_n";
 
 const ChessTableInner = () => {
 
@@ -15,6 +21,7 @@ const ChessTableInner = () => {
     const tableFen = useSelector(state => state.reducerFenTable.fenTable)
     const [playerColor, setPlayerColor] = useState(1)
     const [arrayForTable, setArrayForTable] = useState([])
+    const color = ['white', 'black']
 
     useEffect(() => {
         dispatch(setFenTable('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'))
@@ -90,8 +97,6 @@ const ChessTableInner = () => {
 
         if(selectedFigure && key && e?.target.closest('._accent')) {
 
-            console.log('send socket "play_piece":', selectedFigure + key)
-
             websocket.send(JSON.stringify({
                 "command": "play_piece",
                 "data": {
@@ -107,132 +112,22 @@ const ChessTableInner = () => {
             setArrayPoints({arr1, arr2})
         }
 
-
-
         document.querySelectorAll('.chess__grid--cell._accent')?.forEach(item => item.classList.remove('_accent'))
         const figureIndex = e.target.closest('.chess__grid--cell').getAttribute('data-index')
 
+
         if (figure === figure_p[playerColor-1]) {
-            let positionToMove = [];
-            const posItem = e.target.closest('.chess__grid--cell').getAttribute('data-array')[0]
-
-            for(let a = 8; a < 24; a+= 8) {
-                console.log(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img'))
-                // if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - a})`)?.querySelector('img')) break;
-                positionToMove.push(a)
-            }
-
-            if(+posItem !== 6) {
-                positionToMove = [8]
-            }
-
-            if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - 7})`).querySelector('img')) {
-                positionToMove.push(7)
-            }
-            if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - 9})`).querySelector('img')) {
-                positionToMove.push(9)
-            }
-
-            positionToMove.map(item => {
-                document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.classList.add('_accent')
-            })
+            FIGURE_P(e, figureIndex, playerColor)
         } else if (figure === figure_n[playerColor-1]) {
-            let positionToMove = [15, 6, 17, 10, -10, -17, -6, -15];
-            const posItem = e.target.closest('.chess__grid--cell').getAttribute('data-array')[2]
-
-            if (+posItem === 1) {
-                positionToMove = [15, 6, -10, -17, 17, -15]
-            } else if (+posItem === 6) {
-                positionToMove = [-15, -6, 10, 17, -17, 15]
-            } else if (+posItem === 0) {
-                positionToMove = [15, 6, -10, -17]
-            } else if (+posItem === 7) {
-                positionToMove = [-15, -6, 10, 17]
-            }
-
-            positionToMove.map(item => {
-                document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.classList.add('_accent')
-            })
+            FIGURE_N(e, figureIndex, playerColor)
         } else if (figure === figure_r[playerColor-1]) {
-            let positionToMove = [];
-            const posItem = e.target.closest('.chess__grid--cell').getAttribute('data-array')
-
-            for(let a = 8; a <= posItem[0] * 8; a+=8) {
-                positionToMove.push(a)
-            }
-            for(let a = -8; a >= -((7 - posItem[0]) * 8); a-=8) {
-                positionToMove.push(a)
-            }
-            for(let a = 1; a <= posItem[2]; a++) {
-                positionToMove.push(a)
-            }
-            for(let a = -1; a >= -(7 - posItem[2]); a--) {
-                positionToMove.push(a)
-            }
-
-
-            positionToMove.map(item => {
-                document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.classList.add('_accent')
-            })
+            FIGURE_R(e, figureIndex, playerColor)
         } else if (figure === figure_b[playerColor-1]) {
-            let positionToMove = [];
-            const posItem = e.target.closest('.chess__grid--cell').getAttribute('data-array')
-
-            for(let a = 7; a <= (7 - +posItem[2]) * 7; a += 7) {
-                positionToMove.push(a)
-            }
-            for(let a = -7; a >= -(+posItem[2] * 7); a -= 7) {
-                positionToMove.push(a)
-            }
-            for(let a = 9; a <= +posItem[2] * 9; a += 9) {
-                positionToMove.push(a)
-            }
-            for(let a = -9; a >= -((8 - (+posItem[2] > +posItem[0] ? +posItem[2] : +posItem[0])) * 9); a -= 9) {
-                positionToMove.push(a)
-            }
-
-            positionToMove.map(item => {
-                document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.classList.add('_accent')
-            })
+            FIGURE_B(e, figureIndex, playerColor)
         } else if (figure === figure_k[playerColor-1]) {
-            let positionToMove = [1, -1, 8, -8, 9, -9, 7, -7];
-
-            positionToMove.map(item => {
-                document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.classList.add('_accent')
-            })
+            FIGURE_K(e, figureIndex, playerColor)
         } else if (figure === figure_q[playerColor-1]) {
-            let positionToMove = [];
-            const posItem = e.target.closest('.chess__grid--cell').getAttribute('data-array')
-
-            for(let a = 7; a <= (7 - +posItem[2]) * 7; a += 7) {
-                positionToMove.push(a)
-            }
-            for(let a = -7; a >= -(+posItem[2] * 7); a -= 7) {
-                positionToMove.push(a)
-            }
-            for(let a = 9; a <= +posItem[2] * 9; a += 9) {
-                positionToMove.push(a)
-            }
-            for(let a = -9; a >= -((8 - (+posItem[2] > +posItem[0] ? +posItem[2] : +posItem[0])) * 9); a -= 9) {
-                positionToMove.push(a)
-            }
-
-            for(let a = 8; a <= posItem[0] * 8; a+=8) {
-                positionToMove.push(a)
-            }
-            for(let a = -8; a >= -((7 - posItem[0]) * 8); a-=8) {
-                positionToMove.push(a)
-            }
-            for(let a = 1; a <= posItem[2]; a++) {
-                positionToMove.push(a)
-            }
-            for(let a = -1; a >= -(7 - posItem[2]); a--) {
-                positionToMove.push(a)
-            }
-
-            positionToMove.map(item => {
-                document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - item})`)?.classList.add('_accent')
-            })
+            FIGURE_Q(e, figureIndex, playerColor)
         }
 
     }
@@ -241,15 +136,28 @@ const ChessTableInner = () => {
         <div className="chess__grid--table">
 
             {
-                arrayForTable.map((item, index) =>
-                    <div key={item.position} data-index={index + 1} data-array={item.arrayPoints[0] + '/' + item.arrayPoints[1]} onClick={e => handleStep(item.position, item.figure, e, item.arrayPoints[0], item.arrayPoints[1])} data-position={item.position} className="chess__grid--cell">
+                arrayForTable.map((item, index) => {
+                    let color = ''
+
+                    if(item.figure === '') {
+                        color = ''
+                    } else if(item.figure === item.figure.toUpperCase()) {
+                        color = 'white'
+                    } else if(item.figure === item.figure.toLowerCase()) {
+                        color = 'black'
+                    }
+
+                    return (<div key={item.position} data-index={index + 1} data-color={color}
+                         data-array={item.arrayPoints[0] + '/' + item.arrayPoints[1]} data-figure={item.figure}
+                         onClick={e => handleStep(item.position, item.figure, e, item.arrayPoints[0], item.arrayPoints[1])}
+                         data-position={item.position} className="chess__grid--cell">
                         <div className="chess__grid--checker">
                             <div className="chess__grid--checker-body">
                                 {chips[item.figure]}
                             </div>
                         </div>
-                    </div>
-                )
+                    </div>)
+                })
             }
 
         </div>

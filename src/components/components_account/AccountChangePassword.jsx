@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import ActiveNotification from "../../hooks/ActiveNotification";
 import axios from "axios";
 import GetCookies from "../../hooks/GetCookies";
 import GlobalLink from "../../GlobalLink";
+import {useDispatch} from "react-redux";
+import {setTimeoutNotice} from "../../redux/reducers/notificationReducer";
 
 const AccountChangePassword = ({userInfo}) => {
 
@@ -13,6 +14,8 @@ const AccountChangePassword = ({userInfo}) => {
     const [newPassword, setNewPassword] = useState('')
     const [repeatNewPassword, setRepeatNewPassword] = useState('')
 
+    const dispatch = useDispatch()
+
     const handleChangePassword = (e) => {
         e.preventDefault()
 
@@ -22,7 +25,7 @@ const AccountChangePassword = ({userInfo}) => {
         axios.put(GlobalLink(`/api/user/change_password/?old_password=${oldPassword}&password=${newPassword}&confirm_password=${repeatNewPassword}`)).then(res => {
             console.log('success', res.data)
 
-            ActiveNotification('#notification_change-password')
+            dispatch(setTimeoutNotice('notification_change-password'))
             setIsActiveChange(false)
 
             setPassword(newPassword)
@@ -31,7 +34,7 @@ const AccountChangePassword = ({userInfo}) => {
             setRepeatNewPassword('')
         }).catch(error => {
             console.log(error)
-            ActiveNotification('#notification_change-password-error')
+            dispatch(setTimeoutNotice('notification_change-password-error'))
         })
 
     }

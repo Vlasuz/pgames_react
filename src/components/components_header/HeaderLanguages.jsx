@@ -5,6 +5,8 @@ import Lang_RU from "../../languages/ru.json";
 import Lang_EN from "../../languages/en.json";
 import Lang_ES from "../../languages/es.json";
 import i18n from "i18next";
+import SetCookies from "../../hooks/SetCookies";
+import GetCookies from "../../hooks/GetCookies";
 
 
 const jsonLanguages = {
@@ -16,8 +18,8 @@ const jsonLanguages = {
 // Инициализация:
 i18n.use(initReactI18next).init({
     resources: jsonLanguages,
-    lng: "ru",
-    fallbackLng: "ru"
+    lng: 'ru',
+    fallbackLng: 'ru'
 });
 
 const HeaderLanguages = () => {
@@ -25,9 +27,19 @@ const HeaderLanguages = () => {
     const {i18n} = useTranslation();
     const handleChangeLanguages = (e, lang) => {
         e.preventDefault()
-        document.querySelector('.header__language--target span').innerText = e.target.closest('a').innerText
+
+        SetCookies('lang', lang)
+
+        document.querySelector('.header__language--target span').innerText = lang
         i18n.changeLanguage(lang)
     }
+
+    useEffect(() => {
+        const lang = GetCookies('lang').replace('"', '').replace('"', '')
+
+        document.querySelector('.header__language--target span').innerText = lang
+        i18n.changeLanguage(lang)
+    }, [])
 
     const [isOpen, setIsOpen] = useState(false)
     ActiveDropdown(setIsOpen, ".header__language")

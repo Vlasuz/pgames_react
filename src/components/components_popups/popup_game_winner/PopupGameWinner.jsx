@@ -3,6 +3,7 @@ import PopupBgd from "../PopupBgd";
 import PopupCross from "../PopupCross";
 import {popupTitle} from "../../../redux/actions";
 import {useDispatch, useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 
 const PopupGameWinner = ({props}) => {
 
@@ -10,8 +11,11 @@ const PopupGameWinner = ({props}) => {
     const [text, setText] = useState('')
     const user = useSelector(state => state.userInfoReducer.data)
     const players = useSelector(state => state.gamesListPlayersReducer.players)
+    const navigate = useNavigate()
+
     const handleClosePopup = () => {
         document.querySelector('.popup')?.classList.remove('_active')
+        navigate(-1)
         setTimeout(() => {
             dispatch(popupTitle(''))
         }, 300)
@@ -34,7 +38,13 @@ const PopupGameWinner = ({props}) => {
     }
     const colors = ['white', 'black']
 
-    const isYouWinner = props?.game_result_status === colors[players.filter(item => item.id === user.id)[0].position - 1] ? "Поздравляем! Вы выиграли" : "К сожалению, вы проиграли"
+    let isYouWinner = false
+
+    if(props?.game_result_status) {
+        isYouWinner = props?.game_result_status === colors[players.filter(item => item.id === user.id)[0].position - 1] ? "Поздравляем! Вы выиграли" : "К сожалению, вы проиграли"
+    } else if (props?.winner_id) {
+        isYouWinner = props?.winner_id === user.id ? "Поздравляем! Вы выиграли" : "К сожалению, вы проиграли"
+    }
 
     return (
         <div className={"chess-win-popup popup"}>
@@ -44,14 +54,13 @@ const PopupGameWinner = ({props}) => {
                     <div className="chess-win-popup__container popup-container">
                         <PopupCross/>
                         <h2 className="chess-win-popup__title popup-title section-title _decor-none">
+                            {props.outcome === 'winner' ? translatedText[text] : translatedText[props.outcome]}
                             {
-                                props.outcome === 'winner' ? translatedText[text] : translatedText[props.outcome]
+                                props?.winner_id ? isYouWinner : ""
                             }
                         </h2>
                         <div className="chess-win-popup__text popup-text _left">
-                            {
-                                props.outcome === 'winner' ? isYouWinner : translatedText[text]
-                            }
+                            {props?.game_result_status && props.outcome === 'winner' ? isYouWinner : translatedText[text]}
                             <br/>
                             <br/>
                             <br/>

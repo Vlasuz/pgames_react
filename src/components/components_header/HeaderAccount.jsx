@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Link, NavLink} from "react-router-dom";
+import {Link, NavLink, useNavigate} from "react-router-dom";
 import ActiveDropdown from "../../hooks/ActiveDropdown";
 import {useDispatch, useSelector} from "react-redux";
 import {actionLogout} from "../../redux/actions";
@@ -12,9 +12,10 @@ const HeaderAccount = () => {
 
     const [isOpen, setIsOpen] = useState(false)
     const dispatch = useDispatch()
-    ActiveDropdown(setIsOpen, ".header__account")
-
+    const navigate = useNavigate()
     const userInfo = useSelector(state => state.userInfoReducer.data)
+
+    ActiveDropdown(setIsOpen, ".header__account")
 
     const handleLogout = () => {
         axios.defaults.headers.post['platform'] = `pc`;
@@ -23,6 +24,11 @@ const HeaderAccount = () => {
             dispatch(setUserInfo({}))
             document.cookie = "access_token=; expires=Thu, 18 Dec 2013 12:00:00 UTC";
             GetCookies('access_token')
+
+            if(window.location.href.includes('account')) {
+                navigate('/')
+            }
+
         }).catch(error => {
             if(error.response.status === '498') {
                 dispatch(setUserInfo({}))

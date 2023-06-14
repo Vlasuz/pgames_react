@@ -33,6 +33,7 @@ import {reducerEndGame} from "../game_reducers/reducerEndGame";
 import {reducerHistory} from "../game_reducers/reducerHistory";
 import {reducerFoolUsersCards} from "../game_reducers/reducerFoolUsersCards";
 import {reducerCheckersBeaten} from "../game_reducers/reducerCheckersBeaten";
+import {NotificationReducer} from "./notificationReducer";
 
 export const rootReducer = combineReducers({
     logoutReducer,
@@ -58,6 +59,7 @@ export const rootReducer = combineReducers({
     userInfoReducer,
     gamesListPlayersReducer,
     popupReducer,
+    NotificationReducer,
 
     reducerIsReady,
     reducerIsGameStart,

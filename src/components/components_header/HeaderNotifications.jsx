@@ -1,10 +1,14 @@
 import React, {useState} from 'react';
 import ActiveDropdown from "../../hooks/ActiveDropdown";
+import {useSelector} from "react-redux";
+import AllNotifications from "../AllNotifications";
 
 const HeaderNotifications = () => {
 
     const [isOpen, setIsOpen] = useState(false)
     ActiveDropdown(setIsOpen, ".header__notifications")
+
+    const notices = useSelector(state => state.NotificationReducer.notices)
 
     return (
         <div className={"header__user-info--notifications header__notifications" + (isOpen ? " _active": "")}>
@@ -24,6 +28,11 @@ const HeaderNotifications = () => {
             <div className="header__notifications--block">
                 <div className="header__notifications--body custom-scrollbar">
                     <ul className="header__notifications--list">
+
+                        {
+                            notices.length ? notices.map(notice => <AllNotifications notice={notice} key={notice.id} />) : "Нет уведомлений"
+                        }
+
                     </ul>
                 </div>
             </div>

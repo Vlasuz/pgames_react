@@ -1,6 +1,16 @@
 import React from 'react';
+import {useDispatch} from "react-redux";
+import {setTimeoutNotice} from "../../redux/reducers/notificationReducer";
 
 const ReferalLink = () => {
+
+    const dispatch = useDispatch()
+
+    const handleCopy = () => {
+        // dispatch(setTimeoutNotice('notification_referral-copied'))
+        dispatch(setTimeoutNotice('notification_referral-copied'))
+    }
+
     return (
         <div className="account__col">
             <div className="account__block" data-aos="fade-in" data-aos-delay="500"
@@ -13,13 +23,17 @@ const ReferalLink = () => {
                         <form action="#" className="account-referal__form">
                             <div className="account-referal__form--list form-list">
                                 <label className="account-referal__label form-label">
-                                    <input type="text" name="referal-link" id="referal-link"
+                                    <input type="text" name="referal-link"
+                                           readOnly
+                                           value="https://reflink-board-games-id-45-56-mr-jane123123123"
+                                           className="account-referal__input form-input _none-placeholder"/>
+                                    <input type="hidden" name="referal-link" id="referal-link"
                                            readOnly
                                            value="https://reflink-board-games-id-45-56-mr-jane123123123"
                                            className="account-referal__input form-input _none-placeholder"/>
                                 </label>
                             </div>
-                            <button type="button"
+                            <button onClick={handleCopy} type="button"
                                     className="account-referal__btn btn _large-2 _full _min-fs _mt copy-btn"
                                     data-clipboard-target="#referal-link">
                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none"

@@ -4,8 +4,8 @@ import GlobalLink from "../../GlobalLink";
 import GetCookies from "../../hooks/GetCookies";
 import {useDispatch} from "react-redux";
 import {actionLogout, popupTitle} from "../../redux/actions";
-import ActiveNotification from "../../hooks/ActiveNotification";
 import {setUserInfo} from "../../redux/reducers/userInfoReducer";
+import {setTimeoutNotice} from "../../redux/reducers/notificationReducer";
 
 const FormsToAddBalance = () => {
 
@@ -22,9 +22,9 @@ const FormsToAddBalance = () => {
             "service": "visa",
             "currency_type": isBalanceChips
         }).then(({data}) => {
-            console.log('add cash', data)
+
             setInputCash('')
-            ActiveNotification('#notification_payment-success')
+            dispatch(setTimeoutNotice('notification_payment-success'))
 
             axios.defaults.headers.get['Authorization'] = `Bearer ${GetCookies('access_token')}`;
             axios.get(GlobalLink('/api/user/me/')).then(res => {

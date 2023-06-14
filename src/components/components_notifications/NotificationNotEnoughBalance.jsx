@@ -1,8 +1,8 @@
 import React from 'react';
 
-const NotificationNotEnoughBalance = ({handleClose}) => {
+const NotificationNotEnoughBalance = ({handleClose, isActive}) => {
     return (
-        <li id={"notification_no-enough-balance"} className="notifications__item notification-item">
+        <li id={"notification_no-enough-balance"} className={"notifications__item notification-item" + (isActive ? " notification-item_show" : "")}>
             <div className="notification-item__body">
                 <div className="notification-item__header _error">
                     <img src="images/icons/error.svg" width="20" height="20" alt=""

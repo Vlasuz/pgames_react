@@ -1,11 +1,11 @@
 import React from 'react';
 
-const NotificationChangePasswordError = ({handleClose, isActive}) => {
+const NotificationReferralCopied = ({handleClose, isActive}) => {
     return (
-        <li id={"notification_change-password-error"} className={"notifications__item notification-item" + (isActive ? " notification-item_show" : "")}>
+        <li id={"notification_referral-copied"} className={"notifications__item notification-item" + (isActive ? " notification-item_show" : "")}>
             <div className="notification-item__body">
-                <div className="notification-item__header _error">
-                    <img src="images/icons/error.svg" width="20" height="20" alt=""
+                <div className="notification-item__header _message">
+                    <img src="images/icons/bell.svg" width="20" height="20" alt=""
                          className="notification-item__icon"/>
                     <h3 className="notification-item__title" title="Бонус!">
                         Личные данные
@@ -26,7 +26,7 @@ const NotificationChangePasswordError = ({handleClose, isActive}) => {
                 </div>
                 <div className="notification-item__content">
                     <p>
-                        Ошибка при смене пароля! <br />Проверьте данные!
+                        Ссылка скопирована
                     </p>
                 </div>
             </div>
@@ -34,4 +34,4 @@ const NotificationChangePasswordError = ({handleClose, isActive}) => {
     );
 };
 
-export default NotificationChangePasswordError;
+export default NotificationReferralCopied;

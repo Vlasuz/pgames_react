@@ -4436,7 +4436,8 @@ a.page-pagination__btn{
 .header__account--avatar {
     border-radius: 50%;
     border: 1px solid var(--dark-2);
-    margin-right: 8px
+    margin-right: 8px;
+    object-fit: cover;
 }
 
 .header__nav-mob {
@@ -5693,28 +5694,33 @@ a.page-pagination__btn{
     min-height: 97px
 }
 
+.feedback__input::-webkit-input-placeholder,
 .feedback__textarea::-webkit-input-placeholder {
-    color: var(--light);
+    color: rgba(255, 255, 255, .5);
     opacity: 1
 }
 
+.feedback__input::-moz-placeholder,
 .feedback__textarea::-moz-placeholder {
-    color: var(--light);
+    color: rgba(255, 255, 255, .5);
     opacity: 1
 }
 
+.feedback__input:-ms-input-placeholder,
 .feedback__textarea:-ms-input-placeholder {
-    color: var(--light);
+    color: rgba(255, 255, 255, .5);
     opacity: 1
 }
 
+.feedback__input::-ms-input-placeholder,
 .feedback__textarea::-ms-input-placeholder {
-    color: var(--light);
+    color: rgba(255, 255, 255, .5);
     opacity: 1
 }
 
+.feedback__input::placeholder,
 .feedback__textarea::placeholder {
-    color: var(--light);
+    color: rgba(255, 255, 255, .5);
     opacity: 1
 }
 
@@ -16026,11 +16032,6 @@ progress.game__user--progress {
     transform: rotate(90deg);
     margin: 25px;
 }
-.domino__table--element.non-rotate {
-    transform: rotate(0deg);
-    margin-left: 0;
-    margin-right: 0;
-}
 
 .domino__table--element._accent .domino__table--element-body {
     background: rgba(97,200,175,.6);
@@ -16043,7 +16044,21 @@ progress.game__user--progress {
     position: relative;
     border-radius: 8px;
 }
+.domino__table--element.non-rotate {
+    transform: rotate(0deg);
+    margin-left: 0;
+    margin-right: 0;
+}
 .domino__table--element.non-rotate .domino__table--element-body {
+    width: 52px;
+    padding-top: 200%;
+}
+
+.game__domino-block--item.non-rotate {
+    margin-left: 0;
+    margin-right: 0;
+}
+.game__domino-block--item.non-rotate .game__domino-block--item-body{
     width: 52px;
     padding-top: 200%;
 }
@@ -17189,13 +17204,11 @@ html{
 .notifications__item.notification-item{
     opacity: 0;
     visibility: hidden;
-    position: absolute;
+    transition: all .3s ease;
 }
 .notifications__item.notification-item.notification-item_show{
     opacity: 1;
     visibility: visible;
-    transition: opacity .3s ease, visibility .3s ease;
-    position: static;
 }
 
 .account-settings-element__form_password .form-list.account-settings-element__form--list,
@@ -17569,9 +17582,29 @@ label._error .popup-input-placeholder{
     opacity: 0;
 }
 .game__domino-block--item._rotate{
-    /*transform-origin: center;*/
-    transform: rotate(90deg) translate(-10px, -12px);
+    transform: rotate(90deg);
+    height: 54px;
 }
+
+.game__domino-block--item._rotate_br90{
+    transform: rotate(90deg);
+    height: 54px;
+}
+.game__domino-block--item._rotate_bl90{
+    transform: rotate(-90deg);
+    height: 147px;
+    margin-top: -92px;
+}
+.game__domino-block--item._rotate_tr90{
+    transform: rotate(-90deg);
+    height: 147px;
+    margin-top: -92px;
+}
+.game__domino-block--item._rotate_tl90{
+    transform: rotate(90deg);
+    height: 54px;
+}
+
 .game__domino-block--item._transition{
     -webkit-transition: all .3s ease;
     -moz-transition: all .3s ease;
@@ -17608,6 +17641,11 @@ label._error .popup-input-placeholder{
     -ms-transform: rotate(180deg);
     -o-transform: rotate(180deg);
     transform: rotate(180deg);
+}
+
+a,
+button {
+    cursor: pointer;
 }
 
 /*NEW STYLE*/

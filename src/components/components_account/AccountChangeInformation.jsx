@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import ActiveNotification from "../../hooks/ActiveNotification";
-import {accountInformation} from "../../redux/actions";
 import axios from "axios";
 import GetCookies from "../../hooks/GetCookies";
+import {setTimeoutNotice} from "../../redux/reducers/notificationReducer";
 
 const AccountChangeInformation = ({ userInfo }) => {
 
@@ -28,7 +27,7 @@ const AccountChangeInformation = ({ userInfo }) => {
             console.log('email', data)
         })
 
-        ActiveNotification('#notification_change-account')
+        dispatch(setTimeoutNotice('notification_change-account'))
     }
 
     return (
@@ -56,7 +55,7 @@ const AccountChangeInformation = ({ userInfo }) => {
                                             </span>
                                 </label>
                                 <label className="account-settings-element__label form-label">
-                                    <input type="text" name="name" value="Jane_006"
+                                    <input type="text" name="name"
                                            placeholder="Имя пользователя"
                                            className="account-settings-element__input form-input"
                                            required

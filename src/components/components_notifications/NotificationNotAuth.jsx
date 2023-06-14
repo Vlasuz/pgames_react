@@ -4,12 +4,12 @@ import OpenPopup from "../../hooks/OpenPopup";
 import {useDispatch} from "react-redux";
 import {popupTitle} from "../../redux/actions";
 
-const NotificationNotAuth = ({handleClose}) => {
+const NotificationNotAuth = ({handleClose, isActive}) => {
 
     const dispatch = useDispatch()
 
     return (
-        <li id={"notification_not-auth"} className="notifications__item notification-item">
+        <li id={"notification_not-auth"} className={"notifications__item notification-item" + (isActive ? " notification-item_show" : "")}>
             <div className="notification-item__body">
                 <div className="notification-item__header _error">
                     <img src="images/icons/error.svg" width="20" height="20" alt=""

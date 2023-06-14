@@ -6,8 +6,6 @@ import Pagination from "../../hooks/Pagination";
 
 const RoomsList = () => {
 
-    // const {currentItems, pageCount, handlePageClick} = PaginationHook(rooms, 4)
-
     const [rooms, setRooms] = useState([])
     const [pagination, setPagination] = useState({})
     const [pages, setPages] = useState([])
@@ -36,12 +34,6 @@ const RoomsList = () => {
         <>
             <ul className="page-rooms__list">
 
-                {/*{*/}
-                {/*    currentItems && currentItems.map(room =>*/}
-                {/*        <RoomItem key={room.id} data={room}/>*/}
-                {/*    )*/}
-                {/*}*/}
-
                 {
                     rooms.map(room =>
                         <RoomItem key={room.id} game={room}/>
@@ -50,13 +42,12 @@ const RoomsList = () => {
 
             </ul>
 
-            {/*<Pagination handlePageClick={handlePageClick} pageCount={pageCount} />*/}
-            <Pagination
+            {pages.length > 1 && <Pagination
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
                 pagination={pagination}
                 pages={pages}
-            />
+            />}
         </>
     );
 };

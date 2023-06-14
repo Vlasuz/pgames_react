@@ -24,7 +24,11 @@ const AccountAside = () => {
             dispatch(setUserInfo({}))
             document.cookie = "access_token=; expires=Thu, 18 Dec 2013 12:00:00 UTC";
             GetCookies('access_token')
-            navigate('/')
+
+            if(window.location.href.includes('account')) {
+                navigate('/')
+            }
+
         }).catch(error => {
             if(error.response.status === '498') {
                 dispatch(setUserInfo({}))

@@ -2,6 +2,7 @@ import React, {createElement, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {setSelectDominoes} from "../../../redux/game_reducers/reducerChessFenTable";
 import {reducerFoolUsersCards} from "../../../redux/game_reducers/reducerFoolUsersCards";
+import GlobalLink from "../../../GlobalLink";
 
 const DominoesYou = () => {
 
@@ -15,7 +16,7 @@ const DominoesYou = () => {
 
     const cardSelect = (first, second, e) => {
 
-        // if(playerTurn.player !== user.id) return null;
+        if(playerTurn.player !== user.id) return null;
 
         document.querySelector('.game__domino-block--item._accent')?.classList.remove('_accent')
         e.target.closest('.game__domino-block--item').classList.add('_accent')
@@ -25,8 +26,24 @@ const DominoesYou = () => {
             return null;
         }
 
-        const left = +table[0][0]
-        const right = +table[table.length - 1][1]
+        let clearTable = [];
+        table?.filter(item => {
+            if(item !== null && item.length < 3) {
+                clearTable = [...clearTable, item]
+            }
+        })
+
+        if(!clearTable[0]) {
+            dispatch(setSelectDominoes([first, second], null))
+            return null;
+        }
+
+        console.log('11 - ', table, clearTable)
+        console.log('22 - ', table[0])
+        console.log('33 - ', table[0][0])
+
+        const left = +clearTable[0][0]
+        const right = +clearTable[clearTable.length - 1][1]
 
         if (first === left && first === right) {
             dispatch(setSelectDominoes([second, first], [first, second]))
@@ -75,7 +92,7 @@ const DominoesYou = () => {
 
                             {
                                 yourCards.map((card, index) => {
-                                    return (<li key={index} onClick={e => cardSelect(card.first_side, card.second_side, e)}
+                                    return (<li key={index} data-first={card?.first_side} data-second={card?.second_side} onClick={e => cardSelect(card.first_side, card.second_side, e)}
                                         className="game__domino-block--item">
                                         <div className="game__domino-block--item-body">
                                             <img
@@ -99,7 +116,7 @@ const DominoesYou = () => {
                     </div>
                 </div>
                 <div className="game__user--avatar">
-                    <img src="images/account/avatar.png" alt="" className="game__user--avatar-img"/>
+                    <img src={user.avatar ? GlobalLink('/'+user.avatar) : "images/account/avatar-none.svg"} alt="" className="game__user--avatar-img"/>
                 </div>
             </div>
         </div>

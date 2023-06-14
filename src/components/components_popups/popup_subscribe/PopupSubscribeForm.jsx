@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import ClosePopup from "../../../hooks/ClosePopup";
 import {useDispatch} from "react-redux";
 import {popupTitle} from "../../../redux/actions";
-import ActiveNotification from "../../../hooks/ActiveNotification";
+import {setTimeoutNotice} from "../../../redux/reducers/notificationReducer";
 
 const PopupSubscribeForm = () => {
 
@@ -13,7 +13,7 @@ const PopupSubscribeForm = () => {
         e.preventDefault()
 
         setValue('')
-        ActiveNotification('#notification_subscribe-success')
+        dispatch(setTimeoutNotice('notification_subscribe-success'))
 
         setTimeout(() => {
             dispatch(popupTitle(''))

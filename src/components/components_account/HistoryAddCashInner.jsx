@@ -48,8 +48,8 @@ const HistoryAddCashInner = () => {
                         <ul className="account-history__list">
 
                             {
-                                history.map(item =>
-                                    <li key={item.id} className="account-history__item">
+                                history.map((item, index) =>
+                                    <li key={index} className="account-history__item">
                                         <div className="account-history-element">
                                             <div className="account-history-element__body">
                                                 <div className="account-history-element__col">

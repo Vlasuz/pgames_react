@@ -20,7 +20,6 @@ import GlobalSocket from "../GlobalSocket";
 import cardEvent from "../components/component_game/game_fool/functions/card_event";
 import setPosition from "../components/component_game/game_fool/functions/set_position";
 import socketMessages from "../components/component_game/game_fool/functions/socket_messages";
-import ActiveNotification from "../hooks/ActiveNotification";
 import GameTopButtons from "../components/component_game/GameTopButtons";
 import FoolDeck from "../components/component_game/game_fool/FoolDeck";
 import {setWebsocket} from "../redux/game_reducers/reducerWebsocket";

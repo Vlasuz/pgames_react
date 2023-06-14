@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import ActiveNotification from "../../hooks/ActiveNotification";
-import {accountPhoto} from "../../redux/actions";
 import axios from "axios";
 import GetCookies from "../../hooks/GetCookies";
 import GlobalLink from "../../GlobalLink";
 import {setUserInfo} from "../../redux/reducers/userInfoReducer";
+import {setTimeoutNotice} from "../../redux/reducers/notificationReducer";
 
 const AccountChangePhoto = () => {
 
@@ -38,7 +37,7 @@ const AccountChangePhoto = () => {
         axios.defaults.headers.post['Authorization'] = `Bearer ${GetCookies('access_token')}`;
         axios.post('https://board-games.sonisapps.com/api/user/avatar/', formData).then(({data}) => {
             dispatch(setUserInfo(data))
-            ActiveNotification('#notification_change-account')
+            dispatch(setTimeoutNotice('notification_change-account'))
             setNewPhoto('')
         })
     }
@@ -59,7 +58,7 @@ const AccountChangePhoto = () => {
                                          height="116"
                                          alt=""
                                          className="account-settings-element__avatar--img" />
-                                    <input onChange={handleLoadPhoto} required type="file" name="avatar"
+                                    <input onChange={handleLoadPhoto} accept="image/png, image/gif, image/jpeg" required type="file" name="avatar"
                                            className="account-settings-element__avatar--input" />
                                 </div>
                                 <div

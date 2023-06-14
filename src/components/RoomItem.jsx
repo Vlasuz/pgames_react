@@ -1,7 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {accountBalanceReducer} from "../redux/reducers/accountBalanceReducer";
-import ActiveNotification from "../hooks/ActiveNotification";
+
 import {useNavigate} from "react-router-dom";
 import {logoutReducer} from "../redux/reducers/logoutReducer";
 import {addBalance} from "../redux/actions";
@@ -10,6 +10,7 @@ import GetCookies from "../hooks/GetCookies";
 import GlobalLink from "../GlobalLink";
 import {setGamePlayers} from "../redux/reducers/gamesListPlayersReducer";
 import SetCookies from "../hooks/SetCookies";
+import {setTimeoutNotice} from "../redux/reducers/notificationReducer";
 
 const RoomItem = ({ game }) => {
 
@@ -30,7 +31,7 @@ const RoomItem = ({ game }) => {
 
         }).catch(error => {
             if(error.message.includes('401')) {
-                ActiveNotification('#notification_not-auth')
+                dispatch(setTimeoutNotice('notification_not-auth'))
             }
         })
 
@@ -40,13 +41,14 @@ const RoomItem = ({ game }) => {
         <li key={game?.id} className="online-games__rooms--item room-item" data-aos="fade-up">
             <div className="room-item__body">
                 <div className="room-item__header">
-                    {/*<img src={"../"+data.icon} width="18" height="18" alt=""*/}
-                    {/*     className="room-item__icon"/>*/}
+                    <img src={`images/icons/${game.slug}.svg`} width="18" height="18" alt=""
+                         className="room-item__icon"/>
                     <h3 className="room-item__name" title="Дурак классический">
-                        {/*{game?.title}*/}
+                        {game?.name}
+                        {game?.id}
                     </h3>
                     <time className="room-item__time" dateTime="2022-03-12 12:43">
-                        {/*{data.date[0]} <b>{data.date[1]}</b>*/}
+                        {game?.date}
                     </time>
                 </div>
                 <div className="room-item__info">

@@ -21,9 +21,12 @@ import TextPage from "./TextPage";
 import RoomSingleChess from "./RoomSingleChess";
 import RoomSingleCheckers from "./RoomSingleCheckers";
 import RoomSingleDominoes from "./RoomSingleDominoes";
+import {useSelector} from "react-redux";
 
 const Routers = () => {
     ScrollToTop()
+
+    const auth = useSelector(state => state.userInfoReducer.data)
 
     const routers = [
         {path: "*", comp: <Error404/>},
@@ -58,9 +61,18 @@ const Routers = () => {
 
         <Routes>
             {
-                routers.map((elem, key) =>
-                    <Route key={key} path={elem.path} element={elem.comp}/>
-                )
+                routers.map((elem, key) => {
+
+                    if(auth && !Object.keys(auth).length) {
+
+                        if(elem.path.includes('account')) {
+                            elem = '*'
+                        }
+
+                    }
+
+                    return <Route key={key} path={elem.path} element={elem.comp}/>
+                })
             }
         </Routes>
     );

@@ -1,10 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import JsCustomSelect from "../components/JS_CustomSelect";
-import {useDispatch, useSelector} from "react-redux";
-import {addRoomAction} from "../redux/actions";
-import uniqid from 'uniqid';
 import {NavLink} from "react-router-dom";
-import ActiveNotification from "../hooks/ActiveNotification";
 import RoomCreateForm from "../components/components_rooms/RoomCreateForm";
 
 const RoomCreate = () => {

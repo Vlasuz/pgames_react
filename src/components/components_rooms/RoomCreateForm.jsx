@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import uniqid from "uniqid";
 import {addBalance, addRoomAction} from "../../redux/actions";
-import ActiveNotification from "../../hooks/ActiveNotification";
 import {useNavigate} from "react-router-dom";
 import {accountBalanceReducer} from "../../redux/reducers/accountBalanceReducer";
 import OpenPopup from "../../hooks/OpenPopup";
@@ -11,6 +10,7 @@ import GlobalLink from "../../GlobalLink";
 import GetCookies from "../../hooks/GetCookies";
 import JsCustomSelect from "../JS_CustomSelect";
 import SetCookies from "../../hooks/SetCookies";
+import {setTimeoutNotice} from "../../redux/reducers/notificationReducer";
 
 const RoomCreateForm = () => {
 
@@ -38,7 +38,7 @@ const RoomCreateForm = () => {
             setMaxPlayers(data.max_players)
             setTimeout(() => {
                 JsCustomSelect()
-            }, 10)
+            }, 20)
         })
     }, [gameIs])
 
@@ -81,7 +81,7 @@ const RoomCreateForm = () => {
 
         }).catch(error => {
             if (error.message.includes('401')) {
-                ActiveNotification('#notification_not-auth')
+                dispatch(setTimeoutNotice('notification_not-auth'))
             }
         })
 

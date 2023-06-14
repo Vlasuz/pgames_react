@@ -5,19 +5,28 @@ import axios from "axios";
 import GetCookies from "../../hooks/GetCookies";
 import {useNavigate, useParams} from "react-router-dom";
 import GlobalLink from "../../GlobalLink";
-import ActiveNotification from "../../hooks/ActiveNotification";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import SetCookies from "../../hooks/SetCookies";
+import {setTimeoutNotice} from "../../redux/reducers/notificationReducer";
 
 const GamesSingleRooms = ({game}) => {
 
     const {gamesId} = useParams()
 
+    const userInfo = useSelector(state => state.userInfoReducer.data)
     const [isActiveCreate, setIsActiveCreate] = useState(true)
     const [rooms, setRooms] = useState([])
-    const userInfo = useSelector(state => state.userInfoReducer.data)
-
     const [maxPlayers, setMaxPlayers] = useState([])
+    const [isLoad, setIsLoad] = useState(false)
+    const [currency, setCurreny] = useState('chips')
+    const [maxLength, setMaxLength] = useState(2)
+    const [isAccess, setIsAccess] = useState(true)
+    const [typeOfGame, setTypeOfGame] = useState('Классический')
+    const [cost, setCost] = useState(0)
+    const [title, setTitle] = useState('')
+
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     useEffect(() => {
         setMaxPlayers(Array(game.max_players).fill(''))
@@ -30,18 +39,9 @@ const GamesSingleRooms = ({game}) => {
                 JsCustomSelect()
             }, 10)
         } else {
-            ActiveNotification('#notification_not-auth')
+            dispatch(setTimeoutNotice('notification_not-auth'))
         }
     }
-
-    const [isLoad, setIsLoad] = useState(false)
-    const [currency, setCurreny] = useState('chips')
-    const [maxLength, setMaxLength] = useState(2)
-    const [isAccess, setIsAccess] = useState(true)
-    const [typeOfGame, setTypeOfGame] = useState('Классический')
-    const [cost, setCost] = useState(0)
-    const [title, setTitle] = useState('')
-    const navigate = useNavigate()
 
     useEffect(() => {
         if(!isLoad) {
@@ -77,7 +77,7 @@ const GamesSingleRooms = ({game}) => {
 
         }).catch(error => {
             if (error.message.includes('401')) {
-                ActiveNotification('#notification_not-auth')
+                dispatch(setTimeoutNotice('notification_not-auth'))
             }
         })
 

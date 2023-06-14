@@ -1,8 +1,8 @@
 import React from 'react';
 
-const NotificationPromoCode404 = ({handleClose}) => {
+const NotificationPromoCode404 = ({handleClose, isActive}) => {
     return (
-        <li className="notifications__item notification-item" id={"notification-promo-404"}>
+        <li id={"notification-promo-404"} className={"notifications__item notification-item" + (isActive ? " notification-item_show" : "")}>
             <div className="notification-item__body">
                 <div className="notification-item__header _error">
                     <img src="images/icons/error.svg" width="20" height="20" alt=""

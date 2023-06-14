@@ -37,6 +37,7 @@ import {setHistoryItem} from "../redux/game_reducers/reducerHistory";
 
 const RoomSingleFool = () => {
 
+    const [isEndGame, setIsEndGame] = useState(false)
     const {roomId} = useParams()
     const [isLoad, setIsLoad] = useState(true)
     const dispatch = useDispatch()
@@ -68,6 +69,8 @@ const RoomSingleFool = () => {
 
         if (data.status === 'Waiting') {
             dispatch(setUserReadyState(...data.users.filter(user => user.ready).map(item => item.id)))
+        } else if(data.status === 'End game') {
+            setIsEndGame(true)
         }
 
         const startGame = () => {
@@ -236,7 +239,7 @@ const RoomSingleFool = () => {
                                     <GameHistory/>
 
                                     {
-                                        !isGameStart && (!usersReadyState.some(item => item === user.id) ?
+                                        !isEndGame && !isGameStart && (!usersReadyState.some(item => item === user.id) ?
                                             <FoolButtonReady websocket={websocket}/> :
                                             <FoolButtonWaiting/>)
                                     }

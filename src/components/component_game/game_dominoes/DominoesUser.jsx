@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector} from "react-redux";
 import GameReadyBlock from "../GameReadyBlock";
+import GlobalLink from "../../../GlobalLink";
 
 const DominoesUser = ({player}) => {
 
@@ -25,7 +26,7 @@ const DominoesUser = ({player}) => {
         <div className="domino__player game__player _min">
             <div className="game__player--body">
                 <div className="game__player--avatar">
-                    <img src={player.avatar ? player.avatar : "images/account/avatar.png"} width="76" height="76" alt=""
+                    <img src={player.avatar ? GlobalLink('/'+player.avatar) : "images/account/avatar-none.svg"} width="76" height="76" alt=""
                          className="game__player--avatar-img"/>
                 </div>
                 <div className="game__player--info">
