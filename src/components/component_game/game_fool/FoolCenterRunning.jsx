@@ -15,7 +15,8 @@ const FoolCenterRunning = ({
                                defenderTake,
                                isCardsBeat,
                                attacker,
-                               defender
+                               defender,
+                               maxPlayers
                            }) => {
 
     const userTurn = useSelector(state => state.reducerPlayerTurn.playerTurn)
@@ -42,17 +43,17 @@ const FoolCenterRunning = ({
             const userTurnPosition = players.filter(item => item.user?.id ? item.user?.id === defenderTake?.player?.id : item.id === defenderTake?.player?.id)[0]?.position
             const yourPosition = players.filter(item => item.user?.id ? item.user?.id === user.id : item.id === user.id)[0]?.position !== undefined ? players.filter(item => item.user?.id ? item.user?.id === user.id : item.id === user.id)[0]?.position : 1
 
-            return userTurnPosition - (yourPosition - 1) > 0 ? userTurnPosition - (yourPosition - 1) : userTurnPosition - (yourPosition - 1) + 6;
+            return userTurnPosition - (yourPosition - 1) > 0 ? userTurnPosition - (yourPosition - 1) : userTurnPosition - (yourPosition - 1) + maxPlayers;
         } else if (Object.keys(attacker).length && attacker?.player?.id !== user.id) {
             const userTurnPosition = players.filter(item => item?.user?.id ? item.user?.id === attacker?.player?.id : item.id === attacker?.player?.id)[0].position
             const yourPosition = players.filter(item => item.user?.id ? item.user?.id === user.id : item.id === user.id)[0]?.position ? players.filter(item => item.user?.id ? item.user?.id === user.id : item.id === user.id)[0]?.position : 1
 
-            return userTurnPosition - (yourPosition - 1) > 0 ? userTurnPosition - (yourPosition - 1) : userTurnPosition - (yourPosition - 1) + 6;
+            return userTurnPosition - (yourPosition - 1) > 0 ? userTurnPosition - (yourPosition - 1) : userTurnPosition - (yourPosition - 1) + maxPlayers;
         } else if (Object.keys(defender).length && defender?.player?.id !== user.id) {
             const userTurnPosition = players.filter(item => item?.user?.id ? item.user?.id === defender?.player?.id : item.id === defender?.player?.id)[0].position
             const yourPosition = players.filter(item => item.user?.id ? item.user?.id === user.id : item.id === user.id)[0]?.position ? players.filter(item => item.user?.id ? item.user?.id === user.id : item.id === user.id)[0]?.position : 1
 
-            return userTurnPosition - (yourPosition - 1) > 0 ? userTurnPosition - (yourPosition - 1) : userTurnPosition - (yourPosition - 1) + 6;
+            return userTurnPosition - (yourPosition - 1) > 0 ? userTurnPosition - (yourPosition - 1) : userTurnPosition - (yourPosition - 1) + maxPlayers;
         }
     }
 

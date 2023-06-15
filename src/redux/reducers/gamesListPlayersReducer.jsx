@@ -8,9 +8,10 @@ export const gamesListPlayersReducer = (state = initialState, action) => {
 
     switch(action.type) {
         case SET_GAME_PLAYERS:
+            console.log('ss',action.players)
             return{
                 ...state,
-                players: [...state.players, ...action.players]
+                players: action.players === 'clear' ? [] : [...state.players, ...action.players]
             }
         case LEAVE_GAME_PLAYERS:
 

@@ -87,7 +87,7 @@ const FooterNavigation = () => {
                 </div>
             </div>
         </nav>
-    );
+);
 };
 
 export default FooterNavigation;

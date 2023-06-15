@@ -24,6 +24,7 @@ const GameHistory = () => {
         setIsOpenHistory(prev => !prev)
     }
 
+
     return (
         <div className="chess__history game__history">
             <div className={"game__history--wrapper" + (isOpenHistory ? " _active" : "")}>
@@ -43,7 +44,7 @@ const GameHistory = () => {
                 <ul className="chess__history--list game__history--list">
 
                     {
-                        history && history.map((historyItem, index) => {
+                        history.length ? history.map((historyItem, index) => {
                             const historyUser = players.filter(user => historyItem.userId === user?.id)[0]
                             const isYou = user?.id === historyUser?.id
 
@@ -67,7 +68,7 @@ const GameHistory = () => {
                                     </span>
                                 </li>
                             )
-                        })
+                        }) : "Истории нет"
                     }
 
                 </ul>

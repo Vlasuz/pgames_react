@@ -38,11 +38,16 @@ const CheckersTable = () => {
             <div className="checkers__table--lost checkers__lost checkers__lost_opponent">
                 <div className="checkers__lost--list">
                     {
-                        beatenOpponent.map((_, index) =>
-                            <div key={index} className="checkers__lost--item">
-                                <img src={`images/checkers/checker-${color[playerColor - 1]}.svg`} alt="" className="checkers__lost--img"/>
-                            </div>
-                        )
+                        beatenOpponent.map((item, index) => {
+                            let isKing = item.includes('king')
+
+                            return (
+                                <div key={index} className="checkers__lost--item">
+                                    <img src={`images/checkers/checker-${color[playerColor - 1]}${isKing ? "_king" : ""}.svg`} alt=""
+                                         className="checkers__lost--img"/>
+                                </div>
+                            )
+                        })
                     }
                 </div>
             </div>
@@ -58,11 +63,15 @@ const CheckersTable = () => {
                 <div className="checkers__lost--list">
 
                     {
-                        beatenYour.map((_, index) =>
-                            <div key={index} className="checkers__lost--item">
-                                <img src={`images/checkers/checker-${color[playerColor > 1 ? 0 : playerColor]}.svg`} alt="" className="checkers__lost--img"/>
-                            </div>
-                        )
+                        beatenYour.map((item, index) => {
+                            let isKing = item.includes('king')
+
+                            return (
+                                <div key={index} className="checkers__lost--item">
+                                    <img src={`images/checkers/checker-${color[playerColor > 1 ? 0 : playerColor]}${isKing ? "_king" : ""}.svg`} alt="" className="checkers__lost--img"/>
+                                </div>
+                            )
+                        })
                     }
 
                 </div>

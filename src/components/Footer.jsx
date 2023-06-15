@@ -20,7 +20,7 @@ const Footer = () => {
             <div className="footer__container container _large">
                 <FooterInfo/>
                 <FooterNavigation/>
-                {/*<FooterHot/>*/}
+                <FooterHot/>
                 <FooterCopyright/>
             </div>
         </footer>

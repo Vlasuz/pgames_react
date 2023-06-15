@@ -10249,7 +10249,7 @@ progress.game__user--progress {
     border: 1px solid #393834;
     border-top: 0;
     border-radius: 0 0 4px 4px;
-    height: calc(100% - 38px);
+    max-height: calc(100% - 38px);
     overflow-y: auto
 }
 
@@ -14536,7 +14536,7 @@ progress.game__user--progress {
 
 @media(min-width:500px) {
     .checkers__grid {
-        padding: 11% 22.8% 0 22.5%
+        padding: 11% 22.9% 0 22.5%
     }
 
     .checkers__grid--wrapper {
@@ -14562,6 +14562,10 @@ progress.game__user--progress {
     grid-template-columns: repeat(8,12.5%)
 }
 
+.checkers__grid--cell .checkers__grid--checker{
+    cursor: pointer;
+    z-index: 3;
+}
 .checkers__grid--cell {
     border: 1px solid transparent;
     -webkit-transition: all .3s ease;
@@ -14569,12 +14573,33 @@ progress.game__user--progress {
     -ms-transition: all .3s ease;
     -o-transition: all .3s ease;
     transition: all .3s ease;
+    position: relative;
 }
 
-.checkers__grid--cell._possible-move {
-    /*border: 1px solid #000;*/
+.checkers__grid--cell:after {
+    content: '';
     background: rgba(97,200,174,.4);
-    cursor: pointer
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    opacity: 0;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+    z-index: 0;
+    visibility: hidden;
+}
+.checkers__grid--cell._possible-move {
+    cursor: pointer;
+}
+.checkers__grid--cell._possible-move:after {
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
 }
 
 .checkers__grid--cell._transparent>* {
@@ -14583,7 +14608,7 @@ progress.game__user--progress {
 }
 
 .checkers__grid--cell._transparent>._active {
-    opacity: 1
+    opacity: 1;
 }
 
 .checkers__grid--cell._set-king {
@@ -16223,7 +16248,11 @@ progress.game__user--progress {
 }
 
 .footer__hot--img {
-    max-width: 100%
+    max-width: 100%;
+    max-height: 100%;
+    height: 112px;
+    object-fit: cover;
+
 }
 
 .footer__copy {
@@ -17646,6 +17675,21 @@ label._error .popup-input-placeholder{
 a,
 button {
     cursor: pointer;
+}
+
+.game__table_ended .game__table-popup{
+    border: 1px solid white;
+    padding: 40px;
+    padding-bottom: 30px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+.game__table_ended{
+    text-align: center;
+}
+.moving{
+    z-index: 3;
 }
 
 /*NEW STYLE*/

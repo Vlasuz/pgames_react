@@ -3,6 +3,7 @@ import {useSelector} from "react-redux";
 import RoomItem from "../RoomItem";
 import axios from "axios";
 import Pagination from "../../hooks/Pagination";
+import GlobalLink from "../../GlobalLink";
 
 const RoomsList = () => {
 
@@ -15,7 +16,7 @@ const RoomsList = () => {
     useEffect(() => {
 
         if(Object.keys(user).length) {
-            axios.get(`https://board-games.sonisapps.com/api/room/list/?page=${currentPage}`).then(res => {
+            axios.get(GlobalLink(`/api/room/list/?page=${currentPage}`)).then(res => {
 
                 setRooms(res.data.rooms)
                 setPagination(res.data.paginator)

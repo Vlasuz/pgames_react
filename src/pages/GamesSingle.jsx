@@ -15,9 +15,11 @@ const GamesSingle = () => {
     const [game, setGame] = useState({})
     const [isShowMoreText, setIsShowMoreText] = useState(false)
 
-    axios.get(`https://board-games.sonisapps.com/api/game/get/${gamesId}/`).then(({data}) => {
-        setGame(data)
-    })
+    useEffect(() => {
+        axios.get(`https://board-games.sonisapps.com/api/game/get/${gamesId}/`).then(({data}) => {
+            setGame(data)
+        })
+    }, [gamesId])
 
     const handleMoreText = (e) => {
         e.preventDefault()

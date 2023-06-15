@@ -18,7 +18,6 @@ const PopupWinnerGame = () => {
         }, 300)
     }
     const handleExit = () => {
-        navigate(-1)
         document.querySelector('.popup')?.classList.remove('_active')
         setTimeout(() => {
             dispatch(popupTitle(''))

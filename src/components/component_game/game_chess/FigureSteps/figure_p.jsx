@@ -12,6 +12,9 @@ const FIGURE_P = (e, figureIndex, playerColor) => {
     if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - 8})`).querySelector('img')) {
         positionToMove = [];
     }
+    if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - 16})`).querySelector('img')) {
+        positionToMove = [8];
+    }
     if(document.querySelector(`.chess__grid--cell:nth-child(${figureIndex - 7})`).querySelector('img')) {
         positionToMove.push(7)
     }

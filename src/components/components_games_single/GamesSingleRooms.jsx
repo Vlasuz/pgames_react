@@ -11,6 +11,8 @@ import {setTimeoutNotice} from "../../redux/reducers/notificationReducer";
 
 const GamesSingleRooms = ({game}) => {
 
+
+    // console.log(game)
     const {gamesId} = useParams()
 
     const userInfo = useSelector(state => state.userInfoReducer.data)
@@ -44,13 +46,11 @@ const GamesSingleRooms = ({game}) => {
     }
 
     useEffect(() => {
-        if(!isLoad) {
-            axios.get(GlobalLink(`/api/game/get/${gamesId}/`)).then(res => {
-                setRooms(res.data.room)
-                setIsLoad(true)
-            })
-        }
-    }, [])
+        axios.get(GlobalLink(`/api/game/get/${gamesId}/`)).then(res => {
+            setRooms(res.data.room)
+            setIsLoad(true)
+        })
+    }, [gamesId])
 
     const handleCreateRoom = (e) => {
         e.preventDefault()
@@ -106,8 +106,8 @@ const GamesSingleRooms = ({game}) => {
                         <ul className="page-rooms__list">
 
                             {
-                                rooms.sort((a, b) => a.players_count - b.players_count).map(game =>
-                                    <RoomItem key={game.id} game={game}/>
+                                rooms.sort((a, b) => a.players_count - b.players_count).map(room =>
+                                    <RoomItem key={room.id} game={room} generalGame={game}/>
                                 )
                             }
 

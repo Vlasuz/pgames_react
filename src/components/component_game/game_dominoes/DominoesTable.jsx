@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 
-const DominoesTable = () => {
+const DominoesTable = ({isGameStart}) => {
 
     const dispatch = useDispatch()
     const [isLoad, setIsLoad] = useState(false)
-    const table = useSelector(state => state.reducerFenTable)
     const [tableParse, setTableParse] = useState([])
-    const websocket = useSelector(state => state.reducerWebsocket.gameWebsocket)
     const [isWidthBig, setIsWidthBig] = useState(false)
+    const websocket = useSelector(state => state.reducerWebsocket.gameWebsocket)
+    const table = useSelector(state => state.reducerFenTable)
 
     useEffect(() => {
         if (isLoad) return;
@@ -119,6 +119,16 @@ const DominoesTable = () => {
                 }
 
             </div>
+
+
+            {!isGameStart && <div className="game__table--content">
+                <h3 className="game__table--title section-title _center">
+                    Ожидаем готовность комнаты
+                </h3>
+                <div className="game__table--text">
+                    Оставайтесь и одержите победу!
+                </div>
+            </div>}
         </div>
     );
 };

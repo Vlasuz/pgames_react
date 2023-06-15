@@ -81,8 +81,16 @@ const RoomSingleDominoes = () => {
         dispatch(setSocketResponse(data))
 
         if (data.status === 'Waiting') {
+
+            dispatch(setGamePlayers('clear'))
             dispatch(setGamePlayers(data.users))
-            data.users.map(item => item.ready && dispatch(setUserReadyState(item.id)))
+            dispatch(setUserReadyState('clear'))
+            dispatch(setUserReadyState(data.users?.filter(user => user.ready)[0].id))
+            dispatch(setFenTable([]))
+            dispatch(setUsersCards([]))
+            dispatch(setIsGameStart(false))
+            dispatch(setPlayerTurn({}))
+
         } else if (data.status === 'Game in progress') {
             dispatch(setGamePlayers(data.users))
             dispatch(setIsReady(true))
@@ -92,7 +100,6 @@ const RoomSingleDominoes = () => {
             dispatch(setIsGameStart(true))
         }
         const newPlayer = () => {
-            console.log('JOIN NEW PLAYER', data.data)
             dispatch(setGamePlayers([data.data]))
         }
         const gameState = () => {
@@ -253,8 +260,6 @@ const RoomSingleDominoes = () => {
         if (typeof events[data.event] === 'function') events[data.event]();
     }
 
-    console.log(infoRoom.player_slots)
-
     return (
         <main className="main">
             <section className="domino page-padding-top">
@@ -308,7 +313,7 @@ const RoomSingleDominoes = () => {
                             </div>
                             <DominoesYou/>
                         </div>
-                        <DominoesTable/>
+                        <DominoesTable isGameStart={isGameStart} />
                         <div className="domino__main--user-menu game__user-menu">
                             <div className="game__user-menu--col">
                                 <div className="game__user-menu--communication game__communication">

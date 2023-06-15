@@ -8,23 +8,23 @@ import GlobalLink from "../../GlobalLink";
 const MainRoomsList = () => {
 
     const [rooms, setRooms] = useState([])
-    const games = useSelector(state => state.gamesListReducer.list)
+    const user = useSelector(state => state.userInfoReducer.data)
 
     useEffect(() => {
-        if(games[0]?.game[0]?.slug){
-            axios.get(GlobalLink(`/api/game/get/${games[0]?.game[0]?.slug}/`)).then(res => {
-                console.log('rooms', res.data)
-                setRooms(res.data.room)
+        if(Object.keys(user).length) {
+            axios.get(GlobalLink(`/api/room/list/?page=1`)).then(res => {
+                console.log('111', res.data.rooms)
+                setRooms(res.data.rooms)
             })
         }
-    }, [games])
+    }, [user])
 
     return (
         <ul className="rooms__list">
 
             {
-                rooms?.map((game, index) =>
-                    index < 10 && <RoomItem key={index} game={game} />
+                rooms?.map((room, index) =>
+                    index < 10 && <RoomItem key={index} game={room}/>
                 )
             }
 

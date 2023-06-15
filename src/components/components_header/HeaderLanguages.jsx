@@ -35,7 +35,7 @@ const HeaderLanguages = () => {
     }
 
     useEffect(() => {
-        const lang = GetCookies('lang').replace('"', '').replace('"', '')
+        const lang = GetCookies('lang') ? GetCookies('lang').replace('"', '').replace('"', '') : "Ru"
 
         document.querySelector('.header__language--target span').innerText = lang
         i18n.changeLanguage(lang)

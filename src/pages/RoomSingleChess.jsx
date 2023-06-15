@@ -1,23 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import GetCookies from "../hooks/GetCookies";
-import axios from "axios";
-import FoolCenterWaiting from "../components/component_game/game_fool/FoolCenterWaiting";
-import FoolCenterRunning from "../components/component_game/game_fool/FoolCenterRunning";
-import FoolCenterStarting from "../components/component_game/game_fool/FoolCenterStarting";
 import GameChat from "../components/component_game/GameChat";
 import GameButtonsChatAndMicro from "../components/component_game/GameButtonsChatAndMicro";
 import FoolButtonReady from "../components/component_game/game_fool/FoolButtonReady";
-import GamePlayer from "../components/component_game/GamePlayer";
-import GamePlayerWaiting from "../components/component_game/game_thousand/GamePlayerWaiting";
-import FoolButtonPass from "../components/component_game/game_fool/FoolButtonPass";
-import FoolButtonTake from "../components/component_game/game_fool/FoolButtonTake";
-import FoolCenterEndgame from "../components/component_game/game_fool/FoolCenterEndgame";
 import FoolButtonWaiting from "../components/component_game/game_fool/FoolButtonWaiting";
 import GlobalSocket from "../GlobalSocket";
 import GameTopButtons from "../components/component_game/GameTopButtons";
-import FoolDeck from "../components/component_game/game_fool/FoolDeck";
 import ChessMessage from "../components/component_game/game_chess/ChessMessage";
 import ChessYourUser from "../components/component_game/game_chess/ChessYourUser";
 import ChessOpponent from "../components/component_game/game_chess/ChessOpponent";
@@ -47,6 +37,7 @@ const RoomSingleFool = () => {
     const isGameStart = useSelector(state => state.reducerIsGameStart.isGameStart)
     const websocket = useSelector(state => state.reducerWebsocket.gameWebsocket)
     const tableFen = useSelector(state => state.reducerFenTable.fenTable)
+    const navigate = useNavigate()
     const usersReadyState = useSelector(state => state.reducerUserReadyState.usersReadyState)
     const arrayLines = tableFen && Object.keys(tableFen).length && tableFen.slice(0, tableFen.indexOf(" ")).split('/').map(item => {
         return item.split('').map(item2 => {
@@ -68,7 +59,16 @@ const RoomSingleFool = () => {
         }
 
         if (data.status === 'Waiting') {
+
+            dispatch(setUserReadyState('clear'))
             dispatch(setUserReadyState(...data.users.filter(user => user.ready).map(item => item.id)))
+            dispatch(setUserReadyState(...data.users.filter(user => user.ready).map(item => item.id)))
+            dispatch(setGamePlayers('clear'))
+            dispatch(setGamePlayers(data.users))
+            dispatch(setIsGameStart(false))
+            dispatch(setPlayerTurn({}))
+            document.cookie = "gameHistory=[]; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+
         } else if(data.status === 'End game') {
             setIsEndGame(true)
         }
@@ -123,6 +123,7 @@ const RoomSingleFool = () => {
                     const moveY = -(topSelected - topFigure)
                     const moveX = -(leftSelected - leftFigure)
 
+                    figureFrom.classList.add('moving')
                     figureFrom.querySelector('.chess__grid--checker-body').style.top = moveY + "px"
                     figureFrom.querySelector('.chess__grid--checker-body').style.left = moveX + "px"
 
@@ -155,12 +156,20 @@ const RoomSingleFool = () => {
                 dispatch(setFenLine(arr.join('/')))
                 figureFrom.querySelector('.chess__grid--checker-body').style.top = 0 + "px"
                 figureFrom.querySelector('.chess__grid--checker-body').style.left = 0 + "px"
+
+                setTimeout(() => {
+                    figureFrom.classList.remove('moving')
+                }, 100)
             }, 500)
 
         }
         const endGame = () => {
             dispatch(setEndGame(data.data))
             dispatch(popupTitle('game-winner', data.data))
+
+            setTimeout(() => {
+                navigate(-1)
+            }, 5000)
         }
 
         console.log('socket message', data)
@@ -186,6 +195,7 @@ const RoomSingleFool = () => {
         const socket = new WebSocket(GlobalSocket(`/room/${roomId}/`))
         socket.onopen = () => {
             dispatch(setWebsocket(socket))
+            document.cookie = "gameHistory=[]; expires=Thu, 18 Dec 2013 12:00:00 UTC";
             socket.send(JSON.stringify({"command": "auth", "data": {"token": GetCookies('access_token')}}))
         }
     }, [isAuth])
@@ -232,7 +242,7 @@ const RoomSingleFool = () => {
                                                 Ожидание...
                                             </div>
                                     }
-                                    <ChessTable/>
+                                    <ChessTable isWhite={players.filter(item => item.id === user.id)[0]?.position} />
                                     <ChessYourUser isGameStart={isGameStart} user={user}/>
                                 </div>
                                 <div className="chess__col">
@@ -245,7 +255,13 @@ const RoomSingleFool = () => {
                                     }
                                 </div>
                             </div>
-                            {!isGameStart && <ChessMessage/>}
+                            {isEndGame ? <div className="chess__main--message chess__message">
+                                <div className="chess__message--body">
+                                    <h3 className="chess__message--title section-title _center">
+                                        Игра окончена
+                                    </h3>
+                                </div>
+                            </div> : !isGameStart ? <ChessMessage/> : ""}
                         </div>
                     </div>
                 </section>

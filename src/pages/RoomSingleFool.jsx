@@ -24,6 +24,7 @@ import GameTopButtons from "../components/component_game/GameTopButtons";
 import FoolDeck from "../components/component_game/game_fool/FoolDeck";
 import {setWebsocket} from "../redux/game_reducers/reducerWebsocket";
 import {reducerPlayerTurn} from "../redux/game_reducers/reducerPlayerTurn";
+import {setEndGame} from "../redux/game_reducers/reducerEndGame";
 
 const RoomSingleFool = () => {
 
@@ -121,7 +122,7 @@ const RoomSingleFool = () => {
 
     useEffect(() => {
 
-        if(wrongStep) {
+        if (wrongStep) {
             setTimeout(() => {
                 setWrongStep(false)
             }, 1000)
@@ -178,8 +179,8 @@ const RoomSingleFool = () => {
                                     </div>
                                 </div>
                                 <div className="game__grid--item">
-                                    {
-                                        Object.keys(players.filter(item => item.position === setPosition(3, players, user))).length ?
+                                    {infoRoom.player_slots >= 3 && <>
+                                        {Object.keys(players.filter(item => item.position === setPosition(3, players, user, infoRoom.player_slots))).length ?
                                             <GamePlayer
                                                 fixedTime={fixedTime}
                                                 isWinner={isWinner}
@@ -189,14 +190,13 @@ const RoomSingleFool = () => {
                                                 cardsLeft={cardsLeft}
                                                 defenderTake={defenderTake}
                                                 playersQuantityCards={playersQuantityCards}
-                                                player={players.filter(item => item.position === setPosition(3, players, user))[0]}/> :
-                                            <GamePlayerWaiting/>
-                                    }
-
+                                                player={players.filter(item => item.position === setPosition(3, players, user, infoRoom.player_slots))[0]}/> :
+                                            <GamePlayerWaiting/>}
+                                    </>}
                                 </div>
                                 <div className="game__grid--item">
-                                    {
-                                        Object.keys(players.filter(item => item.position === setPosition(4, players, user))).length ?
+                                    {infoRoom.player_slots >= 4 && <>
+                                        {Object.keys(players.filter(item => item.position === setPosition(4, players, user, infoRoom.player_slots))).length ?
                                             <GamePlayer
                                                 fixedTime={fixedTime}
                                                 isWinner={isWinner}
@@ -206,15 +206,13 @@ const RoomSingleFool = () => {
                                                 cardsLeft={cardsLeft}
                                                 defenderTake={defenderTake}
                                                 playersQuantityCards={playersQuantityCards}
-                                                player={players.filter(item => item.position === setPosition(4, players, user))[0]}/> :
-                                            <GamePlayerWaiting/>
-                                    }
-
+                                                player={players.filter(item => item.position === setPosition(4, players, user, infoRoom.player_slots))[0]}/> :
+                                            <GamePlayerWaiting/>}
+                                    </>}
                                 </div>
                                 <div className="game__grid--item">
-
-                                    {
-                                        Object.keys(players.filter(item => item.position === setPosition(5, players, user))).length ?
+                                    {infoRoom.player_slots >= 5 && <>
+                                        {Object.keys(players.filter(item => item.position === setPosition(5, players, user, infoRoom.player_slots))).length ?
                                             <GamePlayer
                                                 fixedTime={fixedTime}
                                                 isWinner={isWinner}
@@ -224,16 +222,14 @@ const RoomSingleFool = () => {
                                                 cardsLeft={cardsLeft}
                                                 defenderTake={defenderTake}
                                                 playersQuantityCards={playersQuantityCards}
-                                                player={players.filter(item => item.position === setPosition(5, players, user))[0]}/> :
-                                            <GamePlayerWaiting/>
-                                    }
-
+                                                player={players.filter(item => item.position === setPosition(5, players, user, infoRoom.player_slots))[0]}/> :
+                                            <GamePlayerWaiting/>}
+                                    </>}
                                 </div>
-                                <FoolDeck allCardsCount={allCardsCount} trump={trump} />
+                                <FoolDeck allCardsCount={allCardsCount} trump={trump}/>
                                 <div className="game__grid--item">
-
-                                    {
-                                        Object.keys(players.filter(item => item.position === setPosition(2, players, user))).length ?
+                                    {infoRoom.player_slots >= 2 && <>
+                                        {Object.keys(players.filter(item => item.position === setPosition(2, players, user, infoRoom.player_slots))).length ?
                                             <GamePlayer
                                                 fixedTime={fixedTime}
                                                 isWinner={isWinner}
@@ -243,15 +239,13 @@ const RoomSingleFool = () => {
                                                 cardsLeft={cardsLeft}
                                                 defenderTake={defenderTake}
                                                 playersQuantityCards={playersQuantityCards}
-                                                player={players.filter(item => item.position === setPosition(2, players, user))[0]}/> :
-                                            <GamePlayerWaiting/>
-                                    }
-
+                                                player={players.filter(item => item.position === setPosition(2, players, user, infoRoom.player_slots))[0]}/> :
+                                            <GamePlayerWaiting/>}
+                                    </>}
                                 </div>
                                 <div className="game__grid--item">
-
-                                    {
-                                        Object.keys(players.filter(item => item.position === setPosition(6, players, user))).length ?
+                                    {infoRoom.player_slots >= 6 && <>
+                                        {Object.keys(players.filter(item => item.position === setPosition(6, players, user, infoRoom.player_slots))).length ?
                                             <GamePlayer
                                                 fixedTime={fixedTime}
                                                 isWinner={isWinner}
@@ -261,10 +255,9 @@ const RoomSingleFool = () => {
                                                 cardsLeft={cardsLeft}
                                                 defenderTake={defenderTake}
                                                 playersQuantityCards={playersQuantityCards}
-                                                player={players.filter(item => item.position === setPosition(6, players, user))[0]}/> :
-                                            <GamePlayerWaiting/>
-                                    }
-
+                                                player={players.filter(item => item.position === setPosition(6, players, user, infoRoom.player_slots))[0]}/> :
+                                            <GamePlayerWaiting/>}
+                                    </>}
                                 </div>
                                 <div className="game__grid--item">
                                     <div className="game__user">
@@ -338,29 +331,45 @@ const RoomSingleFool = () => {
                                         </div>
                                         <div className="game__user--avatar">
                                             <img
-                                                src={user.avatar ? GlobalLink('/'+user.avatar) : "images/account/avatar-none.svg"}
+                                                src={user.avatar ? GlobalLink('/' + user.avatar) : "images/account/avatar-none.svg"}
                                                 alt="" className="game__user--avatar-img"/>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div
-                                className={"game__main--table game__table" + (userTurn.event === 'defender' || response.event === 'end_game' ? " game__table_defence" : "")}>
+                                className={"game__main--table game__table" + (userTurn.event === 'defender' || response.event === 'end_game' || isEndGame ? " game__table_defence" : "")}>
 
                                 {
                                     gameCenter[response.event] ? gameCenter[response.event] :
-                                    !isGameStart ? <FoolCenterWaiting/> :
-                                        <FoolCenterRunning cardsOnTable={cardsOnTable}
-                                                           setSelectedCard={setSelectedCard}
-                                                           selectedCard={selectedCard}
-                                                           setMyCards={setMyCards}
-                                                           trump={trump}
-                                                           setWrongStep={setWrongStep}
-                                                           defenderTake={defenderTake}
-                                                           isCardsBeat={isCardsBeat}
-                                                           attacker={attacker}
-                                                           defender={defender}
-                                        />
+                                        isEndGame ? <div className="game__main--table game__table game__table_ended">
+                                            <div className="game__table-popup">
+                                                <h3 className="game__table-popup--title section-title _center">
+                                                    Игра закончена
+                                                </h3>
+                                                <div className="game__table-popup--text">
+                                                    {/*asd*/}
+                                                </div>
+                                                <div className="game__table-popup--footer">
+                                                    <button onClick={_ => navigate(-1)}
+                                                            className="game__table-popup--btn alt-btn _min _transparent">
+                                                        Выйти
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div> : !isGameStart ? <FoolCenterWaiting/> :
+                                            <FoolCenterRunning cardsOnTable={cardsOnTable}
+                                                               setSelectedCard={setSelectedCard}
+                                                               selectedCard={selectedCard}
+                                                               setMyCards={setMyCards}
+                                                               trump={trump}
+                                                               setWrongStep={setWrongStep}
+                                                               defenderTake={defenderTake}
+                                                               isCardsBeat={isCardsBeat}
+                                                               attacker={attacker}
+                                                               defender={defender}
+                                                               maxPlayers={infoRoom.player_slots}
+                                            />
                                 }
 
                             </div>
@@ -384,7 +393,7 @@ const RoomSingleFool = () => {
                                                     <FoolButtonTake timer={timer} websocket={websocket}/> :
                                                     !usersReady.some(item => item === user.id) && !isGameStart ?
                                                         <FoolButtonReady
-                                                                         websocket={websocket}/> :
+                                                            websocket={websocket}/> :
                                                         <FoolButtonWaiting/>
                                         }
                                     </> : ""

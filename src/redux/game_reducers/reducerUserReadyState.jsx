@@ -9,7 +9,7 @@ export const reducerUserReadyState = (state = initialState, action) => {
         case SET_USER_READY_STATE:
             return {
                 ...state,
-                usersReadyState: [...state.usersReadyState, action.usersReadyState]
+                usersReadyState: action.usersReadyState === 'clear' ? [] : [...state.usersReadyState, action.usersReadyState]
             }
         default: return state
     }

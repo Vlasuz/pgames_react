@@ -21,7 +21,7 @@ const ChessTableInner = () => {
     const tableFen = useSelector(state => state.reducerFenTable.fenTable)
     const [playerColor, setPlayerColor] = useState(1)
     const [arrayForTable, setArrayForTable] = useState([])
-    const color = ['white', 'black']
+    const globalColor = ['white', 'black']
 
     useEffect(() => {
         dispatch(setFenTable('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'))
@@ -93,7 +93,7 @@ const ChessTableInner = () => {
         const figure_k = ["K", "k"]
         const figure_q = ["Q", "q"]
 
-        if(isYourTurn.player.id !== user.id) return null;
+        if(isYourTurn.player?.id !== user?.id) return null;
 
         if(selectedFigure && key && e?.target.closest('._accent')) {
 

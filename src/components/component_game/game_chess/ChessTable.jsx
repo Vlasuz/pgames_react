@@ -1,13 +1,13 @@
 import React from 'react';
 import ChessTableInner from "./ChessTableInner";
 
-const ChessTable = () => {
+const ChessTable = ({isWhite}) => {
     return (
         <div className="chess__table">
             <div className="chess__table--board">
                 <div className="chess__table--board-body">
                     <picture>
-                        <img src="images/chess/table.png" alt="" width="300"
+                        <img src={`images/chess/table${isWhite === 2 ? '-reverse' : ""}.png`} alt="" width="300"
                              height="300"
                              className="chess__table--img"/>
                     </picture>

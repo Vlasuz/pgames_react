@@ -41,11 +41,28 @@ const socketMessages = (
     }
 
     if(data.status === 'Waiting') {
+
+        dispatch(setGamePlayers('clear'))
         dispatch(setGamePlayers(data.users))
-        data.users.map(item => item.ready && dispatch(setUserReadyState(item.id)))
+        dispatch(setUserReadyState('clear'))
+        // data.users.map(item => item.ready && dispatch(setUserReadyState(item.id)))
+        setMyCards([])
+        setAllCardsCount(0)
+        setTrump({})
+        setCardsOnTable([])
+        setWhoToWhom({})
+        setTimer(0)
+        dispatch(setPlayerTurn({}))
+        dispatch(setIsGameStart(false))
+        dispatch(setUsersCards([]))
+        dispatch(setEndGame(false))
+
     } else if (data.status === 'Game in progress') {
         dispatch(setGamePlayers(data.users))
         dispatch(setIsReady(true))
+    } else if (data.status === 'End game') {
+        dispatch(setGamePlayers(data.users))
+        dispatch(setEndGame(true))
     }
 
     function CardDistribution() {
@@ -65,10 +82,6 @@ const socketMessages = (
     function PlayerTurn() {
         document.querySelector('.game-user-cards__item._active')?.classList.remove('_active')
 
-        // setUserTurn({
-        //     id: data.data.player.id,
-        //     event: data.data.role,
-        // })
         dispatch(setPlayerTurn({
             id: data.data.player.id,
             event: data.data.role,
@@ -133,8 +146,6 @@ const socketMessages = (
             }
         })
 
-        // setCardsOnTable(prev => [...prev.slice(0, index), newObjectWithCards, ...prev.slice(index + 1)])
-
         setCardsOnTable(prev => {
             prev.splice(index, 1, newObjectWithCards);
             return prev;
@@ -190,6 +201,10 @@ const socketMessages = (
 
     function EndGame() {
         dispatch(setEndGame(true))
+
+        setTimeout(() => {
+            navigate(-1)
+        }, 5000)
     }
 
     function UserReadyState() {
@@ -219,11 +234,6 @@ const socketMessages = (
                 id: data.data.game.players.filter(item => item.role === 'defender')[0].id
             }
         })
-        // setUserTurn({
-        //     id: data.data.game.players.filter(item => data.data.game.state.toLowerCase().includes(item.role))[0].id,
-        //     event: data.data.game.players.filter(item => data.data.game.state.toLowerCase().includes(item.role))[0].role,
-        // })
-
         setTimer(70 - data.data.game.players.filter(item => item.timer !== null)[0].timer)
 
         dispatch(setPlayerTurn({

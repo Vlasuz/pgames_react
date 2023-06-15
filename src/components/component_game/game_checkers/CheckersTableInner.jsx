@@ -66,74 +66,104 @@ const CheckersTableInner = () => {
     }, [tableFen, playerColor])
 
     const handleMove = (e, index) => {
+        const thisCell = e.target.closest('.checkers__grid--cell')
 
-        if(!e.target.closest('.checkers__grid--cell').classList.contains('_possible-move')) {
+        if (!thisCell.classList.contains('_possible-move')) {
             document.querySelectorAll('.checkers__grid--cell').forEach(item => item.classList.remove('_possible-move'))
         }
 
-        if(isYourTurn.player.id !== user.id || !(e.target.closest('.checkers__grid--cell').querySelector('img') !== null || e.target.closest('.checkers__grid--cell._possible-move'))) return null;
+        if (isYourTurn.player.id !== user.id || !(thisCell.querySelector('img') !== null || e.target.closest('.checkers__grid--cell._possible-move'))) return null;
 
-        const arrIndex = e.target.closest('.checkers__grid--cell').getAttribute('data-index-arr');
-        const isKing = e.target.closest('.checkers__grid--cell').classList.contains('_king');
+        const arrIndex = thisCell.getAttribute('data-index-arr');
+        const isYour = thisCell.getAttribute('data-color');
+        const isKing = thisCell.classList.contains('_king');
 
-        if (e.target.closest('.checkers__grid--cell').querySelector('img') && e.target.closest('.checkers__grid--cell').querySelector('img').getAttribute('src').includes(color[playerColor - 1])) {
+        const leftTopCell = document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 9}"]`)
+        const rightTopCell = document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 7}"]`)
+        const leftBottomCell = document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex + 9}"]`)
+        const rightBottomCell = document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex + 7}"]`)
+
+        const leftTopBeat = document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 18}"]`)
+        const rightTopBeat = document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 14}"]`)
+        const leftBottomBeat = document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex + 18}"]`)
+        const rightBottomBeat = document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex + 14}"]`)
+
+        if (thisCell.querySelector('img') && thisCell.querySelector('img').getAttribute('src').includes(color[playerColor - 1])) {
             document.querySelectorAll('.checkers__grid--cell').forEach(item => item.classList.remove('_possible-move'))
-            document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 9}"]`)?.classList.add('_possible-move')
-            document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 7}"]`)?.classList.add('_possible-move')
+            leftTopCell?.classList.add('_possible-move')
+            rightTopCell?.classList.add('_possible-move')
         }
-        if (e.target.closest('.checkers__grid--cell').getAttribute('data-index-desc').includes('a')) {
-            document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 9}"]`)?.classList.remove('_possible-move')
+        if (thisCell.getAttribute('data-index-desc').includes('a')) {
+            leftTopCell?.classList.remove('_possible-move')
         }
-        if (e.target.closest('.checkers__grid--cell').getAttribute('data-index-desc').includes('h')) {
-            document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 7}"]`)?.classList.remove('_possible-move')
+        if (thisCell.getAttribute('data-index-desc').includes('h')) {
+            rightTopCell?.classList.remove('_possible-move')
         }
+
+        if (isYour && isYour !== color[playerColor - 1]) return null;
+
 
         if (isKing) {
-            document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex + 9}"]`)?.classList.add('_possible-move')
-            document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex + 7}"]`)?.classList.add('_possible-move')
+            leftBottomCell?.classList.add('_possible-move')
+            rightBottomCell?.classList.add('_possible-move')
 
-            if (document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex + 9}"] img`)) {
-                document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex + 9}"]`)?.classList.remove('_possible-move')
-                document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex + 18}"]`)?.classList.add('_possible-move')
+            if (leftBottomCell?.querySelector('img')) {
+                leftBottomCell?.classList.remove('_possible-move')
+                leftBottomBeat?.classList.add('_possible-move')
             }
-            if (document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex + 7}"] img`)) {
-                document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex + 7}"]`)?.classList.remove('_possible-move')
-                document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex + 14}"]`)?.classList.add('_possible-move')
+            if (rightBottomCell?.querySelector('img')) {
+                rightBottomCell?.classList.remove('_possible-move')
+                rightBottomBeat?.classList.add('_possible-move')
             }
-            if (document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 9}"] img`)) {
-                document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 9}"]`)?.classList.remove('_possible-move')
-                document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 18}"]`)?.classList.add('_possible-move')
+            if (leftTopCell?.querySelector('img')) {
+                leftTopCell?.classList.remove('_possible-move')
+                leftTopBeat?.classList.add('_possible-move')
             }
-            if (document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 7}"] img`)) {
-                document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 7}"]`)?.classList.remove('_possible-move')
-                document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 14}"]`)?.classList.add('_possible-move')
+            if (rightTopCell?.querySelector('img')) {
+                rightTopCell?.classList.remove('_possible-move')
+                rightTopBeat?.classList.add('_possible-move')
             }
         } else {
-            if (document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 9}"] img`)) {
-                document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 9}"]`)?.classList.remove('_possible-move')
-                if(document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 9}"]`).getAttribute('data-color') !== color[playerColor-1]) {
-                    if(!document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 18}"]`)?.querySelector('img')) {
-                        document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 7}"]`)?.classList.remove('_possible-move')
-                        document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 18}"]`)?.classList.add('_possible-move')
+
+            if (leftTopCell?.querySelector('img')) {
+
+                leftTopCell?.classList.remove('_possible-move')
+
+                const isEnemyCell = leftTopCell.getAttribute('data-color') !== color[playerColor - 1]
+                const isEmptyNextCell = !leftTopBeat?.querySelector('img')
+
+                if (isEnemyCell && isEmptyNextCell) {
+
+                    if (!thisCell.getAttribute('data-index-desc').includes('b')) {
+                        rightTopCell?.classList.remove('_possible-move')
+                        leftTopBeat?.classList.add('_possible-move')
                     } else {
-                        document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 7}"]`)?.classList.add('_possible-move')
+                        leftTopBeat?.classList.remove('_possible-move')
                     }
+
                 }
             }
-            if (document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 7}"] img`)) {
-                document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 7}"]`)?.classList.remove('_possible-move')
-                if(document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 7}"]`).getAttribute('data-color') !== color[playerColor-1]) {
-                    if(!document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 14}"]`)?.querySelector('img')) {
-                        document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 9}"]`)?.classList.remove('_possible-move')
-                        document.querySelector(`.checkers__grid--cell[data-index-arr="${+arrIndex - 14}"]`)?.classList.add('_possible-move')
-                    }
-                }
+            if (rightTopCell?.querySelector('img')) {
+                rightTopCell?.classList.remove('_possible-move')
 
+                const isEnemyCell = rightTopCell.getAttribute('data-color') !== color[playerColor - 1]
+                const isEmptyNextCell = !rightTopBeat?.querySelector('img')
+
+                if (isEnemyCell && isEmptyNextCell) {
+
+                    if (!thisCell.getAttribute('data-index-desc').includes('g')) {
+                        leftTopCell?.classList.remove('_possible-move')
+                        rightTopBeat?.classList.add('_possible-move')
+                    } else {
+                        rightTopBeat?.classList.remove('_possible-move')
+                    }
+
+                }
             }
         }
 
 
-        if (switchedPieces && e.target.closest('.checkers__grid--cell').classList.contains('_possible-move')) {
+        if (switchedPieces && thisCell.classList.contains('_possible-move')) {
 
             console.log('MOVE', switchedPieces, index)
             websocket.send(JSON.stringify({
@@ -160,7 +190,9 @@ const CheckersTableInner = () => {
                         arrayForTable && arrayForTable?.map(cell => {
                             const isKing = cell.figure?.is_king ? '_king' : "";
 
-                            return (<div key={cell.indexDesc} data-color={cell?.figure?.owner} data-index-desc={cell.indexDesc} data-index={cell.index}
+                            return (
+                                <div key={cell.indexDesc} data-color={cell?.figure?.owner} data-index-desc={cell.indexDesc}
+                                     data-index={cell.index}
                                      data-index-arr={cell.indexArr} className={"checkers__grid--cell " + isKing}
                                      onClick={e => handleMove(e, cell.index)}>
 

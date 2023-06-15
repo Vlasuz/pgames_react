@@ -12,10 +12,12 @@ import {setGamePlayers} from "../redux/reducers/gamesListPlayersReducer";
 import SetCookies from "../hooks/SetCookies";
 import {setTimeoutNotice} from "../redux/reducers/notificationReducer";
 
-const RoomItem = ({ game }) => {
+const RoomItem = ({ game, generalGame }) => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
+
+
 
     const handleEntry = (e) => {
 
@@ -41,14 +43,13 @@ const RoomItem = ({ game }) => {
         <li key={game?.id} className="online-games__rooms--item room-item" data-aos="fade-up">
             <div className="room-item__body">
                 <div className="room-item__header">
-                    <img src={`images/icons/${game.slug}.svg`} width="18" height="18" alt=""
-                         className="room-item__icon"/>
+                    <img src={`images/icons/${game?.game?.slug ? game?.game?.slug : generalGame?.slug}.svg`} width="18" height="18" alt=""
+                          className="room-item__icon"/>
                     <h3 className="room-item__name" title="Дурак классический">
-                        {game?.name}
-                        {game?.id}
+                        {game?.game?.name ? game?.game?.name : generalGame?.name}
                     </h3>
-                    <time className="room-item__time" dateTime="2022-03-12 12:43">
-                        {game?.date}
+                    <time className="room-item__time" dateTime={game?.created_at}>
+                        {game?.created_at}
                     </time>
                 </div>
                 <div className="room-item__info">

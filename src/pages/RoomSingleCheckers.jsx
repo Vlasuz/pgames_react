@@ -8,7 +8,7 @@ import {changeFenCheckers, isKingCheckers, setFenLine, setFenTable} from "../red
 import GlobalSocket from "../GlobalSocket";
 import {setWebsocket} from "../redux/game_reducers/reducerWebsocket";
 import GetCookies from "../hooks/GetCookies";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {setSocketResponse} from "../redux/game_reducers/reducerSocketResponse";
 import {setGamePlayers} from "../redux/reducers/gamesListPlayersReducer";
 import {setIsGameStart} from "../redux/game_reducers/reducerIsGameStart";
@@ -30,9 +30,11 @@ import axios from "axios";
 import GlobalLink from "../GlobalLink";
 import {setBeaten} from "../redux/game_reducers/reducerCheckersBeaten";
 import SetCookies from "../hooks/SetCookies";
+import ChessMessage from "../components/component_game/game_chess/ChessMessage";
 
 const RoomSingleCheckers = () => {
 
+    const [isEndGame, setIsEndGame] = useState(false)
     const {roomId} = useParams()
     const dispatch = useDispatch()
     const isAuth = useSelector(state => state.userInfoReducer.data)
@@ -41,6 +43,7 @@ const RoomSingleCheckers = () => {
     const isGameStart = useSelector(state => state.reducerIsGameStart.isGameStart)
     const players = useSelector(state => state.gamesListPlayersReducer.players)
     const [isLoad, setIsLoad] = useState(true)
+    const navigate = useNavigate()
     const user = useSelector(state => state.userInfoReducer.data)
     const tableFen = useSelector(state => state.reducerFenTable.fenTable)
     const [infoRoom, setInfoRoom] = useState({})
@@ -51,130 +54,132 @@ const RoomSingleCheckers = () => {
         setPlayerColor(players?.filter(item => item?.id === user?.id)[0]?.position)
     }, [players])
 
+    const defaultFenTable = [
+        {
+            "owner": "white",
+            "is_king": false,
+            "position": 1
+        },
+        {
+            "owner": "white",
+            "is_king": false,
+            "position": 2
+        },
+        {
+            "owner": "white",
+            "is_king": false,
+            "position": 3
+        },
+        {
+            "owner": "white",
+            "is_king": false,
+            "position": 4
+        },
+        {
+            "owner": "white",
+            "is_king": false,
+            "position": 5
+        },
+        {
+            "owner": "white",
+            "is_king": false,
+            "position": 6
+        },
+        {
+            "owner": "white",
+            "is_king": false,
+            "position": 7
+        },
+        {
+            "owner": "white",
+            "is_king": false,
+            "position": 8
+        },
+        {
+            "owner": "white",
+            "is_king": false,
+            "position": 9
+        },
+        {
+            "owner": "white",
+            "is_king": false,
+            "position": 10
+        },
+        {
+            "owner": "white",
+            "is_king": false,
+            "position": 11
+        },
+        {
+            "owner": "white",
+            "is_king": false,
+            "position": 12
+        },
+        {
+            "owner": "black",
+            "is_king": false,
+            "position": 21
+        },
+        {
+            "owner": "black",
+            "is_king": false,
+            "position": 22
+        },
+        {
+            "owner": "black",
+            "is_king": false,
+            "position": 23
+        },
+        {
+            "owner": "black",
+            "is_king": false,
+            "position": 24
+        },
+        {
+            "owner": "black",
+            "is_king": false,
+            "position": 25
+        },
+        {
+            "owner": "black",
+            "is_king": false,
+            "position": 26
+        },
+        {
+            "owner": "black",
+            "is_king": false,
+            "position": 27
+        },
+        {
+            "owner": "black",
+            "is_king": false,
+            "position": 28
+        },
+        {
+            "owner": "black",
+            "is_king": false,
+            "position": 29
+        },
+        {
+            "owner": "black",
+            "is_king": false,
+            "position": 30
+        },
+        {
+            "owner": "black",
+            "is_king": false,
+            "position": 31
+        },
+        {
+            "owner": "black",
+            "is_king": false,
+            "position": 32
+        }
+    ]
+
     useEffect(() => {
 
-        dispatch(setFenTable([
-            {
-                "owner": "white",
-                "is_king": false,
-                "position": 1
-            },
-            {
-                "owner": "white",
-                "is_king": false,
-                "position": 2
-            },
-            {
-                "owner": "white",
-                "is_king": false,
-                "position": 3
-            },
-            {
-                "owner": "white",
-                "is_king": false,
-                "position": 4
-            },
-            {
-                "owner": "white",
-                "is_king": false,
-                "position": 5
-            },
-            {
-                "owner": "white",
-                "is_king": false,
-                "position": 6
-            },
-            {
-                "owner": "white",
-                "is_king": false,
-                "position": 7
-            },
-            {
-                "owner": "white",
-                "is_king": false,
-                "position": 8
-            },
-            {
-                "owner": "white",
-                "is_king": false,
-                "position": 9
-            },
-            {
-                "owner": "white",
-                "is_king": false,
-                "position": 10
-            },
-            {
-                "owner": "white",
-                "is_king": false,
-                "position": 11
-            },
-            {
-                "owner": "white",
-                "is_king": false,
-                "position": 12
-            },
-            {
-                "owner": "black",
-                "is_king": false,
-                "position": 21
-            },
-            {
-                "owner": "black",
-                "is_king": false,
-                "position": 22
-            },
-            {
-                "owner": "black",
-                "is_king": false,
-                "position": 23
-            },
-            {
-                "owner": "black",
-                "is_king": false,
-                "position": 24
-            },
-            {
-                "owner": "black",
-                "is_king": false,
-                "position": 25
-            },
-            {
-                "owner": "black",
-                "is_king": false,
-                "position": 26
-            },
-            {
-                "owner": "black",
-                "is_king": false,
-                "position": 27
-            },
-            {
-                "owner": "black",
-                "is_king": false,
-                "position": 28
-            },
-            {
-                "owner": "black",
-                "is_king": false,
-                "position": 29
-            },
-            {
-                "owner": "black",
-                "is_king": false,
-                "position": 30
-            },
-            {
-                "owner": "black",
-                "is_king": false,
-                "position": 31
-            },
-            {
-                "owner": "black",
-                "is_king": false,
-                "position": 32
-            }
-        ]))
+        dispatch(setFenTable(defaultFenTable))
 
     }, [roomId])
 
@@ -189,8 +194,8 @@ const RoomSingleCheckers = () => {
 
             axios.defaults.headers.get['Authorization'] = `Bearer ${GetCookies('access_token')}`;
             axios.get(GlobalLink(`/api/room/get/${roomId}/`)).then(res => {
-                console.log('info about room', res.data)
                 setInfoRoom(res.data)
+                document.cookie = "gameHistory=[]; expires=Thu, 18 Dec 2013 12:00:00 UTC";
             })
         }
     }, [isAuth])
@@ -201,10 +206,20 @@ const RoomSingleCheckers = () => {
         dispatch(setSocketResponse(data))
 
         if (data.status === 'Waiting') {
-            dispatch(setGamePlayers(data.users))
+
+            dispatch(setUserReadyState('clear'))
             dispatch(setUserReadyState(...data.users.filter(user => user.ready).map(item => item.id)))
+            dispatch(setGamePlayers('clear'))
+            dispatch(setGamePlayers(data.users))
+            dispatch(setFenTable(defaultFenTable))
+            dispatch(setIsGameStart(false))
+            dispatch(setPlayerTurn({}))
+            document.cookie = "gameHistory=[]; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+
         } else if (data.status === 'Game in progress') {
             dispatch(setGamePlayers(data.users))
+        } else if (data.status === 'End game') {
+            setIsEndGame(true)
         }
 
         const startGame = () => {
@@ -219,7 +234,7 @@ const RoomSingleCheckers = () => {
             dispatch(setIsGameStart(true))
             dispatch(setPlayerTurn({
                 player: {id: data.data.game.players.filter(item => item.is_player_turn)[0].id},
-                time_remaining: data.data.game.players.filter(item => item.is_player_turn)[0].timer
+                time_remaining: 60 - data.data.game.players.filter(item => item.is_player_turn)[0].timer
             }))
         }
         const playerTurn = () => {
@@ -292,14 +307,31 @@ const RoomSingleCheckers = () => {
                     deleteItem = +figureFrom.getAttribute('data-index-arr') + 7
                 }
 
-                if(!document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.querySelector('img')?.getAttribute('src').includes(color[playerColor - 1]) && document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.querySelector('img')) {
-                    dispatch(setBeaten('card', null))
+                if (!document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.querySelector('img')?.getAttribute('src').includes(color[playerColor - 1]) && document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.querySelector('img')) {
+
                     const oldBeaten = GetCookies('CheckersYourBeaten') ? JSON.parse(GetCookies('CheckersYourBeaten')) : []
-                    SetCookies('CheckersYourBeaten', [...oldBeaten, 'card'])
-                } else if(document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.querySelector('img')?.getAttribute('src').includes(color[playerColor - 1]) && document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.querySelector('img')) {
-                    dispatch(setBeaten(null, 'card'))
+
+                    if(document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.querySelector('img').getAttribute('src').includes('king')) {
+                        SetCookies('CheckersYourBeaten', [...oldBeaten, 'card-king'])
+                        dispatch(setBeaten('card-king', null))
+                    } else {
+                        SetCookies('CheckersYourBeaten', [...oldBeaten, 'card'])
+                        dispatch(setBeaten('card', null))
+                    }
+
+
+                } else if (document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.querySelector('img')?.getAttribute('src').includes(color[playerColor - 1]) && document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.querySelector('img')) {
+
                     const oldBeaten = GetCookies('CheckersOpponentBeaten') ? JSON.parse(GetCookies('CheckersOpponentBeaten')) : []
-                    SetCookies('CheckersOpponentBeaten', [...oldBeaten, 'card'])
+
+                    if(document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.querySelector('img').getAttribute('src').includes('king')) {
+                        SetCookies('CheckersOpponentBeaten', [...oldBeaten, 'card-king'])
+                        dispatch(setBeaten(null, 'card-king'))
+                    } else {
+                        SetCookies('CheckersOpponentBeaten', [...oldBeaten, 'card'])
+                        dispatch(setBeaten(null, 'card'))
+                    }
+
                 }
                 document.querySelector(`.checkers__grid--cell[data-index-arr="${deleteItem}"]`)?.classList.add('_hidden')
 
@@ -330,6 +362,10 @@ const RoomSingleCheckers = () => {
                 dispatch(setEndGame(data.data))
                 dispatch(popupTitle('game-winner', data.data))
             }, 300)
+
+            setTimeout(() => {
+                navigate(-1)
+            }, 5000)
         }
 
         console.log('socket message', data)
@@ -398,21 +434,19 @@ const RoomSingleCheckers = () => {
                             <div className="checkers__col">
                                 <GameHistory/>
                                 {
-                                    !isGameStart && (!usersReadyState.some(item => item === user.id) ? <FoolButtonReady websocket={websocket}/> :
+                                    !isEndGame && !isGameStart && (!usersReadyState.some(item => item === user.id) ?
+                                        <FoolButtonReady websocket={websocket}/> :
                                         <FoolButtonWaiting/>)
                                 }
                             </div>
                         </div>
-                        {!isGameStart && <div className="checkers__main--message game__message">
-                            <div className="game__message--body">
-                                <h3 className="game__message--title section-title _center">
-                                    Ожидаем готовность комнаты
+                        {isEndGame ? <div className="chess__main--message chess__message">
+                            <div className="chess__message--body">
+                                <h3 className="chess__message--title section-title _center">
+                                    Игра окончена
                                 </h3>
-                                <div className="game__message--text">
-                                    Оставайтесь и одержите победу!
-                                </div>
                             </div>
-                        </div>}
+                        </div> : !isGameStart ? <ChessMessage/> : ""}
                     </div>
                 </div>
             </section>
