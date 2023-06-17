@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
 import GetCookies from "../../hooks/GetCookies";
 import {setTimeoutNotice} from "../../redux/reducers/notificationReducer";
+import {popupTitle} from "../../redux/actions";
 
 const AccountChangeInformation = ({ userInfo }) => {
 
@@ -22,12 +23,21 @@ const AccountChangeInformation = ({ userInfo }) => {
         setIsActiveInputsForInformation(false)
         e.target.closest('form').querySelectorAll('input').forEach(input => input.disabled = true);
 
-        axios.defaults.headers.put['Authorization'] = `Bearer ${GetCookies('access_token')}`;
-        axios.put(`https://board-games.sonisapps.com/api/user/change_email/?email=${userInfo?.email}`).then(({data}) => {
-            console.log('email', data)
-        })
+        if(inputEmail === userInfo.email) return null;
 
-        dispatch(setTimeoutNotice('notification_change-account'))
+        axios.defaults.headers.put['Authorization'] = `Bearer ${GetCookies('access_token')}`;
+        axios.put(`https://board-games.sonisapps.com/api/user/change_email/?email=${inputEmail}`).then(({data}) => {
+            console.log('email', data)
+
+            if(data.status) {
+                dispatch(popupTitle('change-email', {inputEmail}))
+            }
+
+        }).catch(er => {
+            if(er.response.status === 409) {
+                dispatch(setTimeoutNotice('notification_email-already-exist'))
+            }
+        })
     }
 
     return (

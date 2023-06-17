@@ -4003,6 +4003,9 @@ a.page-pagination__btn{
     border-bottom: 1px solid #393834;
     font-size: 14px;
 }
+.form-list .form-input:disabled {
+    opacity: .4;
+}
 
 .form-input-placeholder {
     position: absolute;
@@ -17633,6 +17636,9 @@ label._error .popup-input-placeholder{
     transform: rotate(90deg);
     height: 54px;
 }
+.game__domino-block--item._rotate_180{
+    transform: rotate(180deg);
+}
 
 .game__domino-block--item._transition{
     -webkit-transition: all .3s ease;
@@ -17660,8 +17666,8 @@ label._error .popup-input-placeholder{
     -ms-transform: scale(.8);
     -o-transform: scale(.8);
     transform: scale(.8);
-    width: 100%;
-    max-width: 1070px;
+    /*width: 100%;*/
+    /*max-width: 1070px;*/
 }
 .domino__table--element.go-from-line-right + .domino__table--element.go-from-line-right,
 .domino__table--element.go-from-line-right{

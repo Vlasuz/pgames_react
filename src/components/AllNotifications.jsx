@@ -16,6 +16,7 @@ import NotificationSuccessPayment from "./components_notifications/NotificationS
 import NotificationSuccessSubscribe from "./components_notifications/NotificationSuccessSubscribe";
 import {useDispatch} from "react-redux";
 import {removeNotice} from "../redux/reducers/notificationReducer";
+import NotificationEmailAlreadyExist from "./components_notifications/NotificationEmailAlreadyExist";
 
 const AllNotifications = ({notice}) => {
 
@@ -32,6 +33,7 @@ const AllNotifications = ({notice}) => {
     const [isActive] = useState(true)
 
     const noticesItem = {
+        "notification_email-already-exist": <NotificationEmailAlreadyExist isActive={isActive} handleClose={handleClose}/>,
         "notification_send-an-email": <NotificationSendEmail handleClose={handleClose} isActive={isActive}/>,
         "notification_change-account": <NotificationChangeAccount handleClose={handleClose} isActive={isActive}/>,
         "notification_referral-copied": <NotificationReferralCopied handleClose={handleClose} isActive={isActive}/>,

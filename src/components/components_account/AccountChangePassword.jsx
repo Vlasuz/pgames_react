@@ -4,6 +4,7 @@ import GetCookies from "../../hooks/GetCookies";
 import GlobalLink from "../../GlobalLink";
 import {useDispatch} from "react-redux";
 import {setTimeoutNotice} from "../../redux/reducers/notificationReducer";
+import SetCookies from "../../hooks/SetCookies";
 
 const AccountChangePassword = ({userInfo}) => {
 
@@ -21,9 +22,12 @@ const AccountChangePassword = ({userInfo}) => {
 
         console.log(`/api/user/change_password/?old_password=${oldPassword}&password=${newPassword}&confirm_password=${repeatNewPassword}`)
 
+        axios.defaults.headers.put['platform'] = `pc`;
         axios.defaults.headers.put['Authorization'] = `Bearer ${GetCookies('access_token')}`;
         axios.put(GlobalLink(`/api/user/change_password/?old_password=${oldPassword}&password=${newPassword}&confirm_password=${repeatNewPassword}`)).then(res => {
-            console.log('success', res.data)
+
+            document.cookie = 'access_token=' + res.data.access_token + ';expires=;';
+            document.cookie = 'refresh_token=' + res.data.refresh_token + ';expires=;';
 
             dispatch(setTimeoutNotice('notification_change-password'))
             setIsActiveChange(false)

@@ -85,7 +85,7 @@ const RoomSingleDominoes = () => {
             dispatch(setGamePlayers('clear'))
             dispatch(setGamePlayers(data.users))
             dispatch(setUserReadyState('clear'))
-            dispatch(setUserReadyState(data.users?.filter(user => user.ready)[0].id))
+            dispatch(setUserReadyState(data.users?.filter(user => user.ready)[0]?.id))
             dispatch(setFenTable([]))
             dispatch(setUsersCards([]))
             dispatch(setIsGameStart(false))
@@ -159,17 +159,22 @@ const RoomSingleDominoes = () => {
 
             const numLeftDomino = document.querySelector('.domino__table--element:nth-child(2)')?.getAttribute('data-first')
             const numRightDomino = document.querySelector('.domino__table--element:nth-last-child(2)')?.getAttribute('data-second')
+            const isLeftMiniSide = document.querySelector('.domino__table--element:first-child')?.classList.contains('go-from-line-left')
+            const isRightMiniSide = document.querySelector('.domino__table--element:last-child')?.classList.contains('go-from-line-right')
             const isTopLeft = dominoSelect[0] === numLeftDomino
             const isBottomLeft = dominoSelect[1] === numLeftDomino
             const isTopRight = dominoSelect[0] === numRightDomino
             const isBottomRight = dominoSelect[1] === numRightDomino
 
+            console.log(isLeftMiniSide, isBottomLeft, isRightMiniSide, isBottomRight)
             if (!twins && !(selectedBoneTable.classList.contains('go-from-line-left') || selectedBoneTable.classList.contains('go-from-line-right'))) {
                 if (position) {
                     if (isTopLeft) {
                         selectedBone?.classList.add('_rotate_tl90')
                     } else if (isBottomLeft) {
                         selectedBone?.classList.add('_rotate_bl90')
+                    } else if (isLeftMiniSide && isBottomLeft) {
+                        selectedBone?.classList.add('_rotate_180')
                     }
                 } else {
                     if (isTopRight) {
@@ -177,6 +182,10 @@ const RoomSingleDominoes = () => {
                     } else if (isBottomRight) {
                         selectedBone?.classList.add('_rotate_br90')
                     }
+                }
+            } else {
+                if ((isLeftMiniSide && isBottomLeft) || (isRightMiniSide && isBottomRight)) {
+                    selectedBone?.classList.add('_rotate_180')
                 }
             }
 

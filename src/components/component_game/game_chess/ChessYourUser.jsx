@@ -9,8 +9,6 @@ const ChessYourUser = ({user, isGameStart}) => {
     const isYourTurn = useSelector(state => state.reducerPlayerTurn.playerTurn)
     const usersReadyState = useSelector(state => state.reducerUserReadyState.usersReadyState)
 
-    console.log(usersReadyState)
-
     return (
         <div className="chess__user">
             <div className="game__user">

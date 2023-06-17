@@ -16,6 +16,7 @@ import NotificationSuccessSubscribe from "./components_notifications/Notificatio
 import NotificationReferralCopied from "./components_notifications/NotificationReferralCopied";
 import {useDispatch, useSelector} from "react-redux";
 import {NotificationReducer, setNotice, setTimeoutNotice} from "../redux/reducers/notificationReducer";
+import NotificationEmailAlreadyExist from "./components_notifications/NotificationEmailAlreadyExist";
 
 const Notifications = () => {
 
@@ -50,6 +51,7 @@ const Notifications = () => {
     const notices = {
         "notification_send-an-email": <NotificationSendEmail isActive={isActive} handleClose={handleClose}/>,
         "notification_change-account": <NotificationChangeAccount isActive={isActive} handleClose={handleClose}/>,
+        "notification_email-already-exist": <NotificationEmailAlreadyExist isActive={isActive} handleClose={handleClose}/>,
         "notification_referral-copied": <NotificationReferralCopied isActive={isActive} handleClose={handleClose}/>,
         "notification_change-password": <NotificationChangePassword isActive={isActive} handleClose={handleClose}/>,
         "notification_change-password-error": <NotificationChangePasswordError isActive={isActive} handleClose={handleClose}/>,

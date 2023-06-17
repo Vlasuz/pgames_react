@@ -1,15 +1,16 @@
 import React, {useState} from 'react';
-import PopupBgd from "../PopupBgd";
-import PopupCross from "../PopupCross";
 import {useDispatch} from "react-redux";
+import {useNavigate} from "react-router-dom";
 import {popupTitle} from "../../../redux/actions";
 import axios from "axios";
 import GetCookies from "../../../hooks/GetCookies";
-import {useNavigate} from "react-router-dom";
 import {setUserInfo} from "../../../redux/reducers/userInfoReducer";
+import PopupBgd from "../PopupBgd";
+import PopupCross from "../PopupCross";
+import GlobalLink from "../../../GlobalLink";
+import {setTimeoutNotice} from "../../../redux/reducers/notificationReducer";
 
-const PopupDeleteAccount = () => {
-
+const PopupChangeEmail = ({props}) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -23,20 +24,24 @@ const PopupDeleteAccount = () => {
     }
 
     const handleDelete = () => {
-        axios.defaults.headers.delete['Authorization'] = `Bearer ${GetCookies('access_token')}`;
-        axios.delete(`https://board-games.sonisapps.com/api/user/confirm_delete_account/?delete_code=${code}`).then((res) => {
-            console.log('delete', res)
-            if (res.data.status) {
+
+        axios.defaults.headers.put['platform'] = `pc`;
+        axios.defaults.headers.put['Authorization'] = `Bearer ${GetCookies('access_token')}`;
+        axios.put(GlobalLink(`/api/user/confirm_email_change/?email=${props.inputEmail}&code=${code}`)).then((res) => {
+            console.log('change email', res)
+
+            if (res.status === 200) {
                 document.querySelector('.popup')?.classList.remove('_active')
                 setTimeout(() => {
                     dispatch(popupTitle(''))
                 }, 300)
 
-                dispatch(setUserInfo({}))
-                document.cookie = "access_token=; expires=Thu, 18 Dec 2013 12:00:00 UTC";
-                GetCookies('access_token')
+                document.cookie = 'access_token=' + res.data.access_token + ';expires=;';
+                document.cookie = 'refresh_token=' + res.data.refresh_token + ';expires=;';
+                dispatch(setUserInfo(res.data.user))
 
-                navigate('/')
+                dispatch(setTimeoutNotice('notification_change-account'))
+
             }
         })
     }
@@ -52,7 +57,7 @@ const PopupDeleteAccount = () => {
                             <img src="images/logo.svg" width="100" height="38" alt="" className="popup-logo__img"/>
                         </div>
                         <h2 className="promocode-popup__title popup-title section-title _center">
-                            Удаление аккаунта
+                            Изменение Email
                         </h2>
                         <div className="promocode-popup__form--list popup-form-list"><label
                             className="promocode-popup__label popup-label">
@@ -62,7 +67,7 @@ const PopupDeleteAccount = () => {
                         <div className="promocode-popup__form popup-form">
                             <button onClick={handleDelete}
                                     className="promocode-popup__submit popup-submit btn _red _large _shadow">
-                                Удалить аккаунт
+                                Изменить Email
                             </button>
                             <button onClick={handleClosePopup}
                                     className="promocode-popup__submit popup-submit btn _large _shadow">
@@ -76,4 +81,4 @@ const PopupDeleteAccount = () => {
     );
 };
 
-export default PopupDeleteAccount;
+export default PopupChangeEmail;

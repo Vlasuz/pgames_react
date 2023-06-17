@@ -64,11 +64,9 @@ const Routers = () => {
                 routers.map((elem, key) => {
 
                     if(auth && !Object.keys(auth).length) {
-
                         if(elem.path.includes('account')) {
                             elem = '*'
                         }
-
                     }
 
                     return <Route key={key} path={elem.path} element={elem.comp}/>

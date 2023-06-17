@@ -58,7 +58,7 @@ const NewsSingle = () => {
                             <div className="news-page__image">
                                 <div className="news-page__image--body">
                                     <picture>
-                                        <img src={"../" + thisNews.image} alt="" width="300"
+                                        <img src={thisNews.image} alt="" width="300"
                                              className="news-page__image--img"/>
                                     </picture>
                                 </div>
@@ -80,7 +80,7 @@ const NewsSingle = () => {
                                                     <div className="news-list__item--image">
                                                         <div className="news-list__item--image-body">
                                                             <picture>
-                                                                <img src={"../"+news.image} loading="lazy" alt=""
+                                                                <img src={news.image} loading="lazy" alt=""
                                                                      width="311"
                                                                      height="150" className="news-list__item--img"/>
                                                             </picture>
@@ -119,7 +119,7 @@ const NewsSingle = () => {
                                         <div className="news-list__item--image">
                                             <div className="news-list__item--image-body">
                                                 <picture>
-                                                    <img src={"../"+news.image} loading="lazy" alt="" width="311"
+                                                    <img src={news.image} loading="lazy" alt="" width="311"
                                                          height="150"
                                                          className="news-list__item--img"/>
                                                 </picture>

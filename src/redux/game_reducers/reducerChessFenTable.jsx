@@ -7,7 +7,6 @@ import {
     SET_DOMINO
 } from "../types";
 
-// rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
 const initialState = {
     fenTable: []
 }
@@ -23,7 +22,7 @@ export const reducerFenTable = (state = initialState, action) => {
         case SET_FEN_LINE:
             return {
                 ...state,
-                fenTable: `${action.fenLine} w KQkq - 0 1`
+                fenTable: `${action.fenLine}`
             }
         case SET_FEN_CHECKERS:
 

@@ -115,7 +115,6 @@ const ChessTableInner = () => {
         document.querySelectorAll('.chess__grid--cell._accent')?.forEach(item => item.classList.remove('_accent'))
         const figureIndex = e.target.closest('.chess__grid--cell').getAttribute('data-index')
 
-
         if (figure === figure_p[playerColor-1]) {
             FIGURE_P(e, figureIndex, playerColor)
         } else if (figure === figure_n[playerColor-1]) {
@@ -125,7 +124,7 @@ const ChessTableInner = () => {
         } else if (figure === figure_b[playerColor-1]) {
             FIGURE_B(e, figureIndex, playerColor)
         } else if (figure === figure_k[playerColor-1]) {
-            FIGURE_K(e, figureIndex, playerColor)
+            FIGURE_K(e, figureIndex, playerColor, tableFen)
         } else if (figure === figure_q[playerColor-1]) {
             FIGURE_Q(e, figureIndex, playerColor)
         }

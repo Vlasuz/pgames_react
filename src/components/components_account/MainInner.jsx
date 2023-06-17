@@ -50,7 +50,7 @@ const MainInner = () => {
                     <div className="account__block" data-aos="fade-in" data-aos-delay="800"
                          data-aos-anchor=".account__main">
                         <div className="account__block--body _transparent _none-padding">
-                            <button type="button" className="account-remove-btn">
+                            <button onClick={handleDelete} type="button" className="account-remove-btn">
                                 <svg width="10" height="13" viewBox="0 0 10 13" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path

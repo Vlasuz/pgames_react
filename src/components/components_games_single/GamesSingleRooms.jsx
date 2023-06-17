@@ -192,26 +192,26 @@ const GamesSingleRooms = ({game}) => {
                                         </select>
                                     </div>
                                 </div>
-                                <div className="page-rooms__create--col">
-                                    <div className="page-rooms__select-wrapper">
-                                        <select onChange={e => setIsAccess(e.target.value === 'open')}
-                                                name="status-game" className="page-rooms__select custom-select">
+                                {/*<div className="page-rooms__create--col">*/}
+                                {/*    <div className="page-rooms__select-wrapper">*/}
+                                {/*        <select onChange={e => setIsAccess(e.target.value === 'open')}*/}
+                                {/*                name="status-game" className="page-rooms__select custom-select">*/}
 
-                                            {
-                                                game.room_types.some(item => item === 'private') &&
-                                                <option value="open">
-                                                    Открытая игра
-                                                </option>
-                                            }
-                                            {
-                                                game.room_types.some(item => item === 'private') &&
-                                                <option value="lock">
-                                                    Закрытая игра
-                                                </option>
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
+                                {/*            {*/}
+                                {/*                game.room_types.some(item => item === 'private') &&*/}
+                                {/*                <option value="open">*/}
+                                {/*                    Открытая игра*/}
+                                {/*                </option>*/}
+                                {/*            }*/}
+                                {/*            {*/}
+                                {/*                game.room_types.some(item => item === 'private') &&*/}
+                                {/*                <option value="lock">*/}
+                                {/*                    Закрытая игра*/}
+                                {/*                </option>*/}
+                                {/*            }*/}
+                                {/*        </select>*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
                                 {/*<div className="page-rooms__create--col">*/}
                                 {/*    <div className="page-rooms__select-wrapper">*/}
                                 {/*        <select onChange={e => setTypeOfGame(e.target.value)} name="mode-game"*/}

@@ -18,7 +18,7 @@ const PopupPromocodeForm = () => {
 
         axios.defaults.headers.post['Authorization'] = `Bearer ${GetCookies('access_token')}`;
         axios.post(`https://board-games.sonisapps.com/api/finance/promo_code/?code=${inputValue}`).then(res => {
-            console.log(res.data)
+            console.log(res)
             dispatch(setTimeoutNotice('notification_promocode-success'))
             setInputValue('')
             dispatch(popupTitle(''))

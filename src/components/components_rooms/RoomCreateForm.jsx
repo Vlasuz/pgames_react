@@ -188,19 +188,19 @@ const RoomCreateForm = () => {
                         {maxLength <= maxPlayers || !isValidate ? "" : <span className="span-error">Неверное кол-во</span>}
                         </div>
                     </div>
-                    <div className="page-rooms__create--col">
-                        <div className="page-rooms__select-wrapper">
-                            <select onChange={e => setIsAccess(e.target.value === 'open')}
-                                    name="status-game" className="page-rooms__select custom-select">
-                                <option value="open">
-                                    Открытая игра
-                                </option>
-                                <option value="lock">
-                                    Закрытая игра
-                                </option>
-                            </select>
-                        </div>
-                    </div>
+                    {/*<div className="page-rooms__create--col">*/}
+                    {/*    <div className="page-rooms__select-wrapper">*/}
+                    {/*        <select onChange={e => setIsAccess(e.target.value === 'open')}*/}
+                    {/*                name="status-game" className="page-rooms__select custom-select">*/}
+                    {/*            <option value="open">*/}
+                    {/*                Открытая игра*/}
+                    {/*            </option>*/}
+                    {/*            <option value="lock">*/}
+                    {/*                Закрытая игра*/}
+                    {/*            </option>*/}
+                    {/*        </select>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
                     <div className="page-rooms__create--col">
                         {/*<div className="page-rooms__select-wrapper">*/}
                         {/*    <select onChange={e => setTypeOfGame(e.target.value)} name="mode-game"*/}

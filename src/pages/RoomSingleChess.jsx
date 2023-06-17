@@ -24,6 +24,8 @@ import {logDOM} from "@testing-library/react";
 import {reducerEndGame, setEndGame} from "../redux/game_reducers/reducerEndGame";
 import {popupTitle} from "../redux/actions";
 import {setHistoryItem} from "../redux/game_reducers/reducerHistory";
+import SetCookies from "../hooks/SetCookies";
+import {setBeaten} from "../redux/game_reducers/reducerCheckersBeaten";
 
 const RoomSingleFool = () => {
 
@@ -39,6 +41,8 @@ const RoomSingleFool = () => {
     const tableFen = useSelector(state => state.reducerFenTable.fenTable)
     const navigate = useNavigate()
     const usersReadyState = useSelector(state => state.reducerUserReadyState.usersReadyState)
+    const [wHaveCastling, setWHaveCastling] = useState('KQ');
+    const [bHaveCastling, setBHaveCastling] = useState('kq');
     const arrayLines = tableFen && Object.keys(tableFen).length && tableFen.slice(0, tableFen.indexOf(" ")).split('/').map(item => {
         return item.split('').map(item2 => {
             if (!+item2) return item2
@@ -47,7 +51,72 @@ const RoomSingleFool = () => {
             return array.join(' ').split(' ');
         }).flat(1)
     })
-    let arr = [];
+
+    const newTableFen = (data, castlingFrom, castlingTo) => {
+        let arr = [];
+        let figureFrom, figureTo, dataArrayCellsFrom, dataArrayCellsTo;
+        document.querySelectorAll('.chess__grid--cell').forEach(item => {
+            const dataPosition = item.getAttribute('data-position')
+            const codeFrom = castlingFrom ? castlingFrom : data.data.uci[0] + data.data.uci[1]
+            const codeTo = castlingTo ? castlingTo : data.data.uci[2] + data.data.uci[3]
+
+            if (dataPosition === codeFrom) {
+                dataArrayCellsFrom = item.getAttribute('data-array').split('/')
+                figureFrom = item;
+            }
+            if (dataPosition === codeTo) {
+                dataArrayCellsTo = item.getAttribute('data-array').split('/')
+                figureTo = item;
+            }
+
+            if (figureFrom && figureTo) {
+
+                const topSelected = figureFrom.closest('.chess__grid--cell').offsetTop
+                const topFigure = figureTo.closest('.chess__grid--cell').offsetTop
+                const leftSelected = figureFrom.closest('.chess__grid--cell').offsetLeft
+                const leftFigure = figureTo.closest('.chess__grid--cell').offsetLeft
+
+                const moveY = -(topSelected - topFigure)
+                const moveX = -(leftSelected - leftFigure)
+
+                figureFrom.classList.add('moving')
+                figureFrom.querySelector('.chess__grid--checker-body').style.top = moveY + "px"
+                figureFrom.querySelector('.chess__grid--checker-body').style.left = moveX + "px"
+
+            }
+
+        })
+        setTimeout(() => {
+            const maxLength = 7;
+
+            if (players.filter(item => item.id === user.id)[0].position === 2) {
+                dataArrayCellsFrom[0] = Math.abs(maxLength - dataArrayCellsFrom[0])
+                dataArrayCellsTo[0] = Math.abs(maxLength - dataArrayCellsTo[0])
+                dataArrayCellsFrom[1] = Math.abs(maxLength - dataArrayCellsFrom[1])
+                dataArrayCellsTo[1] = Math.abs(maxLength - dataArrayCellsTo[1])
+            }
+
+            arrayLines[+dataArrayCellsTo[0]][+dataArrayCellsTo[1]] = arrayLines[+dataArrayCellsFrom[0]][+dataArrayCellsFrom[1]]
+            arrayLines[+dataArrayCellsFrom[0]][+dataArrayCellsFrom[1]] = ''
+
+            for (let row = 0; row < 8; row++) {
+                arr.push(arrayLines[row].map(item => item === '' ? item.replace('', 1) : item).join(''))
+            }
+
+            dispatch(setHistoryItem({
+                code: `${figureFrom.getAttribute('data-position')} - ${figureTo.getAttribute('data-position')}`,
+                userId: data.data.player.id
+            }))
+
+            dispatch(setFenLine(arr.join('/') + ` w ${wHaveCastling}${bHaveCastling} - 0 1`))
+            figureFrom.querySelector('.chess__grid--checker-body').style.top = 0 + "px"
+            figureFrom.querySelector('.chess__grid--checker-body').style.left = 0 + "px"
+
+            setTimeout(() => {
+                figureFrom.classList.remove('moving')
+            }, 100)
+        }, 500)
+    }
 
     websocket.onmessage = (e) => {
         const data = JSON.parse(e.data)
@@ -62,14 +131,13 @@ const RoomSingleFool = () => {
 
             dispatch(setUserReadyState('clear'))
             dispatch(setUserReadyState(...data.users.filter(user => user.ready).map(item => item.id)))
-            dispatch(setUserReadyState(...data.users.filter(user => user.ready).map(item => item.id)))
             dispatch(setGamePlayers('clear'))
             dispatch(setGamePlayers(data.users))
             dispatch(setIsGameStart(false))
             dispatch(setPlayerTurn({}))
             document.cookie = "gameHistory=[]; expires=Thu, 18 Dec 2013 12:00:00 UTC";
 
-        } else if(data.status === 'End game') {
+        } else if (data.status === 'End game') {
             setIsEndGame(true)
         }
 
@@ -77,11 +145,12 @@ const RoomSingleFool = () => {
             dispatch(setIsGameStart(true))
         }
         const newPlayer = () => {
-            console.log('JOIN NEW PLAYER', data.data)
             dispatch(setGamePlayers([data.data]))
         }
         const gameState = () => {
             dispatch(setFenTable(data.data.game.fen))
+            setWHaveCastling(data.data.game.fen.includes('KQ') ? 'KQ' : ' - ')
+            setBHaveCastling(data.data.game.fen.includes('kq') ? 'kq' : ' - ')
             dispatch(setIsGameStart(true))
             dispatch(setPlayerTurn({
                 player: {id: data.data.game.players.filter(user => data.data.game.state.includes(user.color))[0].id},
@@ -89,7 +158,6 @@ const RoomSingleFool = () => {
             }))
         }
         const playerTurn = () => {
-            console.log(data.data)
             dispatch(setPlayerTurn(data.data))
         }
         const userReadyState = () => {
@@ -97,70 +165,83 @@ const RoomSingleFool = () => {
         }
         const playerMadeMove = () => {
 
-            let figureFrom, figureTo, dataArrayCellsFrom, dataArrayCellsTo;
+            const moveFromFigure = document.querySelector(`.chess__grid--cell[data-position=${data.data.uci[0] + data.data.uci[1]}]`).getAttribute('data-figure')
 
-            document.querySelectorAll('.chess__grid--cell').forEach(item => {
-                const dataPosition = item.getAttribute('data-position')
-                const codeFrom = data.data.uci[0] + data.data.uci[1]
-                const codeTo = data.data.uci[2] + data.data.uci[3]
+            if(moveFromFigure === 'k' || moveFromFigure === 'r') {
+                setBHaveCastling(' - ')
+            } else if (moveFromFigure === 'K' || moveFromFigure === 'R') {
+                setWHaveCastling(' - ')
+            }
 
-                if (dataPosition === codeFrom) {
-                    dataArrayCellsFrom = item.getAttribute('data-array').split('/')
-                    figureFrom = item;
+            const playerColorR = ['R', 'r']
+            const playerColorK = ['k', 'K']
+            const playerColorNum = ['1', '8'];
+            const color = players.filter(item => item.id === data.data.player?.id)[0]?.position
+
+            const imageLink = document.querySelector(`.chess__grid--cell[data-position="${data.data.uci[2]+data.data.uci[3]}"]`)?.querySelector('img')?.getAttribute('src')
+            const figureName = document.querySelector(`.chess__grid--cell[data-position="${data.data.uci[2]+data.data.uci[3]}"]`)?.getAttribute('data-figure')
+
+            if(imageLink?.includes('black') || imageLink?.includes('white')) {
+                if(color === players.filter(item => item.id === user?.id)[0]?.position) {
+    
+                    const oldBeaten = GetCookies('CheckersYourBeaten') ? JSON.parse(GetCookies('CheckersYourBeaten')) : []
+                    SetCookies('CheckersYourBeaten', [...oldBeaten, {imageLink, figureName}])
+                    dispatch(setBeaten({imageLink, figureName}, null))
+    
+                } else {
+    
+                    const oldBeaten = GetCookies('CheckersOpponentBeaten') ? JSON.parse(GetCookies('CheckersOpponentBeaten')) : []
+                    SetCookies('CheckersOpponentBeaten', [...oldBeaten, {imageLink, figureName}])
+                    dispatch(setBeaten(null, {imageLink, figureName}))
+    
                 }
-                if (dataPosition === codeTo) {
-                    dataArrayCellsTo = item.getAttribute('data-array').split('/')
-                    figureTo = item;
-                }
+            }
 
-                if (figureFrom && figureTo) {
+            const castling = (from, to) => {
+                const numFromMove = from+playerColorNum[color-1]
+                const numToMove = to+playerColorNum[color-1]
 
-                    const topSelected = figureFrom.closest('.chess__grid--cell').offsetTop
-                    const topFigure = figureTo.closest('.chess__grid--cell').offsetTop
-                    const leftSelected = figureFrom.closest('.chess__grid--cell').offsetLeft
-                    const leftFigure = figureTo.closest('.chess__grid--cell').offsetLeft
-
-                    const moveY = -(topSelected - topFigure)
-                    const moveX = -(leftSelected - leftFigure)
-
-                    figureFrom.classList.add('moving')
-                    figureFrom.querySelector('.chess__grid--checker-body').style.top = moveY + "px"
-                    figureFrom.querySelector('.chess__grid--checker-body').style.left = moveX + "px"
-
-                }
-
-            })
-
-            setTimeout(() => {
-                const maxLength = 7;
-
-                if (players.filter(item => item.id === user.id)[0].position === 2) {
-                    dataArrayCellsFrom[0] = Math.abs(maxLength - dataArrayCellsFrom[0])
-                    dataArrayCellsTo[0] = Math.abs(maxLength - dataArrayCellsTo[0])
-                    dataArrayCellsFrom[1] = Math.abs(maxLength - dataArrayCellsFrom[1])
-                    dataArrayCellsTo[1] = Math.abs(maxLength - dataArrayCellsTo[1])
-                }
-
-                arrayLines[+dataArrayCellsTo[0]][+dataArrayCellsTo[1]] = arrayLines[+dataArrayCellsFrom[0]][+dataArrayCellsFrom[1]]
-                arrayLines[+dataArrayCellsFrom[0]][+dataArrayCellsFrom[1]] = ''
-
-                for (let row = 0; row < 8; row++) {
-                    arr.push(arrayLines[row].map(item => item === '' ? item.replace('', 1) : item).join(''))
-                }
-
-                dispatch(setHistoryItem({
-                    code: `${figureFrom.getAttribute('data-position')} - ${figureTo.getAttribute('data-position')}`,
-                    userId: data.data.player.id
-                }))
-
-                dispatch(setFenLine(arr.join('/')))
-                figureFrom.querySelector('.chess__grid--checker-body').style.top = 0 + "px"
-                figureFrom.querySelector('.chess__grid--checker-body').style.left = 0 + "px"
+                const cellToMove = document.querySelector(`.chess__grid--cell[data-position="${numToMove}"]`)
+                let itemK = '';
 
                 setTimeout(() => {
-                    figureFrom.classList.remove('moving')
+                    newTableFen(data, numFromMove, numToMove)
                 }, 100)
-            }, 500)
+
+                document.querySelectorAll('.chess__grid--cell').forEach(item => {
+                    if(item.getAttribute('data-position').includes(from) && item.getAttribute('data-figure') === playerColorR[color-1]) {
+                        itemK = item
+                    }
+                })
+
+                itemK.querySelector('.chess__grid--checker-body').style.left = -(itemK.getBoundingClientRect().left - cellToMove.getBoundingClientRect().left) + 'px'
+            }
+
+            document.querySelector('.chess__grid--cell._red')?.classList.remove('_red')
+            if (data.data.status === "castling") {
+                const from = data.data.uci[2]
+
+                if(color === 1) {
+                    setWHaveCastling('-')
+                } else if (color === 2) {
+                    setBHaveCastling('-')
+                }
+
+                if (from.includes('g')) {
+                    castling('h', 'f')
+                } else if (from.includes('c')) {
+                    castling('a', 'd')
+                }
+
+            } else if (data.data.status === "check") {
+                document.querySelectorAll('.chess__grid--cell').forEach(item => {
+                    if(playerColorK[color-1] === item.getAttribute('data-figure')) {
+                        item.classList.add('_red')
+                    }
+                })
+            }
+
+            newTableFen(data)
 
         }
         const endGame = () => {
@@ -242,7 +323,7 @@ const RoomSingleFool = () => {
                                                 Ожидание...
                                             </div>
                                     }
-                                    <ChessTable isWhite={players.filter(item => item.id === user.id)[0]?.position} />
+                                    <ChessTable isWhite={players.filter(item => item.id === user.id)[0]?.position}/>
                                     <ChessYourUser isGameStart={isGameStart} user={user}/>
                                 </div>
                                 <div className="chess__col">

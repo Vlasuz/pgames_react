@@ -23,10 +23,10 @@ const WithdrawalsForm = () => {
                                 <div className="account-withdrawals__row--block">
                                     <select name="withdrawals-type"
                                             className="account-withdrawals__select custom-select">
-                                        <option value="chips" defaultValue
-                                                data-image="images/icons/chip.svg">
-                                            Фишки
-                                        </option>
+                                        {/*<option value="chips" defaultValue*/}
+                                        {/*        data-image="images/icons/chip.svg">*/}
+                                        {/*    Фишки*/}
+                                        {/*</option>*/}
                                         <option value="money"
                                                 data-image="images/icons/dollar-circle.svg">
                                             Деньги

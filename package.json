@@ -2,6 +2,7 @@
   "name": "privat_games",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://vlasuz.github.io/pgames_react/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
