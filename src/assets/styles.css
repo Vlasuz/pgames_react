@@ -9389,17 +9389,6 @@ progress.game__user--progress {
     max-width: 1230px;
     position: relative;
 }
-/*.game__table_small .domino__table--element-body{*/
-/*    width: 30px;*/
-/*    height: 60px;*/
-/*}*/
-/*.game__table_small .domino__table--element.non-rotate .domino__table--element-body{*/
-/*    width: 30px;*/
-/*    height: 30px;*/
-/*}*/
-/*.game__table_small .domino__table--element{*/
-/*    margin: 15px;*/
-/*}*/
 
 .game__table_defence{
     z-index: 2;
@@ -15767,7 +15756,7 @@ progress.game__user--progress {
 
 .domino__container {
     max-width: calc(1283px + var(--container-padding) *2);
-    position: relative
+    /*position: relative*/
 }
 
 .domino__main {
@@ -16059,6 +16048,11 @@ progress.game__user--progress {
     transform-origin: center;
     transform: rotate(90deg);
     margin: 25px;
+    /*-webkit-transition: top .3s ease, left .3s ease;*/
+    /*-moz-transition: top .3s ease, left .3s ease;*/
+    /*-ms-transition: top .3s ease, left .3s ease;*/
+    /*-o-transition: top .3s ease, left .3s ease;*/
+    /*transition: top .3s ease, left .3s ease;*/
 }
 
 .domino__table--element._accent .domino__table--element-body {
@@ -17659,6 +17653,14 @@ label._error .popup-input-placeholder{
     top: 100px;
 }
 
+.domino__table--place{
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
 .game__table_small .domino__table--place{
     margin-top: -450px;
     -webkit-transform: scale(.8);
@@ -17696,6 +17698,47 @@ button {
 }
 .moving{
     z-index: 3;
+}
+.game__domino-block--item-animation{
+    top: 0;
+    left: 0;
+    transform: rotate(90deg);
+    position: absolute;
+    width: 60px;
+    height: 56px;
+    z-index: 20;
+    opacity: 0;
+    visibility: hidden;
+}
+.game__domino-block--item-animation._rotate-reverse{
+    transform: rotate(180deg);
+    height: 102px;
+}
+.game__domino-block--item-animation._rotate{
+    transform: rotate(0deg);
+    height: 102px;
+}
+.game__domino-block--item-animation._active{
+    opacity: 1;
+    visibility: visible;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+.anim-from-4{
+    top: 550px;
+    left: 80%;
+}
+.anim-from-3{
+    top: 300px;
+    left: 50%;
+}
+.anim-from-2{
+    top: 550px;
+    left: 15%;
 }
 
 /*NEW STYLE*/

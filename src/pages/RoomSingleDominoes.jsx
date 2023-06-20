@@ -30,6 +30,7 @@ import FoolButtonWaiting from "../components/component_game/game_fool/FoolButton
 import {addUserDomino, removeUserDomino, setUsersCards} from "../redux/game_reducers/reducerFoolUsersCards";
 import GamePlayerWaiting from "../components/component_game/game_thousand/GamePlayerWaiting";
 import {setIsReady} from "../redux/game_reducers/reducerIsReady";
+import {setPlayerMadeMove} from "../redux/game_reducers/reducerPlayerMadeMove";
 
 const RoomSingleDominoes = () => {
 
@@ -68,7 +69,6 @@ const RoomSingleDominoes = () => {
 
             axios.defaults.headers.get['Authorization'] = `Bearer ${GetCookies('access_token')}`;
             axios.get(GlobalLink(`/api/room/get/${roomId}/`)).then(res => {
-                console.log('info about room', res.data)
                 setInfoRoom(res.data)
             })
         }
@@ -87,11 +87,12 @@ const RoomSingleDominoes = () => {
             dispatch(setUserReadyState('clear'))
             dispatch(setUserReadyState(data.users?.filter(user => user.ready)[0]?.id))
             dispatch(setFenTable([]))
-            dispatch(setUsersCards([]))
+            dispatch(setUsersCards([], []))
             dispatch(setIsGameStart(false))
             dispatch(setPlayerTurn({}))
 
         } else if (data.status === 'Game in progress') {
+            dispatch(setGamePlayers('clear'))
             dispatch(setGamePlayers(data.users))
             dispatch(setIsReady(true))
         }
@@ -110,7 +111,7 @@ const RoomSingleDominoes = () => {
             })
             dispatch(setUserReadyState(data.users?.filter(user => user.ready).id))
             dispatch(setFenTable(arr))
-            dispatch(setUsersCards(data.data.game.player_dominoes))
+            dispatch(setUsersCards(data.data.game, data.data.game.player_dominoes))
             dispatch(setIsGameStart(true))
             dispatch(setPlayerTurn({
                 player: data.data.game.players.filter(item => item.is_player_turn)[0].id,
@@ -131,6 +132,16 @@ const RoomSingleDominoes = () => {
             const dominoSelect  = selectedBone && [selectedBone.getAttribute('data-first'), selectedBone.getAttribute('data-second')]
             const position      = data.data.left_side;
             const twins         = data.data.domino.first_side === data.data.domino.second_side
+
+            dispatch(setPlayerMadeMove(data.data))
+
+            if(data.data.player !== user.id) {
+                dispatch(setDomino(domino, position))
+                if(!isEndRound) dispatch(removeUserDomino(domino))
+                dispatch(setSelectDominoes(data.data.domino.first_side, data.data.domino.second_side, position))
+
+                return null;
+            }
 
             if(data.event === 'end_round') {
                 isEndRound = true
@@ -166,7 +177,6 @@ const RoomSingleDominoes = () => {
             const isTopRight = dominoSelect[0] === numRightDomino
             const isBottomRight = dominoSelect[1] === numRightDomino
 
-            console.log(isLeftMiniSide, isBottomLeft, isRightMiniSide, isBottomRight)
             if (!twins && !(selectedBoneTable.classList.contains('go-from-line-left') || selectedBoneTable.classList.contains('go-from-line-right'))) {
                 if (position) {
                     if (isTopLeft) {
@@ -175,12 +185,16 @@ const RoomSingleDominoes = () => {
                         selectedBone?.classList.add('_rotate_bl90')
                     } else if (isLeftMiniSide && isBottomLeft) {
                         selectedBone?.classList.add('_rotate_180')
+                    } else {
+                        selectedBone?.classList.add('_rotate_bl90')
                     }
                 } else {
                     if (isTopRight) {
                         selectedBone?.classList.add('_rotate_tr90')
                     } else if (isBottomRight) {
                         selectedBone?.classList.add('_rotate_br90')
+                    } else {
+                        selectedBone?.classList.add('_rotate_bl90')
                     }
                 }
             } else {
@@ -208,6 +222,7 @@ const RoomSingleDominoes = () => {
                 selectedBone?.classList.remove('_rotate_tr90')
                 selectedBone?.classList.remove('_rotate_br90')
                 selectedBone?.classList.remove('_rotate_bl90')
+                selectedBone?.classList.remove('_rotate_180')
                 selectedBone.classList.remove('non-rotate')
                 selectedBone.style.top = '0px'
                 selectedBone.style.left = '0px'
@@ -229,9 +244,9 @@ const RoomSingleDominoes = () => {
         }
 
         const dominoDistribution = () => {
-            dispatch(setUsersCards(data.data.dominoes))
+            dispatch(setUsersCards([], data.data.dominoes))
             setTimeout(() => {
-                dispatch(setUsersCards(data.data.dominoes))
+                dispatch(setUsersCards([], data.data.dominoes))
             }, 310)
         }
 
@@ -241,8 +256,9 @@ const RoomSingleDominoes = () => {
 
         const endRound = () => {
             setIsEndRound(true)
-            dispatch(setUsersCards([]))
+            dispatch(setUsersCards([], []))
             setTimeout(() => {
+                setIsEndRound(false)
                 dispatch(setFenTable([]))
             }, 500)
         }
@@ -250,6 +266,14 @@ const RoomSingleDominoes = () => {
             dispatch(setPlayerTurn(
                 {player: data.data.beginner_player_id, time_remaining: 60}
             ))
+        }
+
+        const playerPickDomino = () => {
+            dispatch(setUsersCards(data.data, null))
+
+            setTimeout(() => {
+                dispatch(setUsersCards([], null))
+            }, 100)
         }
 
         console.log('socket message', data)
@@ -265,6 +289,7 @@ const RoomSingleDominoes = () => {
             "user_ready_state": userReadyState,
             "player_made_move": playerMadeMove,
             "end_game": endGame,
+            "player_pick_domino": playerPickDomino,
         }
         if (typeof events[data.event] === 'function') events[data.event]();
     }
@@ -300,7 +325,10 @@ const RoomSingleDominoes = () => {
                                 {
                                      infoRoom.player_slots >= 3 && (Object.keys(players.filter(item => item.position === setPosition(3, players, user, infoRoom.player_slots))).length ?
                                         <DominoesUser
-                                            player={players.filter(item => item.position === setPosition(3, players, user, infoRoom.player_slots))[0]}/> :
+                                            player={players.filter(item => item.position === setPosition(3, players, user, infoRoom.player_slots))[0]}
+                                            position={3}
+                                            isEndRound={isEndRound}
+                                        /> :
                                         <GamePlayerWaiting/>)
                                 }
                             </div>
@@ -308,7 +336,10 @@ const RoomSingleDominoes = () => {
                                 {
                                      infoRoom.player_slots >= 2 && (Object.keys(players.filter(item => item.position === setPosition(2, players, user, infoRoom.player_slots))).length ?
                                         <DominoesUser
-                                            player={players.filter(item => item.position === setPosition(2, players, user, infoRoom.player_slots))[0]}/> :
+                                            player={players.filter(item => item.position === setPosition(2, players, user, infoRoom.player_slots))[0]}
+                                            position={2}
+                                            isEndRound={isEndRound}
+                                        /> :
                                         <GamePlayerWaiting/>)
                                 }
                             </div>
@@ -316,7 +347,10 @@ const RoomSingleDominoes = () => {
                                 {
                                      infoRoom.player_slots >= 4 && (Object.keys(players.filter(item => item.position === setPosition(4, players, user, infoRoom.player_slots))).length ?
                                         <DominoesUser
-                                            player={players.filter(item => item.position === setPosition(4, players, user, infoRoom.player_slots))[0]}/> :
+                                            player={players.filter(item => item.position === setPosition(4, players, user, infoRoom.player_slots))[0]}
+                                            position={4}
+                                            isEndRound={isEndRound}
+                                        /> :
                                         <GamePlayerWaiting/>)
                                 }
                             </div>

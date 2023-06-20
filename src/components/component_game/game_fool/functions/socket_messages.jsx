@@ -45,7 +45,6 @@ const socketMessages = (
         dispatch(setGamePlayers('clear'))
         dispatch(setGamePlayers(data.users))
         dispatch(setUserReadyState('clear'))
-        // data.users.map(item => item.ready && dispatch(setUserReadyState(item.id)))
         setMyCards([])
         setAllCardsCount(0)
         setTrump({})

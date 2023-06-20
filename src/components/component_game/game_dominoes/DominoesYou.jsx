@@ -9,7 +9,7 @@ const DominoesYou = () => {
     const dispatch = useDispatch();
     const [yourCards, setYourCards] = useState([])
     const table = useSelector(state => state.reducerFenTable.fenTable)
-    const userCards = useSelector(state => state.reducerFoolUsersCards.users)
+    const userCards = useSelector(state => state.reducerFoolUsersCards.myCards)
     const user = useSelector(state => state.userInfoReducer.data)
     const playerTurn = useSelector(state => state.reducerPlayerTurn.playerTurn)
     const [timer, setTimer] = useState(0)
@@ -37,10 +37,6 @@ const DominoesYou = () => {
             dispatch(setSelectDominoes([first, second], null))
             return null;
         }
-
-        console.log('11 - ', table, clearTable)
-        console.log('22 - ', table[0])
-        console.log('33 - ', table[0][0])
 
         const left = +clearTable[0][0]
         const right = +clearTable[clearTable.length - 1][1]
@@ -79,7 +75,7 @@ const DominoesYou = () => {
     }, [timer])
 
     useEffect(() => {
-        console.log('userCards', userCards)
+
         setYourCards(userCards)
     }, [userCards])
 
@@ -91,7 +87,7 @@ const DominoesYou = () => {
                         <ul className="game__domino-block--list">
 
                             {
-                                yourCards.map((card, index) => {
+                                yourCards && yourCards.map((card, index) => {
                                     return (<li key={index} data-first={card?.first_side} data-second={card?.second_side} onClick={e => cardSelect(card.first_side, card.second_side, e)}
                                         className="game__domino-block--item">
                                         <div className="game__domino-block--item-body">

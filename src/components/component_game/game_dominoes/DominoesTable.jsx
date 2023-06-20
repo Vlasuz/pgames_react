@@ -9,6 +9,8 @@ const DominoesTable = ({isGameStart}) => {
     const [isWidthBig, setIsWidthBig] = useState(false)
     const websocket = useSelector(state => state.reducerWebsocket.gameWebsocket)
     const table = useSelector(state => state.reducerFenTable)
+    const [leftWithoutRotate, setLeftWithoutRotate] = useState(false)
+    const [rightWithoutRotate, setRightWithoutRotate] = useState(false)
 
     useEffect(() => {
         if (isLoad) return;
@@ -20,13 +22,17 @@ const DominoesTable = ({isGameStart}) => {
             setTimeout(() => {
                 if (!isWidthBig) {
                     setIsWidthBig(document.querySelector('.domino__main--table')?.clientWidth / 1.8 <= document.querySelector('.domino__table--place')?.clientWidth)
-                    // setIsWidthBig(1070 <= document.querySelector('.domino__table--place')?.clientWidth)
                 }
-            }, 100)
+            }, 600)
         } else {
             setIsWidthBig(false)
         }
         setTableParse(table.fenTable)
+
+        setTimeout(() => {
+            truePositionVerticalBones()
+        }, 400)
+
     }, [table.fenTable])
 
 
@@ -44,7 +50,26 @@ const DominoesTable = ({isGameStart}) => {
         setTableParse(table?.fenTable)
         setTableParse(prev => [left, ...prev, right])
 
+        truePositionVerticalBones()
+
     }, [table.selectArray])
+
+
+    const truePositionVerticalBones = () => {
+        const countVerticalLeft = document.querySelectorAll('.go-from-line-left').length
+        if (!document.querySelector(`.domino__table--element:nth-child(${countVerticalLeft}) + .domino__table--element`)?.classList.contains('non-rotate')) {
+            setLeftWithoutRotate(true)
+        } else {
+            setLeftWithoutRotate(false)
+        }
+
+        const countVerticalRight = document.querySelectorAll('.go-from-line-right').length
+        if (!document.querySelector(`.domino__table--element:nth-last-child(${countVerticalRight + 2}) + .domino__table--element`)?.classList.contains('non-rotate')) {
+            setRightWithoutRotate(true)
+        } else {
+            setRightWithoutRotate(false)
+        }
+    }
 
     const handleMove = (first, second, index) => {
 
@@ -87,16 +112,13 @@ const DominoesTable = ({isGameStart}) => {
                         const moreItemsRight = isTrue && isRightItem ? " go-from-line-right" : ""
 
                         const styleForLeft = {
-                            // left: isLeftItem ? (4 - index) * 52 + 'px' : 0,
                             left: 0,
-                            top: isLeftItem ? -(index - forLeftSide) * 104 + 'px' : 0,
+                            top: isLeftItem ? -(index - forLeftSide) * 104 - (leftWithoutRotate ? 25 : 0) + 'px' : 0,
                             position: "absolute"
                         }
                         const styleForRight = {
-                            // right: isRightItem ? (tableParse.length - 4.05 - index) * 51 + 'px' : 0,
                             right: 0,
-                            // top: isRightItem ? -(index - tableParse.length) * 104 + 'px' : 0,
-                            top: isRightItem ? (index - forRightsSide) * 104 + 'px' : 0,
+                            top: isRightItem ? (index - forRightsSide) * 104 - (rightWithoutRotate ? 25 : 0) + 'px' : 0,
                             position: "absolute"
                         }
 

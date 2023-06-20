@@ -8,7 +8,6 @@ export const gamesListPlayersReducer = (state = initialState, action) => {
 
     switch(action.type) {
         case SET_GAME_PLAYERS:
-            console.log('ss',action.players)
             return{
                 ...state,
                 players: action.players === 'clear' ? [] : [...state.players, ...action.players]

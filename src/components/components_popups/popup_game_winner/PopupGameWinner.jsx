@@ -7,6 +7,7 @@ import {useNavigate} from "react-router-dom";
 
 const PopupGameWinner = ({props}) => {
 
+
     const dispatch = useDispatch()
     const [text, setText] = useState('')
     const user = useSelector(state => state.userInfoReducer.data)
@@ -21,7 +22,7 @@ const PopupGameWinner = ({props}) => {
     }
 
     useEffect(() => {
-        setText(props.game_result_status)
+        setText(props?.game_result_status)
     }, [props])
 
     const translatedText = {
@@ -45,6 +46,8 @@ const PopupGameWinner = ({props}) => {
         isYouWinner = props?.winner_id === user.id ? "Поздравляем! Вы выиграли" : "К сожалению, вы проиграли"
     }
 
+    if(!props) return null;
+
     return (
         <div className={"chess-win-popup popup"}>
             <div className="chess-win-popup__wrapper popup-wrapper">
@@ -53,13 +56,13 @@ const PopupGameWinner = ({props}) => {
                     <div className="chess-win-popup__container popup-container">
                         <PopupCross/>
                         <h2 className="chess-win-popup__title popup-title section-title _decor-none">
-                            {props.outcome === 'winner' ? translatedText[text] : translatedText[props.outcome]}
+                            {props?.outcome === 'winner' ? translatedText[text] : translatedText[props.outcome]}
                             {
                                 props?.winner_id ? isYouWinner : ""
                             }
                         </h2>
                         <div className="chess-win-popup__text popup-text _left">
-                            {props?.game_result_status && props.outcome === 'winner' ? isYouWinner : translatedText[text]}
+                            {props?.game_result_status && props?.outcome === 'winner' ? isYouWinner : translatedText[text]}
                             <br/>
                             <br/>
                             <br/>
