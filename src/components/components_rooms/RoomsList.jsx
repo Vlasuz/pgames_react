@@ -27,6 +27,16 @@ const RoomsList = () => {
                 )
 
             }).catch(er => console.log(er))
+
+            const socket = new WebSocket(`wss://board-games.sonisapps.com/ws/api/room/ws/game/all/`)
+            socket.onopen = () => console.log('open')
+
+            socket.onmessage = (e) => {
+                const data = JSON.parse(JSON.parse(JSON.parse(e.data)).data)
+
+                console.log(data)
+                setRooms(prev => [...prev, data])
+            }
         }
 
     }, [user, currentPage])
@@ -36,9 +46,9 @@ const RoomsList = () => {
             <ul className="page-rooms__list">
 
                 {
-                    rooms.map(room =>
+                    rooms.length ? rooms.sort((a, b) => a.players_count - b.players_count).map(room =>
                         <RoomItem key={room.id} game={room}/>
-                    )
+                    ) : "Комнат нет"
                 }
 
             </ul>

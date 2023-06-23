@@ -26,9 +26,11 @@ import {popupTitle} from "../redux/actions";
 import {setHistoryItem} from "../redux/game_reducers/reducerHistory";
 import SetCookies from "../hooks/SetCookies";
 import {setBeaten} from "../redux/game_reducers/reducerCheckersBeaten";
+import ChessPreloader from "../components/component_game/game_chess/ChessPreloader";
 
 const RoomSingleFool = () => {
 
+    const [isLoadGame, setIsLoadGame] = useState(false)
     const [isEndGame, setIsEndGame] = useState(false)
     const {roomId} = useParams()
     const [isLoad, setIsLoad] = useState(true)
@@ -120,7 +122,7 @@ const RoomSingleFool = () => {
 
     websocket.onmessage = (e) => {
         const data = JSON.parse(e.data)
-
+        setIsLoadGame(true)
         dispatch(setSocketResponse(data))
 
         if (data.users) {
@@ -129,6 +131,7 @@ const RoomSingleFool = () => {
 
         if (data.status === 'Waiting') {
 
+            dispatch(setFenTable('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'))
             dispatch(setUserReadyState('clear'))
             dispatch(setUserReadyState(...data.users.filter(user => user.ready).map(item => item.id)))
             dispatch(setGamePlayers('clear'))
@@ -148,6 +151,7 @@ const RoomSingleFool = () => {
             dispatch(setGamePlayers([data.data]))
         }
         const gameState = () => {
+            dispatch(setFenTable('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'))
             dispatch(setFenTable(data.data.game.fen))
             setWHaveCastling(data.data.game.fen.includes('KQ') ? 'KQ' : ' - ')
             setBHaveCastling(data.data.game.fen.includes('kq') ? 'kq' : ' - ')
@@ -323,14 +327,14 @@ const RoomSingleFool = () => {
                                                 Ожидание...
                                             </div>
                                     }
-                                    <ChessTable isWhite={players.filter(item => item.id === user.id)[0]?.position}/>
+                                    {isLoadGame ? <ChessTable isWhite={players.filter(item => item.id === user.id)[0]?.position}/> : <ChessPreloader/>}
                                     <ChessYourUser isGameStart={isGameStart} user={user}/>
                                 </div>
                                 <div className="chess__col">
                                     <GameHistory/>
 
                                     {
-                                        !isEndGame && !isGameStart && (!usersReadyState.some(item => item === user.id) ?
+                                        isLoadGame && !isEndGame && !isGameStart && (!usersReadyState.some(item => item === user.id) ?
                                             <FoolButtonReady websocket={websocket}/> :
                                             <FoolButtonWaiting/>)
                                     }
@@ -342,7 +346,7 @@ const RoomSingleFool = () => {
                                         Игра окончена
                                     </h3>
                                 </div>
-                            </div> : !isGameStart ? <ChessMessage/> : ""}
+                            </div> : !isGameStart ? isLoadGame ? <ChessMessage/> : "" : ""}
                         </div>
                     </div>
                 </section>

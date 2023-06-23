@@ -3971,12 +3971,13 @@ a.page-pagination__btn{
     transform: translate3d(0,0,0)
 }
 
+.add-wallet input:not(:placeholder-shown)+.form-input-placeholder,
 .form-input:not(:placeholder-shown)+.form-input-placeholder,.form-input:not(:placeholder-shown)+.form-textarea-placeholder,.form-textarea:not(:placeholder-shown)+.form-input-placeholder,.form-textarea:not(:placeholder-shown)+.form-textarea-placeholder {
     top: 7px;
     -webkit-transform: translate3d(0,0,0);
     transform: translate3d(0,0,0)
 }
-
+.add-wallet input:focus+.form-input-placeholder,
 .form-input:focus+.form-input-placeholder,.form-input:focus+.form-textarea-placeholder,.form-textarea:focus+.form-input-placeholder,.form-textarea:focus+.form-textarea-placeholder {
     top: 7px;
     -webkit-transform: translate3d(0,0,0);
@@ -7181,7 +7182,11 @@ a.page-pagination__btn{
 }
 
 .news-list {
-    padding-top: 62px
+    padding-top: 62px;
+}
+
+.main-news{
+    min-height: 1000px;
 }
 
 .news-list__title {
@@ -17739,6 +17744,31 @@ button {
 .anim-from-2{
     top: 550px;
     left: 15%;
+}
+
+.date-cvv{
+    display: flex;
+}
+
+.add-wallet input:focus{
+    color: var(--light);
+}
+.add-wallet input{
+    width: 100%;
+    background: #21201e;
+    color: #89857c;
+    line-height: 100%;
+    border: 1px solid #393834;
+    border-radius: 6px;
+    transition: background .2s ease-in-out,border .2s ease-in-out,color .2s ease-in-out;
+    padding: 24px 14px 11px;
+}
+.add-wallet label{
+    margin-bottom: 15px;
+    margin-left: 15px;
+}
+.add-wallet label:first-child{
+    margin-left: 0;
 }
 
 /*NEW STYLE*/

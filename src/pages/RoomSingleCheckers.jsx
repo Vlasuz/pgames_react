@@ -31,9 +31,11 @@ import GlobalLink from "../GlobalLink";
 import {setBeaten} from "../redux/game_reducers/reducerCheckersBeaten";
 import SetCookies from "../hooks/SetCookies";
 import ChessMessage from "../components/component_game/game_chess/ChessMessage";
+import CheckersPreloader from "../components/component_game/game_checkers/CheckersPreloader";
 
 const RoomSingleCheckers = () => {
 
+    const [isLoadGame, setIsLoadGame] = useState(false)
     const [isEndGame, setIsEndGame] = useState(false)
     const {roomId} = useParams()
     const dispatch = useDispatch()
@@ -195,6 +197,7 @@ const RoomSingleCheckers = () => {
             axios.defaults.headers.get['Authorization'] = `Bearer ${GetCookies('access_token')}`;
             axios.get(GlobalLink(`/api/room/get/${roomId}/`)).then(res => {
                 setInfoRoom(res.data)
+                setIsLoadGame(true)
                 document.cookie = "gameHistory=[]; expires=Thu, 18 Dec 2013 12:00:00 UTC";
             })
         }
@@ -428,7 +431,10 @@ const RoomSingleCheckers = () => {
                                             Ожидание...
                                         </div>
                                 }
-                                <CheckersTable/>
+                                {
+                                    isLoadGame ? <CheckersTable/> : <CheckersPreloader/>
+                                }
+
                                 <CheckersYourUser isGameStart={isGameStart} user={user}/>
                             </div>
                             <div className="checkers__col">
@@ -446,7 +452,7 @@ const RoomSingleCheckers = () => {
                                     Игра окончена
                                 </h3>
                             </div>
-                        </div> : !isGameStart ? <ChessMessage/> : ""}
+                        </div> : !isGameStart ? isLoadGame ? <ChessMessage/> : "" : ""}
                     </div>
                 </div>
             </section>

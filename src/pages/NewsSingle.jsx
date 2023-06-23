@@ -1,16 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {NavLink, useParams} from "react-router-dom";
 import {useSelector} from "react-redux";
 
 const NewsSingle = () => {
     const {newsId} = useParams()
 
-    const newsList = useSelector(state => {
-        const {newsListReducer} = state
-        return newsListReducer.news
-    })
+    const newsList = useSelector(state => state.newsListReducer.news)
 
     const thisNews = newsList.filter(item => item.id === newsId)[0]
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [newsId])
     return (
         <main className="main">
             <section className="news-page page-padding" data-aos="fade-in" data-aos-delay="600">

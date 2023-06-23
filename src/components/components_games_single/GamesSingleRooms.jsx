@@ -11,8 +11,6 @@ import {setTimeoutNotice} from "../../redux/reducers/notificationReducer";
 
 const GamesSingleRooms = ({game}) => {
 
-
-    // console.log(game)
     const {gamesId} = useParams()
 
     const userInfo = useSelector(state => state.userInfoReducer.data)
@@ -50,6 +48,16 @@ const GamesSingleRooms = ({game}) => {
             setRooms(res.data.room)
             setIsLoad(true)
         })
+
+        const socket = new WebSocket(`wss://board-games.sonisapps.com/ws/api/room/ws/game/${gamesId}/`)
+        socket.onopen = () => console.log('open')
+
+        socket.onmessage = (e) => {
+            const data = JSON.parse(JSON.parse(JSON.parse(e.data)).data)
+
+            console.log('socket GAMEEE', data)
+            setRooms(prev => [...prev, data])
+        }
     }, [gamesId])
 
     const handleCreateRoom = (e) => {
@@ -106,9 +114,9 @@ const GamesSingleRooms = ({game}) => {
                         <ul className="page-rooms__list">
 
                             {
-                                rooms.sort((a, b) => a.players_count - b.players_count).map(room =>
+                                rooms.length ? rooms.sort((a, b) => a.players_count - b.players_count).map(room =>
                                     <RoomItem key={room.id} game={room} generalGame={game}/>
-                                )
+                                ) : "Комнат нет"
                             }
 
                         </ul>

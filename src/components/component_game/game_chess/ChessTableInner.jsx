@@ -23,11 +23,6 @@ const ChessTableInner = () => {
     const [arrayForTable, setArrayForTable] = useState([])
     const globalColor = ['white', 'black']
 
-    useEffect(() => {
-        dispatch(setFenTable('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'))
-    }, [])
-
-
     const arrayLines = tableFen && Object.keys(tableFen).length && tableFen.slice(0, tableFen.indexOf(" ")).split('/').map(item => {
         return item.split('').map(item2 => {
             if (!+item2) return item2

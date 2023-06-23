@@ -7,16 +7,13 @@ import NewsTop from "../components/components_news/NewsTop";
 import NewsPopular from "../components/components_news/NewsPopular";
 
 const News = () => {
-    const newsList = useSelector(state => {
-        const {newsListReducer} = state
-        return newsListReducer.news
-    })
+    const newsList = useSelector(state => state.newsListReducer.news)
 
     const [searchInput, setSearchInput] = useState('')
     const {currentItems, pageCount, handlePageClick, selectedPage} = PaginationHook(newsList.filter(item => item.title.includes(searchInput)), 3, searchInput)
 
     return (
-        <main className="main">
+        <main className="main main-news">
             <section className="news section-page-bg-wrapper page-padding-top">
                 <div className="news__bg section-page-bg" data-aos="fade-in" data-aos-delay="600">
                     <div className="section-page-bg__element">

@@ -8,8 +8,10 @@ import GamesSingleRooms from "../components/components_games_single/GamesSingleR
 import JsCustomSelect from "../components/JS_CustomSelect";
 import GlobalLink from "../GlobalLink";
 import axios from "axios";
+import GlobalSocket from "../GlobalSocket";
 
 const GamesSingle = () => {
+
 
     const {gamesId} = useParams()
     const [game, setGame] = useState({})
@@ -31,7 +33,8 @@ const GamesSingle = () => {
             <section className="page-game page-padding">
                 <div className="page-game__container container">
                     <div className="page-game__header page-header" data-aos="fade-in" data-aos-delay="200">
-                        <NavLink to={'/games'} className="page-game__forward-btn page-header__forward-btn" title="Назад">
+                        <NavLink to={'/games'} className="page-game__forward-btn page-header__forward-btn"
+                                 title="Назад">
                             <svg width="5" height="7" viewBox="0 0 5 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M0.25 3.49991C0.25 3.35065 0.304932 3.20132 0.414795 3.08757L3.2273 0.170898C3.44702 -0.0569662 3.80298 -0.0569662 4.02271 0.170898C4.24243 0.398763 4.24243 0.767904 4.02271 0.995768L1.60703 3.49991L4.02227 6.0046C4.24199 6.23246 4.24199 6.6016 4.02227 6.82947C3.80254 7.05733 3.44658 7.05733 3.22686 6.82947L0.414356 3.9128C0.304493 3.79887 0.25 3.64939 0.25 3.49991Z"
@@ -82,7 +85,8 @@ const GamesSingle = () => {
                                     {
                                         game.description > 450 ?
                                             <button
-                                                className={"page-game__descr--text-more-btn" + (isShowMoreText ? " _active" : "")} type="button"
+                                                className={"page-game__descr--text-more-btn" + (isShowMoreText ? " _active" : "")}
+                                                type="button"
                                                 onClick={handleMoreText}
                                             >
                                                 {isShowMoreText ? "скрыть" : "больше..."}
@@ -112,7 +116,8 @@ const GamesSingle = () => {
                                             {
                                                 game.game_currencies?.some(item => item === 'money') ?
                                                     <div className="page-game__param--element">
-                                                        <img src="images/icons/dollar-circle.svg" width="15" height="15" alt=""/>
+                                                        <img src="images/icons/dollar-circle.svg" width="15" height="15"
+                                                             alt=""/>
                                                     </div> : ""
                                             }
                                             {
@@ -132,14 +137,16 @@ const GamesSingle = () => {
                                                 game.room_types?.some(item => item === 'public') ?
                                                     <div className="page-game__param--element">
                                                         <span>Открытая игра</span>
-                                                        <img src="images/icons/door-open.svg" width="17" height="17" alt=""/>
+                                                        <img src="images/icons/door-open.svg" width="17" height="17"
+                                                             alt=""/>
                                                     </div> : ""
                                             }
                                             {
                                                 game.room_types?.some(item => item === 'private') ?
                                                     <div className="page-game__param--element">
                                                         <span>Закрытая игра</span>
-                                                        <img src="images/icons/door-lock.svg" width="17" height="17" alt=""/>
+                                                        <img src="images/icons/door-lock.svg" width="17" height="17"
+                                                             alt=""/>
                                                     </div> : ""
                                             }
                                         </div>
@@ -147,7 +154,7 @@ const GamesSingle = () => {
                                 </ul>
                             </div>
                         </div>
-                        <GamesSingleRooms game={game} />
+                        <GamesSingleRooms game={game}/>
                     </div>
                 </div>
             </section>

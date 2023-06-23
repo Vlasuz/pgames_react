@@ -3,7 +3,7 @@ import {Link, NavLink} from "react-router-dom";
 import RoomsTop from "../components/components_rooms/RoomsTop";
 import RoomsList from "../components/components_rooms/RoomsList";
 
-const Rooms = (props) => {
+const Rooms = () => {
 
     return (
         <main className="main">
