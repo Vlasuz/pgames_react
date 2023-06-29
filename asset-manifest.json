@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/pgames_react/static/css/main.e88d8a2e.css",
-    "main.js": "/pgames_react/static/js/main.c1a0931b.js",
+    "main.css": "/pgames_react/static/css/main.4e6ca54b.css",
+    "main.js": "/pgames_react/static/js/main.dc7eb0db.js",
     "static/media/Inter-Bold.woff": "/pgames_react/static/media/Inter-Bold.c0cdde17fb2702443ba4.woff",
     "static/media/Inter-Medium.woff": "/pgames_react/static/media/Inter-Medium.9d692db3219298e097c4.woff",
     "static/media/Inter-Light.woff": "/pgames_react/static/media/Inter-Light.4706f058f67184ddc577.woff",
@@ -27,11 +27,11 @@
     "static/media/TurismoCF-DemiBold.woff2": "/pgames_react/static/media/TurismoCF-DemiBold.8604eb9462d4a9325a48.woff2",
     "static/media/TurismoCF-Medium.woff2": "/pgames_react/static/media/TurismoCF-Medium.a7efd2ea6364beba85df.woff2",
     "index.html": "/pgames_react/index.html",
-    "main.e88d8a2e.css.map": "/pgames_react/static/css/main.e88d8a2e.css.map",
-    "main.c1a0931b.js.map": "/pgames_react/static/js/main.c1a0931b.js.map"
+    "main.4e6ca54b.css.map": "/pgames_react/static/css/main.4e6ca54b.css.map",
+    "main.dc7eb0db.js.map": "/pgames_react/static/js/main.dc7eb0db.js.map"
   },
   "entrypoints": [
-    "static/css/main.e88d8a2e.css",
-    "static/js/main.c1a0931b.js"
+    "static/css/main.4e6ca54b.css",
+    "static/js/main.dc7eb0db.js"
   ]
 }
