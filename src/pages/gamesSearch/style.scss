@@ -1,0 +1,14 @@
+.online-games-search {
+  .games__item {
+    padding: 0;
+  }
+  .swiper-button-prev, .swiper-button-next {
+    &:after {
+      width: auto;
+    }
+  }
+
+  .online-games__slider._little {
+    padding: 0;
+  }
+}

@@ -604,6 +604,7 @@
         opacity: 1;
       }
 
+      &[aria-current="page"]:before,
       &._current::before {
         opacity: 1;
       }

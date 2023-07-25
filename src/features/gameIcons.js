@@ -1,7 +1,7 @@
 import cards from './../assets/img/icons/cards.svg';
 import chess from './../assets/img/icons/chess.svg';
 import hot from './../assets/img/icons/hot.svg';
-import domino from './../assets/img/icons/domino.svg';
+import dominoes from './../assets/img/icons/domino.svg';
 
 export default function GameIcons(type) {
 
@@ -9,7 +9,7 @@ export default function GameIcons(type) {
         cards,
         chess,
         hot,
-        domino,
+        dominoes,
     }
 
     return iconType[type];
