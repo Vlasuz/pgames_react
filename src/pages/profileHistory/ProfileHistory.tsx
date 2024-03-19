@@ -1,15 +1,39 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Aside} from "../../components/aside/Aside";
+import axios from "axios";
+import {getApiLink} from "../../functions/getApiLink";
+import {IPaymentHistory} from "../../models";
+import moneyIcon from './../../assets/img/account/icon-1.svg'
+import chipsIcon from './../../assets/img/account/icon-2.svg'
+import {ProfileHistoryStyled} from "./ProfileHistory.styled";
 
 interface IProfileHistoryProps {
 
 }
 
+interface IPaginator {
+    current_page: 1
+    offset: 0
+    page_count: 6
+}
+
 export const ProfileHistory: React.FC<IProfileHistoryProps> = () => {
 
+    const [history, setHistory] = useState<IPaymentHistory[]>([])
+    const [pagination, setPagination] = useState<IPaginator>()
+    const [currentPage, setCurrentPage] = useState<number>(1)
+
+    useEffect(() => {
+        axios.get(getApiLink(`/api/finance/replenishment_history/?page=${currentPage}`)).then(({data}) => {
+            setHistory(data.payments)
+            setPagination(data.paginator)
+            console.log(data)
+        }).catch(er => console.log(er))
+    }, [currentPage])
+
     return (
-        <main className="main">
-            <section className="account">
+        <ProfileHistoryStyled className="main">
+            <section className="account" style={{paddingTop: "calc(60px + 33px)"}}>
                 <div className="account__container container _large">
 
                     <Aside/>
@@ -56,491 +80,83 @@ export const ProfileHistory: React.FC<IProfileHistoryProps> = () => {
                                             Пополнение баланса
                                         </h3>
                                         <ul className="account-history__list">
-                                            <li className="account-history__item">
-                                                <div className="account-history-element">
-                                                    <div className="account-history-element__body">
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__icon ">
-                                                                <img src="img/account/icon-1.svg" width="18" height="18"
-                                                                     alt=""
-                                                                     className="account-history-element__icon--img"/>
-                                                            </div>
-                                                        </div>
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__row">
-                                                                <div className="account-history-element__row--col">
-                                                                    <strong className="account-history-element__value">
-                                                                        20.00 USD
-                                                                    </strong>
-                                                                    <span className="account-history-element__name">
-                            Пополнение баланса
-                        </span>
+
+                                            {
+                                                history.map(item =>
+                                                    <li className="account-history__item">
+                                                        <div className="account-history-element">
+                                                            <div className="account-history-element__body">
+                                                                <div className="account-history-element__col">
+                                                                    <div
+                                                                        className="account-history-element__icon _accent">
+                                                                        <img
+                                                                            src={item.currency_type === "chips" ? chipsIcon : moneyIcon}
+                                                                            width="18"
+                                                                            height="18"
+                                                                            alt=""
+                                                                            className="account-history-element__icon--img"/>
+                                                                    </div>
                                                                 </div>
-                                                                <div className="account-history-element__row--col">
-                                                                    <time className="account-history-element__time"
-                                                                          dateTime="2022-07-26 12:45">
-                            <span>
-                                <svg width="10" height="12" viewBox="0 0 10 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M2.14286 0.75C2.14286 0.335859 2.46205 0 2.85714 0C3.25223 0 3.57143 0.335859 3.57143 0.75V1.5H6.42857V0.75C6.42857 0.335859 6.74777 0 7.14286 0C7.53795 0 7.85714 0.335859 7.85714 0.75V1.5H8.92857C9.52009 1.5 10 2.00367 10 2.625V3.75H0V2.625C0 2.00367 0.479688 1.5 1.07143 1.5H2.14286V0.75ZM10 10.875C10 11.4961 9.52009 12 8.92857 12H1.07143C0.479688 12 0 11.4961 0 10.875V4.5H10V10.875Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                26.07.2022
-                            </span>
-                                                                        <span>
-                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M6 12C2.68594 12 0 9.31406 0 6C0 2.68594 2.68594 0 6 0C9.31406 0 12 2.68594 12 6C12 9.31406 9.31406 12 6 12ZM5.4375 6C5.4375 6.1875 5.53125 6.36328 5.68828 6.44766L7.93828 7.94766C8.19609 8.13984 8.54531 8.06953 8.69766 7.81172C8.88984 7.55391 8.81953 7.20469 8.56172 7.03125L6.5625 5.7V2.8125C6.5625 2.50078 6.31172 2.25 5.97891 2.25C5.68828 2.25 5.41641 2.50078 5.41641 2.8125L5.4375 6Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                12:45
-                            </span>
-                                                                    </time>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li className="account-history__item">
-                                                <div className="account-history-element">
-                                                    <div className="account-history-element__body">
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__icon ">
-                                                                <img src="img/account/icon-1.svg" width="18" height="18"
-                                                                     alt=""
-                                                                     className="account-history-element__icon--img"/>
-                                                            </div>
-                                                        </div>
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__row">
-                                                                <div className="account-history-element__row--col">
-                                                                    <strong className="account-history-element__value">
-                                                                        20.00 USD
-                                                                    </strong>
-                                                                    <span className="account-history-element__name">
-                            Пополнение баланса
-                        </span>
-                                                                </div>
-                                                                <div className="account-history-element__row--col">
-                                                                    <time className="account-history-element__time"
-                                                                          dateTime="2022-07-26 12:45">
-                            <span>
-                                <svg width="10" height="12" viewBox="0 0 10 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M2.14286 0.75C2.14286 0.335859 2.46205 0 2.85714 0C3.25223 0 3.57143 0.335859 3.57143 0.75V1.5H6.42857V0.75C6.42857 0.335859 6.74777 0 7.14286 0C7.53795 0 7.85714 0.335859 7.85714 0.75V1.5H8.92857C9.52009 1.5 10 2.00367 10 2.625V3.75H0V2.625C0 2.00367 0.479688 1.5 1.07143 1.5H2.14286V0.75ZM10 10.875C10 11.4961 9.52009 12 8.92857 12H1.07143C0.479688 12 0 11.4961 0 10.875V4.5H10V10.875Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                26.07.2022
-                            </span>
-                                                                        <span>
-                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M6 12C2.68594 12 0 9.31406 0 6C0 2.68594 2.68594 0 6 0C9.31406 0 12 2.68594 12 6C12 9.31406 9.31406 12 6 12ZM5.4375 6C5.4375 6.1875 5.53125 6.36328 5.68828 6.44766L7.93828 7.94766C8.19609 8.13984 8.54531 8.06953 8.69766 7.81172C8.88984 7.55391 8.81953 7.20469 8.56172 7.03125L6.5625 5.7V2.8125C6.5625 2.50078 6.31172 2.25 5.97891 2.25C5.68828 2.25 5.41641 2.50078 5.41641 2.8125L5.4375 6Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                12:45
-                            </span>
-                                                                    </time>
+                                                                <div className="account-history-element__col">
+                                                                    <div className="account-history-element__row">
+                                                                        <div
+                                                                            className="account-history-element__row--col">
+                                                                            <strong
+                                                                                className="account-history-element__value">
+                                                                                {
+                                                                                    item.amount
+                                                                                }
+                                                                            </strong>
+                                                                            <span
+                                                                                className="account-history-element__name">
+                                                                                    Пополнение баланса
+                                                                                </span>
+                                                                        </div>
+                                                                        <div
+                                                                            className="account-history-element__row--col">
+                                                                            <time
+                                                                                className="account-history-element__time"
+                                                                                dateTime="2022-07-26 12:45">
+                                                                                <span>
+                                                                                    <svg width="10" height="12"
+                                                                                         viewBox="0 0 10 12" fill="none"
+                                                                                         xmlns="http://www.w3.org/2000/svg">
+                                                                                        <path
+                                                                                            d="M2.14286 0.75C2.14286 0.335859 2.46205 0 2.85714 0C3.25223 0 3.57143 0.335859 3.57143 0.75V1.5H6.42857V0.75C6.42857 0.335859 6.74777 0 7.14286 0C7.53795 0 7.85714 0.335859 7.85714 0.75V1.5H8.92857C9.52009 1.5 10 2.00367 10 2.625V3.75H0V2.625C0 2.00367 0.479688 1.5 1.07143 1.5H2.14286V0.75ZM10 10.875C10 11.4961 9.52009 12 8.92857 12H1.07143C0.479688 12 0 11.4961 0 10.875V4.5H10V10.875Z"
+                                                                                            fill="#89857D"/>
+                                                                                    </svg>
+                                                                                    {
+                                                                                        item.created_at.slice(0, item.created_at.indexOf(', '))
+                                                                                    }
+                                                                                </span>
+                                                                                <span>
+                                                                                    <svg width="12" height="12"
+                                                                                         viewBox="0 0 12 12" fill="none"
+                                                                                         xmlns="http://www.w3.org/2000/svg">
+                                                                                        <path
+                                                                                            d="M6 12C2.68594 12 0 9.31406 0 6C0 2.68594 2.68594 0 6 0C9.31406 0 12 2.68594 12 6C12 9.31406 9.31406 12 6 12ZM5.4375 6C5.4375 6.1875 5.53125 6.36328 5.68828 6.44766L7.93828 7.94766C8.19609 8.13984 8.54531 8.06953 8.69766 7.81172C8.88984 7.55391 8.81953 7.20469 8.56172 7.03125L6.5625 5.7V2.8125C6.5625 2.50078 6.31172 2.25 5.97891 2.25C5.68828 2.25 5.41641 2.50078 5.41641 2.8125L5.4375 6Z"
+                                                                                            fill="#89857D"/>
+                                                                                    </svg>
+                                                                                    {
+                                                                                        item.created_at.slice(item.created_at.indexOf(' '))
+                                                                                    }
+                                                                                </span>
+                                                                            </time>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li className="account-history__item">
-                                                <div className="account-history-element">
-                                                    <div className="account-history-element__body">
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__icon _accent">
-                                                                <img src="img/account/icon-2.svg" width="18" height="18"
-                                                                     alt=""
-                                                                     className="account-history-element__icon--img"/>
-                                                            </div>
-                                                        </div>
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__row">
-                                                                <div className="account-history-element__row--col">
-                                                                    <strong className="account-history-element__value">
-                                                                        20 фишек
-                                                                    </strong>
-                                                                    <span className="account-history-element__name">
-                            Победа в игре “Дурак”
-                        </span>
-                                                                </div>
-                                                                <div className="account-history-element__row--col">
-                                                                    <time className="account-history-element__time"
-                                                                          dateTime="2022-07-26 12:45">
-                            <span>
-                                <svg width="10" height="12" viewBox="0 0 10 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M2.14286 0.75C2.14286 0.335859 2.46205 0 2.85714 0C3.25223 0 3.57143 0.335859 3.57143 0.75V1.5H6.42857V0.75C6.42857 0.335859 6.74777 0 7.14286 0C7.53795 0 7.85714 0.335859 7.85714 0.75V1.5H8.92857C9.52009 1.5 10 2.00367 10 2.625V3.75H0V2.625C0 2.00367 0.479688 1.5 1.07143 1.5H2.14286V0.75ZM10 10.875C10 11.4961 9.52009 12 8.92857 12H1.07143C0.479688 12 0 11.4961 0 10.875V4.5H10V10.875Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                26.07.2022
-                            </span>
-                                                                        <span>
-                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M6 12C2.68594 12 0 9.31406 0 6C0 2.68594 2.68594 0 6 0C9.31406 0 12 2.68594 12 6C12 9.31406 9.31406 12 6 12ZM5.4375 6C5.4375 6.1875 5.53125 6.36328 5.68828 6.44766L7.93828 7.94766C8.19609 8.13984 8.54531 8.06953 8.69766 7.81172C8.88984 7.55391 8.81953 7.20469 8.56172 7.03125L6.5625 5.7V2.8125C6.5625 2.50078 6.31172 2.25 5.97891 2.25C5.68828 2.25 5.41641 2.50078 5.41641 2.8125L5.4375 6Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                12:45
-                            </span>
-                                                                    </time>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li className="account-history__item">
-                                                <div className="account-history-element">
-                                                    <div className="account-history-element__body">
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__icon _accent">
-                                                                <img src="img/account/icon-1.svg" width="18" height="18"
-                                                                     alt=""
-                                                                     className="account-history-element__icon--img"/>
-                                                            </div>
-                                                        </div>
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__row">
-                                                                <div className="account-history-element__row--col">
-                                                                    <strong className="account-history-element__value">
-                                                                        20.00 USD
-                                                                    </strong>
-                                                                    <span className="account-history-element__name">
-                            Победа в игре “Дурак”
-                        </span>
-                                                                </div>
-                                                                <div className="account-history-element__row--col">
-                                                                    <time className="account-history-element__time"
-                                                                          dateTime="2022-07-26 12:45">
-                            <span>
-                                <svg width="10" height="12" viewBox="0 0 10 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M2.14286 0.75C2.14286 0.335859 2.46205 0 2.85714 0C3.25223 0 3.57143 0.335859 3.57143 0.75V1.5H6.42857V0.75C6.42857 0.335859 6.74777 0 7.14286 0C7.53795 0 7.85714 0.335859 7.85714 0.75V1.5H8.92857C9.52009 1.5 10 2.00367 10 2.625V3.75H0V2.625C0 2.00367 0.479688 1.5 1.07143 1.5H2.14286V0.75ZM10 10.875C10 11.4961 9.52009 12 8.92857 12H1.07143C0.479688 12 0 11.4961 0 10.875V4.5H10V10.875Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                26.07.2022
-                            </span>
-                                                                        <span>
-                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M6 12C2.68594 12 0 9.31406 0 6C0 2.68594 2.68594 0 6 0C9.31406 0 12 2.68594 12 6C12 9.31406 9.31406 12 6 12ZM5.4375 6C5.4375 6.1875 5.53125 6.36328 5.68828 6.44766L7.93828 7.94766C8.19609 8.13984 8.54531 8.06953 8.69766 7.81172C8.88984 7.55391 8.81953 7.20469 8.56172 7.03125L6.5625 5.7V2.8125C6.5625 2.50078 6.31172 2.25 5.97891 2.25C5.68828 2.25 5.41641 2.50078 5.41641 2.8125L5.4375 6Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                12:45
-                            </span>
-                                                                    </time>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li className="account-history__item">
-                                                <div className="account-history-element">
-                                                    <div className="account-history-element__body">
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__icon _accent">
-                                                                <img src="img/account/icon-3.svg" width="18" height="18"
-                                                                     alt=""
-                                                                     className="account-history-element__icon--img"/>
-                                                            </div>
-                                                        </div>
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__row">
-                                                                <div className="account-history-element__row--col">
-                                                                    <strong className="account-history-element__value">
-                                                                        20 фишек
-                                                                    </strong>
-                                                                    <span className="account-history-element__name">
-                            Победа в игре “Дурак”
-                        </span>
-                                                                </div>
-                                                                <div className="account-history-element__row--col">
-                                                                    <time className="account-history-element__time"
-                                                                          dateTime="2022-07-26 12:45">
-                            <span>
-                                <svg width="10" height="12" viewBox="0 0 10 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M2.14286 0.75C2.14286 0.335859 2.46205 0 2.85714 0C3.25223 0 3.57143 0.335859 3.57143 0.75V1.5H6.42857V0.75C6.42857 0.335859 6.74777 0 7.14286 0C7.53795 0 7.85714 0.335859 7.85714 0.75V1.5H8.92857C9.52009 1.5 10 2.00367 10 2.625V3.75H0V2.625C0 2.00367 0.479688 1.5 1.07143 1.5H2.14286V0.75ZM10 10.875C10 11.4961 9.52009 12 8.92857 12H1.07143C0.479688 12 0 11.4961 0 10.875V4.5H10V10.875Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                26.07.2022
-                            </span>
-                                                                        <span>
-                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M6 12C2.68594 12 0 9.31406 0 6C0 2.68594 2.68594 0 6 0C9.31406 0 12 2.68594 12 6C12 9.31406 9.31406 12 6 12ZM5.4375 6C5.4375 6.1875 5.53125 6.36328 5.68828 6.44766L7.93828 7.94766C8.19609 8.13984 8.54531 8.06953 8.69766 7.81172C8.88984 7.55391 8.81953 7.20469 8.56172 7.03125L6.5625 5.7V2.8125C6.5625 2.50078 6.31172 2.25 5.97891 2.25C5.68828 2.25 5.41641 2.50078 5.41641 2.8125L5.4375 6Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                12:45
-                            </span>
-                                                                    </time>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li className="account-history__item">
-                                                <div className="account-history-element">
-                                                    <div className="account-history-element__body">
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__icon ">
-                                                                <img src="img/account/icon-2.svg" width="18" height="18"
-                                                                     alt=""
-                                                                     className="account-history-element__icon--img"/>
-                                                            </div>
-                                                        </div>
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__row">
-                                                                <div className="account-history-element__row--col">
-                                                                    <strong className="account-history-element__value">
-                                                                        20 фишек
-                                                                    </strong>
-                                                                    <span className="account-history-element__name">
-                            Пополнение баланса
-                        </span>
-                                                                </div>
-                                                                <div className="account-history-element__row--col">
-                                                                    <time className="account-history-element__time"
-                                                                          dateTime="2022-07-26 12:45">
-                            <span>
-                                <svg width="10" height="12" viewBox="0 0 10 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M2.14286 0.75C2.14286 0.335859 2.46205 0 2.85714 0C3.25223 0 3.57143 0.335859 3.57143 0.75V1.5H6.42857V0.75C6.42857 0.335859 6.74777 0 7.14286 0C7.53795 0 7.85714 0.335859 7.85714 0.75V1.5H8.92857C9.52009 1.5 10 2.00367 10 2.625V3.75H0V2.625C0 2.00367 0.479688 1.5 1.07143 1.5H2.14286V0.75ZM10 10.875C10 11.4961 9.52009 12 8.92857 12H1.07143C0.479688 12 0 11.4961 0 10.875V4.5H10V10.875Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                26.07.2022
-                            </span>
-                                                                        <span>
-                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M6 12C2.68594 12 0 9.31406 0 6C0 2.68594 2.68594 0 6 0C9.31406 0 12 2.68594 12 6C12 9.31406 9.31406 12 6 12ZM5.4375 6C5.4375 6.1875 5.53125 6.36328 5.68828 6.44766L7.93828 7.94766C8.19609 8.13984 8.54531 8.06953 8.69766 7.81172C8.88984 7.55391 8.81953 7.20469 8.56172 7.03125L6.5625 5.7V2.8125C6.5625 2.50078 6.31172 2.25 5.97891 2.25C5.68828 2.25 5.41641 2.50078 5.41641 2.8125L5.4375 6Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                12:45
-                            </span>
-                                                                    </time>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li className="account-history__item">
-                                                <div className="account-history-element">
-                                                    <div className="account-history-element__body">
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__icon ">
-                                                                <img src="img/account/icon-1.svg" width="18" height="18"
-                                                                     alt=""
-                                                                     className="account-history-element__icon--img"/>
-                                                            </div>
-                                                        </div>
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__row">
-                                                                <div className="account-history-element__row--col">
-                                                                    <strong className="account-history-element__value">
-                                                                        20.00 USD
-                                                                    </strong>
-                                                                    <span className="account-history-element__name">
-                            Пополнение баланса
-                        </span>
-                                                                </div>
-                                                                <div className="account-history-element__row--col">
-                                                                    <time className="account-history-element__time"
-                                                                          dateTime="2022-07-26 12:45">
-                            <span>
-                                <svg width="10" height="12" viewBox="0 0 10 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M2.14286 0.75C2.14286 0.335859 2.46205 0 2.85714 0C3.25223 0 3.57143 0.335859 3.57143 0.75V1.5H6.42857V0.75C6.42857 0.335859 6.74777 0 7.14286 0C7.53795 0 7.85714 0.335859 7.85714 0.75V1.5H8.92857C9.52009 1.5 10 2.00367 10 2.625V3.75H0V2.625C0 2.00367 0.479688 1.5 1.07143 1.5H2.14286V0.75ZM10 10.875C10 11.4961 9.52009 12 8.92857 12H1.07143C0.479688 12 0 11.4961 0 10.875V4.5H10V10.875Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                26.07.2022
-                            </span>
-                                                                        <span>
-                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M6 12C2.68594 12 0 9.31406 0 6C0 2.68594 2.68594 0 6 0C9.31406 0 12 2.68594 12 6C12 9.31406 9.31406 12 6 12ZM5.4375 6C5.4375 6.1875 5.53125 6.36328 5.68828 6.44766L7.93828 7.94766C8.19609 8.13984 8.54531 8.06953 8.69766 7.81172C8.88984 7.55391 8.81953 7.20469 8.56172 7.03125L6.5625 5.7V2.8125C6.5625 2.50078 6.31172 2.25 5.97891 2.25C5.68828 2.25 5.41641 2.50078 5.41641 2.8125L5.4375 6Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                12:45
-                            </span>
-                                                                    </time>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li className="account-history__item">
-                                                <div className="account-history-element">
-                                                    <div className="account-history-element__body">
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__icon _accent">
-                                                                <img src="img/account/icon-2.svg" width="18" height="18"
-                                                                     alt=""
-                                                                     className="account-history-element__icon--img"/>
-                                                            </div>
-                                                        </div>
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__row">
-                                                                <div className="account-history-element__row--col">
-                                                                    <strong className="account-history-element__value">
-                                                                        20 фишек
-                                                                    </strong>
-                                                                    <span className="account-history-element__name">
-                            Победа в игре “Дурак”
-                        </span>
-                                                                </div>
-                                                                <div className="account-history-element__row--col">
-                                                                    <time className="account-history-element__time"
-                                                                          dateTime="2022-07-26 12:45">
-                            <span>
-                                <svg width="10" height="12" viewBox="0 0 10 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M2.14286 0.75C2.14286 0.335859 2.46205 0 2.85714 0C3.25223 0 3.57143 0.335859 3.57143 0.75V1.5H6.42857V0.75C6.42857 0.335859 6.74777 0 7.14286 0C7.53795 0 7.85714 0.335859 7.85714 0.75V1.5H8.92857C9.52009 1.5 10 2.00367 10 2.625V3.75H0V2.625C0 2.00367 0.479688 1.5 1.07143 1.5H2.14286V0.75ZM10 10.875C10 11.4961 9.52009 12 8.92857 12H1.07143C0.479688 12 0 11.4961 0 10.875V4.5H10V10.875Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                26.07.2022
-                            </span>
-                                                                        <span>
-                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M6 12C2.68594 12 0 9.31406 0 6C0 2.68594 2.68594 0 6 0C9.31406 0 12 2.68594 12 6C12 9.31406 9.31406 12 6 12ZM5.4375 6C5.4375 6.1875 5.53125 6.36328 5.68828 6.44766L7.93828 7.94766C8.19609 8.13984 8.54531 8.06953 8.69766 7.81172C8.88984 7.55391 8.81953 7.20469 8.56172 7.03125L6.5625 5.7V2.8125C6.5625 2.50078 6.31172 2.25 5.97891 2.25C5.68828 2.25 5.41641 2.50078 5.41641 2.8125L5.4375 6Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                12:45
-                            </span>
-                                                                    </time>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li className="account-history__item">
-                                                <div className="account-history-element">
-                                                    <div className="account-history-element__body">
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__icon _accent">
-                                                                <img src="img/account/icon-1.svg" width="18" height="18"
-                                                                     alt=""
-                                                                     className="account-history-element__icon--img"/>
-                                                            </div>
-                                                        </div>
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__row">
-                                                                <div className="account-history-element__row--col">
-                                                                    <strong className="account-history-element__value">
-                                                                        20.00 USD
-                                                                    </strong>
-                                                                    <span className="account-history-element__name">
-                            Победа в игре “Дурак”
-                        </span>
-                                                                </div>
-                                                                <div className="account-history-element__row--col">
-                                                                    <time className="account-history-element__time"
-                                                                          dateTime="2022-07-26 12:45">
-                            <span>
-                                <svg width="10" height="12" viewBox="0 0 10 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M2.14286 0.75C2.14286 0.335859 2.46205 0 2.85714 0C3.25223 0 3.57143 0.335859 3.57143 0.75V1.5H6.42857V0.75C6.42857 0.335859 6.74777 0 7.14286 0C7.53795 0 7.85714 0.335859 7.85714 0.75V1.5H8.92857C9.52009 1.5 10 2.00367 10 2.625V3.75H0V2.625C0 2.00367 0.479688 1.5 1.07143 1.5H2.14286V0.75ZM10 10.875C10 11.4961 9.52009 12 8.92857 12H1.07143C0.479688 12 0 11.4961 0 10.875V4.5H10V10.875Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                26.07.2022
-                            </span>
-                                                                        <span>
-                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M6 12C2.68594 12 0 9.31406 0 6C0 2.68594 2.68594 0 6 0C9.31406 0 12 2.68594 12 6C12 9.31406 9.31406 12 6 12ZM5.4375 6C5.4375 6.1875 5.53125 6.36328 5.68828 6.44766L7.93828 7.94766C8.19609 8.13984 8.54531 8.06953 8.69766 7.81172C8.88984 7.55391 8.81953 7.20469 8.56172 7.03125L6.5625 5.7V2.8125C6.5625 2.50078 6.31172 2.25 5.97891 2.25C5.68828 2.25 5.41641 2.50078 5.41641 2.8125L5.4375 6Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                12:45
-                            </span>
-                                                                    </time>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li className="account-history__item">
-                                                <div className="account-history-element">
-                                                    <div className="account-history-element__body">
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__icon _accent">
-                                                                <img src="img/account/icon-3.svg" width="18" height="18"
-                                                                     alt=""
-                                                                     className="account-history-element__icon--img"/>
-                                                            </div>
-                                                        </div>
-                                                        <div className="account-history-element__col">
-                                                            <div className="account-history-element__row">
-                                                                <div className="account-history-element__row--col">
-                                                                    <strong className="account-history-element__value">
-                                                                        20 фишек
-                                                                    </strong>
-                                                                    <span className="account-history-element__name">
-                            Победа в игре “Дурак”
-                        </span>
-                                                                </div>
-                                                                <div className="account-history-element__row--col">
-                                                                    <time className="account-history-element__time"
-                                                                          dateTime="2022-07-26 12:45">
-                            <span>
-                                <svg width="10" height="12" viewBox="0 0 10 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M2.14286 0.75C2.14286 0.335859 2.46205 0 2.85714 0C3.25223 0 3.57143 0.335859 3.57143 0.75V1.5H6.42857V0.75C6.42857 0.335859 6.74777 0 7.14286 0C7.53795 0 7.85714 0.335859 7.85714 0.75V1.5H8.92857C9.52009 1.5 10 2.00367 10 2.625V3.75H0V2.625C0 2.00367 0.479688 1.5 1.07143 1.5H2.14286V0.75ZM10 10.875C10 11.4961 9.52009 12 8.92857 12H1.07143C0.479688 12 0 11.4961 0 10.875V4.5H10V10.875Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                26.07.2022
-                            </span>
-                                                                        <span>
-                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M6 12C2.68594 12 0 9.31406 0 6C0 2.68594 2.68594 0 6 0C9.31406 0 12 2.68594 12 6C12 9.31406 9.31406 12 6 12ZM5.4375 6C5.4375 6.1875 5.53125 6.36328 5.68828 6.44766L7.93828 7.94766C8.19609 8.13984 8.54531 8.06953 8.69766 7.81172C8.88984 7.55391 8.81953 7.20469 8.56172 7.03125L6.5625 5.7V2.8125C6.5625 2.50078 6.31172 2.25 5.97891 2.25C5.68828 2.25 5.41641 2.50078 5.41641 2.8125L5.4375 6Z"
-                                        fill="#89857D"/>
-                                </svg>
-                                12:45
-                            </span>
-                                                                    </time>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                                    </li>
+                                                )
+                                            }
+
+
                                         </ul>
                                         <div className="account-history__pagination">
                                             <div className="page-pagination">
                                                 <div className="page-pagination__wrapper">
-                                                    <a href="#" className="page-pagination__btn _prev _disabled">
+                                                    <a onClick={_ => setCurrentPage(prev => prev > 1 ? prev - 1 : 1)} className={`page-pagination__btn _prev ${currentPage <= 1 && "_disabled"}`}>
                                                         <svg width="9" height="12" viewBox="0 0 9 12" fill="none"
                                                              xmlns="http://www.w3.org/2000/svg">
                                                             <path
@@ -549,33 +165,21 @@ export const ProfileHistory: React.FC<IProfileHistoryProps> = () => {
                                                         </svg>
                                                     </a>
                                                     <ul className="page-pagination__list">
-                                                        <li className="page-pagination__item">
-                                                            <a href="#" className="page-pagination__link _current">
-                                                                1
-                                                            </a>
-                                                        </li>
-                                                        <li className="page-pagination__item">
-                                                            <a href="#" className="page-pagination__link">
-                                                                2
-                                                            </a>
-                                                        </li>
-                                                        <li className="page-pagination__item">
-                                                            <a href="#" className="page-pagination__link">
-                                                                ...
-                                                            </a>
-                                                        </li>
-                                                        <li className="page-pagination__item">
-                                                            <a href="#" className="page-pagination__link">
-                                                                9
-                                                            </a>
-                                                        </li>
-                                                        <li className="page-pagination__item">
-                                                            <a href="#" className="page-pagination__link">
-                                                                10
-                                                            </a>
-                                                        </li>
+
+                                                        {
+                                                            Array.from({length: pagination?.page_count || 0}, (_, index) => index).map(item => (
+                                                                    <li className="page-pagination__item">
+                                                                        <a onClick={_ => setCurrentPage(item + 1)}
+                                                                           className={`page-pagination__link ${currentPage === item + 1 && "_current"}`}>
+                                                                            {item + 1}
+                                                                        </a>
+                                                                    </li>
+                                                                )
+                                                            )
+                                                        }
+
                                                     </ul>
-                                                    <a href="#" className="page-pagination__btn _next">
+                                                    <a onClick={_ => pagination?.page_count && setCurrentPage(prev => prev < pagination?.page_count ? prev + 1 : pagination?.page_count)} className={`page-pagination__btn _next ${currentPage === pagination?.page_count && "_disabled"}`}>
                                                         <svg width="9" height="12" viewBox="0 0 9 12" fill="none"
                                                              xmlns="http://www.w3.org/2000/svg">
                                                             <path
@@ -593,6 +197,6 @@ export const ProfileHistory: React.FC<IProfileHistoryProps> = () => {
                     </div>
                 </div>
             </section>
-        </main>
+        </ProfileHistoryStyled>
     )
 }

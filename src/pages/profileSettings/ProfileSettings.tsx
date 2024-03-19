@@ -14,7 +14,7 @@ export const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
 
     return (
         <ProfileSettingsStyled className="main">
-            <section className="account">
+            <section className="account" style={{paddingTop: "calc(60px + 33px)"}}>
                 <div className="account__container container _large">
 
                     <Aside/>

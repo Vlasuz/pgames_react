@@ -3240,6 +3240,7 @@ body.webp-false .wrapper-bg._webp-false,body.webp-true .wrapper-bg._webp-true {
     bottom: 0;
     z-index: 2;
     max-width: 400px;
+    /*visibility: hidden;*/
     width: 100%;
     height: calc(var(--height-screen,100vh) - var(--height-header,0px));
     display: flex;

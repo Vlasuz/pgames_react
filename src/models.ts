@@ -73,3 +73,25 @@ export interface IGameInfo {
     game_currencies: string[]
     room_types: string[]
 }
+
+export interface ISelectOption {
+    title: string
+    slug: string
+    isActive?: boolean
+}
+
+export interface IPaymentHistory {
+    amount: string;
+    created_at: string;
+    currency_type: string;
+    service: string;
+}
+
+export interface IContacts {
+    facebook: string;
+    instagram: string;
+    support_email: string;
+    support_phone_number: string;
+    telegram: string;
+    twitter: string;
+}

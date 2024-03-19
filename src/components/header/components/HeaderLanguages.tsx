@@ -1,4 +1,5 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
+import {useClickOutside} from "../../../hooks/ClickOutside";
 
 interface IHeaderLanguagesProps {
 
@@ -6,9 +7,20 @@ interface IHeaderLanguagesProps {
 
 export const HeaderLanguages: React.FC<IHeaderLanguagesProps> = () => {
 
+    const [isActive, setIsActive] = useState(false)
+
+    const buttonRef = useRef(null)
+    const blockRef = useRef(null)
+
+    const handleOpen = () => {
+        setIsActive(prev => !prev)
+    }
+
+    useClickOutside({button: buttonRef, block: blockRef, setState: setIsActive})
+
     return (
-        <div className="header__nav--language header__language header__drop-down">
-            <button type="button" className="header__language--target header__drop-down--target">
+        <div className={`header__nav--language header__language header__drop-down ${isActive && "_active"}`}>
+            <button ref={buttonRef} onClick={handleOpen} type="button" className="header__language--target header__drop-down--target">
                 Ru
                 <svg width="7" height="5" viewBox="0 0 7 5" fill="none"
                      xmlns="http://www.w3.org/2000/svg">
@@ -17,7 +29,7 @@ export const HeaderLanguages: React.FC<IHeaderLanguagesProps> = () => {
                         fill="#F9F1DF"/>
                 </svg>
             </button>
-            <div className="header__drop-down--block">
+            <div ref={blockRef} className="header__drop-down--block">
                 <div className="header__drop-down--body">
                     <ul className="header__drop-down--list">
                         <li className="header__drop-down--item">

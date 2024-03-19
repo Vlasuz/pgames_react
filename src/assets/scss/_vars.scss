@@ -7,6 +7,9 @@ $containerMin: 1280 + ($containerPadding * 2);
 $containerLarge: 1405 + ($containerPadding * 2);
 
 :root {
+    --height-screen: 585px;
+    --height-header: 60px;
+
     --title-font: 'TurismoCF';
     --main-font: 'Roboto';
     

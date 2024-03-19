@@ -1,9 +1,9 @@
-import React, {useContext, useEffect} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {PlayerStyled} from "./Player.styled";
 import dealer from './../../assets/img/game/dealer.svg'
 import {IPlayer, IPlayerUser, IUser} from "../../models";
 import {useAllCards} from "../../hooks/AllCards";
-import {WSMessage} from "../../pagesGames/fool/Fool";
+import {UserTurnRef, WSMessage} from "../../pagesGames/fool/Fool";
 import {getApiLink} from "../../functions/getApiLink";
 
 interface IPlayerProps {
@@ -12,15 +12,15 @@ interface IPlayerProps {
     isReady: boolean
     position: number
     isDealer?: boolean
-    cardsList?: number
     isPlayerMin?: boolean
     gameSlug?: string
     isWaitingGame?: boolean
     userTurn?: any
     playerNewCards?: any
+    userEvent?: any
 }
 
-export const Player: React.FC<IPlayerProps> = ({isHavePlayer, playerInfo, isReady, position, isDealer, cardsList, isPlayerMin, gameSlug, isWaitingGame, userTurn, playerNewCards}) => {
+export const Player: React.FC<IPlayerProps> = ({isHavePlayer, playerInfo, isReady, position, isDealer, isPlayerMin, gameSlug, isWaitingGame, userTurn, playerNewCards, userEvent}) => {
 
     const playerWaiting = <>
         <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
@@ -33,26 +33,73 @@ export const Player: React.FC<IPlayerProps> = ({isHavePlayer, playerInfo, isRead
     </>
 
     const ws: any = useContext(WSMessage)
+    const userRef: any = useContext(UserTurnRef)
+
     const {allCards}: any = useAllCards()
+
+    const [cardsList, setCardsList] = useState(6)
+    const [timer, setTimer] = useState(0)
 
     isHavePlayer = ws?.users?.filter((user: IPlayer) => user.position === position)[0]
     playerInfo = ws?.users?.filter((user: IPlayer) => user.position === position)[0]
 
     useEffect(() => {
+        playerNewCards.length && playerNewCards?.map((player: any) => {
+            const allAmount = player.cards_count
+            const addCards = player?.player?.new_cards_count
+
+            if(player?.player?.id === playerInfo?.id || player?.id === playerInfo?.id) {
+                if(!!allAmount) {
+                    setCardsList(allAmount)
+                } else if(!!addCards) {
+                    setCardsList(prev => prev + addCards)
+                }
+            }
+
+        })
+    }, [playerNewCards])
+
+    useEffect(() => {
+        if(!userEvent?.id) return
+
+        if(userEvent.id === playerInfo?.id && cardsList && cardsList > 0)
+             setCardsList(prev => prev - 1)
+
+    }, [userEvent])
+
+    useEffect(() => {
         if (!events[ws.event]) return;
-        console.log(events[ws.event]);
-        events[ws.event](); // Вызываем функцию обработчика события
+
+        events[ws.event]();
     }, [ws]);
 
     const handleNewPlayer = (data: any) => {
         playerInfo = data;
     }
 
+    useEffect(() => {
+        if(!userTurn?.timeout) return;
+
+        const timer = 70 - userTurn.timeout
+        setTimer(timer === 0 ? 70 : timer)
+
+    }, [userTurn])
+
     const events: { [key: string]: any } = {
         "new_player": () => handleNewPlayer(ws.data)
     }
 
-    const isYourTurn = userTurn?.player?.id === playerInfo?.id
+    const isPlayerTurn = userTurn?.player?.id === playerInfo?.id ?? 0
+
+    useEffect(() => {
+        if(timer < 0) return;
+
+        const interval = setInterval(() => {
+            setTimer(prev => prev - 1)
+        }, 1000)
+
+        return () => clearInterval(interval)
+    }, [timer])
 
     return (
         <PlayerStyled className={isWaitingGame ? (!isHavePlayer ? "game__player-waiting" : `game__player ${isPlayerMin && "_min"}`) : ""}>
@@ -66,11 +113,11 @@ export const Player: React.FC<IPlayerProps> = ({isHavePlayer, playerInfo, isRead
                     {isDealer && <div className="game__player--dealer">
                         <img src={dealer} alt="" className="game__player--dealer-img"/>
                     </div>}
-                    <div className="game__player--info">
+                    <div className="game__player--info" ref={userEvent.id === playerInfo?.id ? userRef : null}>
                         <h3 className="game__player--name">
                             {playerInfo?.name ?? playerInfo?.username}
                         </h3>
-                        {isYourTurn && <progress className="game__player--progress" max="100" value="100"></progress>}
+                        {isPlayerTurn && <progress className="game__player--progress" max="100" value={timer * 100 / 70}></progress>}
                     </div>
 
                     <div className="game__player--block">

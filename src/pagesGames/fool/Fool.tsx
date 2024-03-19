@@ -1,4 +1,4 @@
-import React, {createContext, Dispatch, SetStateAction, useContext, useEffect, useState} from 'react'
+import React, {createContext, Dispatch, SetStateAction, useContext, useEffect, useRef, useState} from 'react'
 import {GamesCommunication} from "../../components/gamesCommunication/GamesCommunication";
 import table from './../../assets/img/game/table.png'
 import chip from './../../assets/img/icons/chip.svg'
@@ -15,6 +15,7 @@ import {useParams} from "react-router-dom";
 import getCookies from "../../functions/getCookie";
 import {FoolButton} from "./components/FoolButton";
 import {PopupContext} from "../../App";
+import {FoolUser} from "./components/FoolUser";
 
 interface IFoolProps {
 
@@ -22,10 +23,11 @@ interface IFoolProps {
 
 export const WSMessage: any = createContext(null)
 export const WS: any = createContext(null)
+export const SelectedCardRef: any = createContext(null)
+export const UserTurnRef: any = createContext(null)
+export const DefenderTaken: any = createContext(null)
 
 export const Fool: React.FC<IFoolProps> = () => {
-
-    const [isLoad, setIsLoad] = useState(false)
 
     const {roomId} = useParams()
 
@@ -35,10 +37,16 @@ export const Fool: React.FC<IFoolProps> = () => {
     const [deck, setDeck] = useState<any>({})
     const [userTurn, setUserTurn] = useState<any>({})
     const [tableCards, setTableCards] = useState<any>([])
+    const [selectedCard, setSelectedCard] = useState<{ rank: string; suit: string }>()
+    const [playerNewCards, setPlayerNewCards] = useState({id: "", new_cards_count: 6})
+    const [userEvent, setUserEvent] = useState({})
+    const [defenderTakenUser, setDefenderTakenUser] = useState({})
     const [isEndGame, setIsEndGame] = useState(false)
     const [isWaitingGame, setIsWaitingGame] = useState(false)
-    const [selectedCard, setSelectedCard] = useState<{ rank: string; suit: string }>()
-    const [playerNewCards, setPlayerNewCards] = useState({})
+    const [isCardsBeaten, setIsCardsBeaten] = useState(false)
+
+    const userTurnRef: any = useRef()
+    const selectedCardRef: any = useRef()
 
     useEffect(() => {
         const _ws = new WebSocket(getApiLink(`/room/${roomId}/`, true));
@@ -65,7 +73,7 @@ export const Fool: React.FC<IFoolProps> = () => {
 
 
     useEffect(() => {
-        if(!user?.id) return;
+        if (!user?.id) return;
 
         ws.onopen = () => {
             console.log('WebSocket connection established');
@@ -106,7 +114,7 @@ export const Fool: React.FC<IFoolProps> = () => {
                 "player_turn": () => handlePlayerTurn(data.data),
                 "card_distribution": () => handleDistribution(data.data),
                 "attacker_played": () => handleAttackerPlayed(data.data),
-                "sub_attacker_played": () => handleOk(),
+                "sub_attacker_played": () => handleSubAttackerPlayed(data.data),
                 "players_new_cards_quantity": () => handleNewCards(data.data),
                 "defender_take": () => handleDefenderTake(data.data),
                 "defender_played": () => handleDefenderPlayed(data.data),
@@ -126,14 +134,16 @@ export const Fool: React.FC<IFoolProps> = () => {
             console.log('ok')
         }
         const handlePlayerWin = (data: any) => {
-            if(user.id === data.player.id) {
+            if (user.id === data.player.id) {
                 setModal('game-winner')
             }
         }
         const handleDefenderPlayed = (data: any) => {
 
-            console.log('handleDefenderPlayed', tableCards)
-            console.log('handleDefenderPlayed', data)
+            setUserEvent(data.player)
+            setTimeout(() => {
+                setUserEvent({})
+            }, 300)
 
             setTableCards((prev: any) => {
 
@@ -150,15 +160,45 @@ export const Fool: React.FC<IFoolProps> = () => {
             setMyCards(prev => [...prev, ...data.cards])
         }
         const handleDefenderTake = (data: any) => {
-            setTableCards([])
+            setDefenderTakenUser(data)
 
-            console.log('handleDefenderTake', myCards, data, user.id)
+            setUserEvent(data.player)
+            setTimeout(() => {
+                setUserEvent({})
+                setDefenderTakenUser({})
+                setTableCards([])
 
-            if (user.id === data.player.id) {
-                setMyCards(prev => [...prev, ...data.cards])
-            }
+                if (user.id === data.player.id) {
+                    setMyCards(prev => [...prev, ...data.cards])
+                }
+            }, 300)
         }
         const handleAttackerPlayed = (data: any) => {
+
+            setUserEvent(data.player)
+            setTimeout(() => {
+                setUserEvent({})
+            }, 300)
+
+            setTableCards((prev: any) => {
+                const newCard = {
+                    "played_card": {
+                        "rank": data?.played_card?.rank,
+                        "suit": data?.played_card?.suit
+                    },
+                    "entry_card": null
+                }
+
+                return [...prev, newCard]
+            })
+
+        }
+        const handleSubAttackerPlayed = (data: any) => {
+
+            setUserEvent(data.player)
+            setTimeout(() => {
+                setUserEvent({})
+            }, 300)
 
             setTableCards((prev: any) => {
                 const newCard = {
@@ -181,17 +221,25 @@ export const Fool: React.FC<IFoolProps> = () => {
         }
         const handleEndGame = () => {
             setIsEndGame(true)
+            setMyCards([])
+            setTableCards([])
+            setPlayerNewCards({id: "", new_cards_count: 0})
         }
         const handleCardsBeat = (data: any) => {
-            console.log('handleCardsBeat', data)
-            setTableCards([])
+            setIsCardsBeaten(true)
+
+            setTimeout(() => {
+                setIsCardsBeaten(false)
+                setTableCards([])
+            }, 400)
         }
         const handlePlayerTurn = (data: any) => {
-            console.log('handlePlayerTurn', data)
             setUserTurn(data)
         }
         const handleGameState = (data: any) => {
             setMyCards(data.game.cards)
+
+            setPlayerNewCards(data.game.players)
 
             const newTableCardsList =
                 data.game.desk.card_row.map((item: any) => {
@@ -218,7 +266,7 @@ export const Fool: React.FC<IFoolProps> = () => {
             })
         }
         const handleNewCards = (data: any) => {
-            setPlayerNewCards(data)
+            setPlayerNewCards(data.players)
 
             setDeck((prev: any) => {
                 return {
@@ -261,157 +309,142 @@ export const Fool: React.FC<IFoolProps> = () => {
 
     }, [ws, user])
 
-    const isYourTurn = userTurn?.player?.id === user?.id
-
     return (
-        <WS.Provider value={ws}>
-            <WSMessage.Provider value={roomState}>
-                <FoolStyled className="game page-padding-top">
-                    <div className="game__container container">
+        <UserTurnRef.Provider value={userTurnRef}>
+            <SelectedCardRef.Provider value={selectedCardRef}>
+                <WS.Provider value={ws}>
+                    <WSMessage.Provider value={roomState}>
+                        <FoolStyled className="game page-padding-top">
+                            <div className="game__container container">
 
-                        <FoolHeader/>
+                                <FoolHeader/>
 
-                        <div className="game__main">
-                            <div className="game__main--table game__bg">
-                                <picture>
-                                    <img src={table} alt="" width="300" className="game__bg--img"/>
-                                </picture>
-                            </div>
-                            <div className="game__main--grid game__grid">
-                                <div className="game__grid--item">
-                                    <div className="game__bet">
-                                        <span className="game__bet--value">1500</span>
-                                        <img src={chip} alt="" className="game__bet--currency"/>
+                                <div className="game__main">
+                                    <div className="game__main--table game__bg">
+                                        <picture>
+                                            <img src={table} alt="" width="300" className="game__bg--img"/>
+                                        </picture>
                                     </div>
-                                </div>
-                                <div className="game__grid--item">
-                                    <Player
-                                        userTurn={userTurn}
-                                        cardsList={6}
-                                        playerNewCards={playerNewCards}
-                                        isWaitingGame={isWaitingGame}
-                                        gameSlug={"fool"}
-                                        isHavePlayer={true}
-                                        isReady={false}
-                                        position={position(3)}
-                                    />
-                                </div>
-                                <div className="game__grid--item">
-                                    <Player
-                                        userTurn={userTurn}
-                                        cardsList={6}
-                                        playerNewCards={playerNewCards}
-                                        isWaitingGame={isWaitingGame}
-                                        gameSlug={"fool"}
-                                        isHavePlayer={false}
-                                        isReady={false}
-                                        position={position(4)}
-                                    />
-                                </div>
-                                <div className="game__grid--item">
-                                    <Player
-                                        userTurn={userTurn}
-                                        cardsList={6}
-                                        playerNewCards={playerNewCards}
-                                        isWaitingGame={isWaitingGame}
-                                        gameSlug={"fool"}
-                                        isHavePlayer={true}
-                                        isReady={false}
-                                        position={position(5)}
-                                    />
-                                </div>
-                                <div className="game__grid--item">
-
-                                    <FoolDeck deck={deck}/>
-
-                                </div>
-                                <div className="game__grid--item">
-                                    <Player
-                                        userTurn={userTurn}
-                                        cardsList={6}
-                                        playerNewCards={playerNewCards}
-                                        isWaitingGame={isWaitingGame}
-                                        gameSlug={"fool"}
-                                        isHavePlayer={true}
-                                        isReady={false}
-                                        position={position(2)}
-                                    />
-                                </div>
-                                <div className="game__grid--item">
-                                    <Player
-                                        userTurn={userTurn}
-                                        cardsList={6}
-                                        playerNewCards={playerNewCards}
-                                        isWaitingGame={isWaitingGame}
-                                        gameSlug={"fool"}
-                                        isHavePlayer={true}
-                                        isReady={false}
-                                        position={position(6)}
-                                    />
-                                </div>
-                                <div className="game__grid--item">
-                                    <div className="game__user">
-                                        <div className="game__user--block">
-
-                                        </div>
-
-                                        <FoolMyCards
-                                            cardsList={myCards}
-                                            deck={deck}
-                                            setSelectedCard={setSelectedCard}
-                                            tableCards={tableCards}
-                                            userTurn={userTurn}
-                                        />
-
-                                        <div className="game__user--info">
-                                            <div className="game__user--info-body">
-                                                <h3 className="game__user--name"
-                                                    style={{marginBottom: !isYourTurn ? "7px" : ""}}>
-                                                    Вы: {user.username}
-                                                </h3>
-                                                {isYourTurn && <progress className="game__user--progress" max="100"
-                                                                         value="100"></progress>}
+                                    <div className="game__main--grid game__grid">
+                                        <div className="game__grid--item">
+                                            <div className="game__bet">
+                                        <span className="game__bet--value">
+                                            {/*{ws}*/}
+                                            111
+                                        </span>
+                                                <img src={chip} alt="" className="game__bet--currency"/>
                                             </div>
                                         </div>
-                                        <div className="game__user--avatar">
-                                            <img src={getApiLink("/" + user?.avatar)} alt=""
-                                                 className="game__user--avatar-img"/>
+                                        <div className="game__grid--item">
+                                            <Player
+                                                userTurn={userTurn}
+                                                playerNewCards={playerNewCards}
+                                                isWaitingGame={isWaitingGame}
+                                                gameSlug={"fool"}
+                                                isHavePlayer={true}
+                                                isReady={false}
+                                                userEvent={userEvent}
+                                                position={position(3)}
+                                            />
+                                        </div>
+                                        <div className="game__grid--item">
+                                            <Player
+                                                userTurn={userTurn}
+                                                playerNewCards={playerNewCards}
+                                                isWaitingGame={isWaitingGame}
+                                                gameSlug={"fool"}
+                                                isHavePlayer={false}
+                                                isReady={false}
+                                                userEvent={userEvent}
+                                                position={position(4)}
+                                            />
+                                        </div>
+                                        <div className="game__grid--item">
+                                            <Player
+                                                userTurn={userTurn}
+                                                playerNewCards={playerNewCards}
+                                                isWaitingGame={isWaitingGame}
+                                                gameSlug={"fool"}
+                                                isHavePlayer={true}
+                                                isReady={false}
+                                                userEvent={userEvent}
+                                                position={position(5)}
+                                            />
+                                        </div>
+                                        <div className="game__grid--item">
+
+                                            <FoolDeck deck={deck}/>
+
+                                        </div>
+                                        <div className="game__grid--item">
+                                            <Player
+                                                userTurn={userTurn}
+                                                playerNewCards={playerNewCards}
+                                                isWaitingGame={isWaitingGame}
+                                                gameSlug={"fool"}
+                                                isHavePlayer={true}
+                                                isReady={false}
+                                                userEvent={userEvent}
+                                                position={position(2)}
+                                            />
+                                        </div>
+                                        <div className="game__grid--item">
+                                            <Player
+                                                userTurn={userTurn}
+                                                playerNewCards={playerNewCards}
+                                                isWaitingGame={isWaitingGame}
+                                                gameSlug={"fool"}
+                                                isHavePlayer={true}
+                                                isReady={false}
+                                                userEvent={userEvent}
+                                                position={position(6)}
+                                            />
+                                        </div>
+                                        <div className="game__grid--item">
+                                            <FoolUser
+                                                myCards={myCards}
+                                                deck={deck}
+                                                setSelectedCard={setSelectedCard}
+                                                tableCards={tableCards}
+                                                userTurn={userTurn}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <FoolTableCenter
+                                        isEndGame={isEndGame}
+                                        isWaitingGame={isWaitingGame}
+                                        selectedCard={selectedCard}
+                                        userTurn={userTurn}
+                                        tableCards={tableCards}
+                                        setMyCards={setMyCards}
+                                        defenderTakenUser={defenderTakenUser}
+                                        isCardsBeaten={isCardsBeaten}
+                                    />
+
+                                    <div className="game__main--user-menu game__user-menu">
+                                        <div className="game__user-menu--col">
+
+                                            <GamesCommunication/>
+
+                                        </div>
+                                        <div className="game__user-menu--col">
+
+                                            <FoolButton
+                                                roomState={roomState}
+                                                userTurn={userTurn}
+                                                isEndGame={isEndGame}
+                                                isWaitingGame={isWaitingGame}
+                                            />
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <FoolTableCenter
-                                isEndGame={isEndGame}
-                                isWaitingGame={isWaitingGame}
-                                selectedCard={selectedCard}
-                                userTurn={userTurn}
-                                setTableCards={setTableCards}
-                                tableCards={tableCards}
-                                setMyCards={setMyCards}
-                            />
-
-                            <div className="game__main--user-menu game__user-menu">
-                                <div className="game__user-menu--col">
-
-                                    <GamesCommunication/>
-
-                                </div>
-                                <div className="game__user-menu--col">
-
-                                    <FoolButton
-                                        roomState={roomState}
-                                        userTurn={userTurn}
-                                        isEndGame={isEndGame}
-                                        isWaitingGame={isWaitingGame}
-                                    />
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </FoolStyled>
-            </WSMessage.Provider>
-        </WS.Provider>
+                        </FoolStyled>
+                    </WSMessage.Provider>
+                </WS.Provider>
+            </SelectedCardRef.Provider>
+        </UserTurnRef.Provider>
     )
 }

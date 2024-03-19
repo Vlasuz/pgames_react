@@ -13,6 +13,7 @@ import {GetUser} from './api/GetUser';
 import {useDispatch} from "react-redux";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import {GetContacts} from "./api/GetContacts";
 
 interface IAppProps {
 
@@ -37,6 +38,7 @@ export const App: React.FC<IAppProps> = () => {
 
     // APIs
     GetUser(dispatch)
+    GetContacts(dispatch)
 
     useEffect(init, []);
 

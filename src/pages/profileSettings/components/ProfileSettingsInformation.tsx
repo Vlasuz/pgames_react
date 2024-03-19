@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {IUser} from "../../../models";
 import {useSelector} from "react-redux";
 
@@ -9,6 +9,16 @@ interface IProfileSettingsInformationProps {
 export const ProfileSettingsInformation: React.FC<IProfileSettingsInformationProps> = () => {
 
     const user: IUser = useSelector((state: any) => state.toolkit.user)
+
+    const [isStartEdit, setIsStartEdit] = useState(false)
+
+    const handleStartEdit = () => {
+        setIsStartEdit(true)
+    }
+
+    const handleSave = () => {
+        setIsStartEdit(false)
+    }
 
     return (
         <div className="account__col _auto _full-on-mob">
@@ -24,6 +34,7 @@ export const ProfileSettingsInformation: React.FC<IProfileSettingsInformationPro
                                 <label className="account-settings-element__label form-label">
                                     <input type="email" name="email"
                                            value={user.email}
+                                           disabled
                                            placeholder="Email"
                                            className="account-settings-element__input form-input"
                                            required/>
@@ -35,19 +46,20 @@ export const ProfileSettingsInformation: React.FC<IProfileSettingsInformationPro
                                 <label className="account-settings-element__label form-label">
                                     <input type="text" name="name" value={user.username}
                                            placeholder="Имя пользователя"
+                                           disabled
                                            className="account-settings-element__input form-input"
                                            required/>
                                     <span
                                         className="account-settings-element__input-placeholder form-input-placeholder">
-                                                                Имя пользователя
-                                                            </span>
+                                        Имя пользователя
+                                    </span>
                                 </label>
                             </div>
-                            <button
-                                className="account-settings-element__submit btn _dark _large-2"
-                                type="submit">
-                                Изменить
-                            </button>
+                            {/*<button*/}
+                            {/*    className="account-settings-element__submit btn _dark _large-2"*/}
+                            {/*    type="submit" disabled>*/}
+                            {/*    Изменить*/}
+                            {/*</button>*/}
                         </form>
                     </div>
                 </div>

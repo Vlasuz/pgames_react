@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react'
 import axios from "axios";
 import {getApiLink} from "../../../functions/getApiLink";
 import {useNavigate, useParams} from "react-router-dom";
+import {Select} from "../../../components/select/Select";
+import {ISelectOption} from "../../../models";
 
 interface IGamesSingleCreateProps {
 
@@ -9,9 +11,53 @@ interface IGamesSingleCreateProps {
 
 export const GamesSingleCreate: React.FC<IGamesSingleCreateProps> = () => {
 
-    const [currency, setCurrency] = useState<string>('chips')
-    const [playerSlots, setPlayerSlots] = useState<string>('6')
-    const [roomType, setRoomType] = useState<string>('public')
+    const roomTypeSelect: ISelectOption[] = [
+        {
+            title: "Фишки",
+            slug: "chips"
+        },
+        {
+            title: "Деньги",
+            slug: "money"
+        }
+    ]
+    const roomPlayersSelect: ISelectOption[] = [
+        {
+            title: "2 Игрока",
+            slug: "2"
+        },
+        {
+            title: "3 Игрока",
+            slug: "3"
+        },
+        {
+            title: "4 Игрока",
+            slug: "4"
+        },
+        {
+            title: "5 Игроков",
+            slug: "5"
+        },
+        {
+            title: "6 Игроков",
+            slug: "6",
+            isActive: true
+        },
+    ]
+    const roomAccessSelect: ISelectOption[] = [
+        {
+            title: "Открытая",
+            slug: "public"
+        },
+        {
+            title: "Закрытая",
+            slug: "private"
+        }
+    ]
+
+    const [currency, setCurrency] = useState<string>(roomTypeSelect.filter(item => item.isActive)[0]?.slug ?? roomTypeSelect[0]?.slug)
+    const [playerSlots, setPlayerSlots] = useState<string>(roomPlayersSelect.filter(item => item.isActive)[0]?.slug ?? roomPlayersSelect[0]?.slug)
+    const [roomType, setRoomType] = useState<string>(roomAccessSelect.filter(item => item.isActive)[0]?.slug ?? roomAccessSelect[0]?.slug)
     const [bet, setBet] = useState<string>('0')
 
     const {gameSlug} = useParams()
@@ -41,22 +87,18 @@ export const GamesSingleCreate: React.FC<IGamesSingleCreateProps> = () => {
                     <legend className="page-rooms__create--legend">
                         Создание комнаты
                     </legend>
-                    <div className="page-rooms__create--row">
+                    <div className="page-rooms__create--row" style={{gridTemplateColumns: "20% 125px auto auto"}}>
                         <div className="page-rooms__create--col">
                             <div className="page-rooms__select-wrapper">
-                                <select onChange={e => setCurrency(e.target.value)} name="currency" className="page-rooms__select custom-select">
-                                    <option value="chips" data-image="img/icons/chip.svg">
-                                        Фишки
-                                    </option>
-                                    <option value="money" data-image="img/icons/dollar-circle.svg">
-                                        Деньги
-                                    </option>
-                                </select>
+
+                                <Select list={roomTypeSelect} setValue={setCurrency}/>
+
                             </div>
                         </div>
                         <div className="page-rooms__create--col">
                             <label className="page-rooms__label form-label">
-                                <input onChange={e => setBet(e.target.value)} type="number" name="sum" required placeholder="Сумма"
+                                <input onChange={e => setBet(e.target.value)} type="number" name="sum" required
+                                       placeholder="Сумма"
                                        className="page-rooms__input form-input _add-bg"/>
                                 <span className="page-rooms__input-placeholder form-input-placeholder">
                                     Сумма
@@ -65,71 +107,14 @@ export const GamesSingleCreate: React.FC<IGamesSingleCreateProps> = () => {
                         </div>
                         <div className="page-rooms__create--col">
                             <div className="page-rooms__select-wrapper">
-                                <select onChange={e => setPlayerSlots(e.target.value)} name="players-length" className="page-rooms__select custom-select">
-                                    <option value="2">
-                                        2 Игрока
-                                    </option>
-                                    <option value="3">
-                                        3 Игрока
-                                    </option>
-                                    <option value="4">
-                                        4 Игрока
-                                    </option>
-                                    <option value="5">
-                                        5 Игроков
-                                    </option>
-                                    <option value="6">
-                                        6 Игроков
-                                    </option>
-                                </select>
+                                <Select list={roomPlayersSelect} setValue={setPlayerSlots}/>
                             </div>
                         </div>
                         <div className="page-rooms__create--col">
                             <div className="page-rooms__select-wrapper">
-                                <select name="status-game" onChange={e => setRoomType(e.target.value)} className="page-rooms__select custom-select">
-                                    <option value="public">
-                                        Открытая игра
-                                    </option>
-                                    <option value="private">
-                                        Закрытая игра
-                                    </option>
-                                </select>
+                                <Select list={roomAccessSelect} setValue={setRoomType}/>
                             </div>
                         </div>
-                        <div className="page-rooms__create--col">
-                            <div className="page-rooms__select-wrapper">
-                                <select name="mode-game" className="page-rooms__select custom-select">
-                                    <option value="type-1">
-                                        Переводной
-                                    </option>
-                                    <option value="type-2">
-                                        Другой режим
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </fieldset>
-                <fieldset className="page-rooms__create--fieldset">
-                    <legend className="page-rooms__create--legend">
-                        Игроки
-                    </legend>
-                    <div className="page-rooms__select-wrapper">
-                        <select name="players" multiple className="page-rooms__select custom-multiple-select"
-                                data-placeholder="Добавить игрока">
-                            <option value="player-1">
-                                Jane_3245
-                            </option>
-                            <option value="player-2">
-                                Player 2
-                            </option>
-                            <option value="player-3">
-                                Player 3
-                            </option>
-                        </select>
-                    </div>
-                    <div className="page-rooms__create--text">
-                        После создания игры пользователям будет отправлено предложение войти в игру
                     </div>
                 </fieldset>
                 <button className="page-rooms__create--submit btn _large" type={"submit"}>

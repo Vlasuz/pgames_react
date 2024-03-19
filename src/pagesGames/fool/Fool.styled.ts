@@ -59,5 +59,44 @@ export const FoolStyled = styled.section`
       //}
     }
   }
+  
+  .game-my-cards__item {
+    transition: max-height .3s ease;
+  }
+  
+  .game__player--progress,
+  .game__user--progress {
+    transition: all 1s linear;
+  }
+  
+  .game__table-cards--card,
+  .game__table-cards--card img {
+    transition: all .3s ease;
+  }
+  
+  .game__table-cards--item_placeholder {
+    transition: all .3s ease;
+    padding: 0;
+    max-width: 0;
+    min-width: 0;
+    
+    img {
+      width: 0;
+      height: 100%;
+      transition: all .3s ease;
+      display: block;
+    }
+    
+    &._active {
+      padding: 0 40px;
+      max-width: 23.7%;
+      min-width: 17%;
+      
+      img {
+        width: 100%;
+      }
+    }
+  }
+  
 
 `

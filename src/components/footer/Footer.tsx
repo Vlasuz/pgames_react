@@ -1,6 +1,11 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {NavLink} from "react-router-dom";
 import logo from "./../../assets/img/logo.svg"
+import axios from "axios";
+import {getApiLink} from "../../functions/getApiLink";
+import {IContacts, IGame, IGames} from "../../models";
+import {FooterStyled} from "./Footer.styled";
+import { useSelector } from 'react-redux';
 
 interface IFooterProps {
 
@@ -8,8 +13,24 @@ interface IFooterProps {
 
 export const Footer: React.FC<IFooterProps> = () => {
 
+    const [gamesList, setGamesList] = useState<IGame[]>([])
+
+    useEffect(() => {
+        axios.get(getApiLink(`/api/game/list/`)).then(({data}) => {
+            console.log(data)
+
+            const allGames = data.reduce((games: IGames[], current: IGames) => {
+                return [...current.game, ...games]
+            }, [])
+
+            setGamesList(allGames)
+        }).catch(er => console.log(er))
+    }, [])
+
+    const contacts: IContacts = useSelector((state: any) => state.toolkit.contacts)
+
     return (
-        <footer className="footer" data-aos="fade-in" data-aos-anchor=".main">
+        <FooterStyled className="footer" data-aos="fade-in" data-aos-anchor=".main">
 
             <div className="footer__container container _large">
                 <div className="footer__intro">
@@ -18,7 +39,7 @@ export const Footer: React.FC<IFooterProps> = () => {
                              className="footer__logo--img"/>
                     </NavLink>
                     <div className="footer__contacts">
-                        <a href="tel:+38098111111" className="footer__contacts--link" aria-label="+38098111111">
+                        <a href={`tel:${contacts?.support_phone_number}`} className="footer__contacts--link" aria-label="+38098111111">
                             <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -26,10 +47,10 @@ export const Footer: React.FC<IFooterProps> = () => {
                                     fill="#F9F1DF"/>
                             </svg>
                             <span>
-                                +38098111111
+                                {contacts?.support_phone_number}
                             </span>
                         </a>
-                        <a href="mailto:boardgames@gmail.com" className="footer__contacts--link"
+                        <a href={`mailto:${contacts?.support_email}`} className="footer__contacts--link"
                            aria-label="boardgames@gmail.com">
                             <svg width="18" height="12" viewBox="0 0 18 12" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
@@ -38,14 +59,14 @@ export const Footer: React.FC<IFooterProps> = () => {
                                     fill="#F9F1DF"/>
                             </svg>
                             <span>
-                                boardgames@gmail.com
+                                {contacts?.support_email}
                             </span>
                         </a>
                     </div>
                     <div className="footer__social">
                         <ul className="footer__social--list">
                             <li className="footer__social--item">
-                                <a href="#" className="footer__social--link" title="Instagram">
+                                <a href={contacts?.instagram} target={"_blank"} className="footer__social--link" title="Instagram">
                                     <svg width="21" height="21" viewBox="0 0 21 21" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -55,7 +76,7 @@ export const Footer: React.FC<IFooterProps> = () => {
                                 </a>
                             </li>
                             <li className="footer__social--item">
-                                <a href="#" className="footer__social--link" title="Twitter">
+                                <a href={contacts?.twitter} className="footer__social--link" title="Twitter">
                                     <svg width="27" height="20" viewBox="0 0 27 20" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -65,7 +86,7 @@ export const Footer: React.FC<IFooterProps> = () => {
                                 </a>
                             </li>
                             <li className="footer__social--item">
-                                <a href="#" className="footer__social--link" title="Telegram">
+                                <a href={contacts?.telegram} className="footer__social--link" title="Telegram">
                                     <svg width="24" height="23" viewBox="0 0 24 23" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
                                         <path fillRule="evenodd" clipRule="evenodd"
@@ -75,7 +96,7 @@ export const Footer: React.FC<IFooterProps> = () => {
                                 </a>
                             </li>
                             <li className="footer__social--item">
-                                <a href="#" className="footer__social--link" title="Facebook">
+                                <a href={contacts?.facebook} className="footer__social--link" title="Facebook">
                                     <svg width="24" height="23" viewBox="0 0 24 23" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -92,58 +113,28 @@ export const Footer: React.FC<IFooterProps> = () => {
                         <div className="footer__nav--col">
                             <ul className="footer__nav--list">
                                 <li className="footer__nav--item">
-                                    <a href="#" className="footer__nav--link">
+                                    <NavLink to={"/games"} className="footer__nav--link">
                                         Игры
-                                    </a>
+                                    </NavLink>
                                 </li>
                                 <li className="footer__nav--item">
-                                    <a href="#" className="footer__nav--link">
+                                    <NavLink to={"/"} className="footer__nav--link">
                                         Главная
-                                    </a>
+                                    </NavLink>
                                 </li>
                                 <li className="footer__nav--item">
-                                    <a href="#" className="footer__nav--link">
-                                        Комнаты
-                                    </a>
-                                </li>
-                                <li className="footer__nav--item">
-                                    <a href="#" className="footer__nav--link">
+                                    <NavLink to={"/news"} className="footer__nav--link">
                                         Новости
-                                    </a>
-                                </li>
-                                <li className="footer__nav--item">
-                                    <a href="#" className="footer__nav--link">
-                                        Преимущества
-                                    </a>
+                                    </NavLink>
                                 </li>
                             </ul>
                         </div>
                         <div className="footer__nav--col">
                             <ul className="footer__nav--list">
                                 <li className="footer__nav--item">
-                                    <a href="#" className="footer__nav--link">
-                                        Правила использования
-                                    </a>
-                                </li>
-                                <li className="footer__nav--item">
-                                    <a href="#" className="footer__nav--link">
-                                        Политика конфеденциальности
-                                    </a>
-                                </li>
-                                <li className="footer__nav--item">
-                                    <a href="#" className="footer__nav--link">
-                                        Документ
-                                    </a>
-                                </li>
-                                <li className="footer__nav--item">
-                                    <a href="#" className="footer__nav--link">
-                                        Статья о сервисе
-                                    </a>
-                                </li>
-                                <li className="footer__nav--item">
-                                    <a href="#" className="footer__nav--link">
-                                        Статья
-                                    </a>
+                                    <NavLink to={"/news"} className="footer__nav--link">
+                                        Новости
+                                    </NavLink>
                                 </li>
                             </ul>
                         </div>
@@ -154,37 +145,29 @@ export const Footer: React.FC<IFooterProps> = () => {
                         Горячие предложения!
                     </h2>
                     <ul className="footer__hot--list">
-                        <li className="footer__hot--item">
-                            <a href="page-game.html" className="footer__hot--link" title="Название игры">
-                                <picture>
-                                    <img src="img/main-page/games/image-6.png" alt="" loading="lazy" width="300"
-                                         className="footer__hot--img"/>
-                                </picture>
-                            </a>
-                        </li>
-                        <li className="footer__hot--item">
-                            <a href="page-game.html" className="footer__hot--link" title="Название игры">
-                                <picture>
-                                    <img src="img/main-page/games/image-7.png" alt="" loading="lazy" width="300"
-                                         className="footer__hot--img"/>
-                                </picture>
-                            </a>
-                        </li>
-                        <li className="footer__hot--item">
-                            <a href="page-game.html" className="footer__hot--link" title="Название игры">
-                                <picture>
-                                    <img src="img/main-page/games/image-1.png" alt="" loading="lazy" width="300"
-                                         className="footer__hot--img"/>
-                                </picture>
-                            </a>
-                        </li>
+
+                        {
+                            gamesList.filter((item, index) => index < 3).map(item =>
+                                <li className="footer__hot--item" key={item.slug}>
+                                    <NavLink to={`/games/${item.slug}`} className="footer__hot--link"
+                                             title="Название игры">
+                                        <picture>
+                                            <img src={getApiLink("/" + item.image)} alt="" loading="lazy" width="300"
+                                                 className="footer__hot--img"/>
+                                        </picture>
+                                    </NavLink>
+                                </li>
+                            )
+                        }
+
+
                     </ul>
                 </div>
                 <div className="footer__copy">
-                    Все права защищены <br />
-                    Версия обновлена 10 Июля 2022
+                    Все права защищены <br/>
+                    Версия обновлена 10 Июля 2024
                 </div>
             </div>
-        </footer>
-)
+        </FooterStyled>
+    )
 }

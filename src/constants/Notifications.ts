@@ -24,7 +24,22 @@ export const notifications: {[key: string]: INotification} = {
         title: "Системное сообщение",
         type: "error",
         body: "У вас недостаточно средств"
-    }
+    },
+    "pay_success": {
+        title: "Аккаунт",
+        type: "success",
+        body: "Счет успешно пополнен"
+    },
+    "old_password_is_wrong": {
+        title: "Аккаунт",
+        type: "error",
+        body: "Старый пароль не верный"
+    },
+    "change_pass_success": {
+        title: "Аккаунт",
+        type: "success",
+        body: "Пароль успешно изменен"
+    },
 }
 
 export const notificationTypes: INotificationTypes = {

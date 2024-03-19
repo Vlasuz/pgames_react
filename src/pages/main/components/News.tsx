@@ -35,57 +35,68 @@ export const News: React.FC<INewsProps> = () => {
                             Все новости
                         </NavLink>
                     </div>
-                    {newsList.length ? <div className="last-news__list">
-                        <article className="last-news__large-article" data-aos="fade-in" data-aos-delay="400">
-                            <NavLink to={`/news/${newsList[0]?.slug}`} className="last-news__large-article--body"
-                                     title="Название новости или статьи">
-                                <div className="last-news__large-article--image">
-                                    <picture>
-                                        <img src={newsList[0]?.image} alt="" width="400"
-                                             loading="lazy" className="last-news__large-article--img"/>
-                                    </picture>
+                    <div className="news__last" data-aos="fade-in" data-aos-delay="400">
+                        <div className="last-news__row">
+                            <div className="last-news__list">
+                                <article className="last-news__large-article" data-aos="fade-in" data-aos-delay="400">
+                                    <NavLink to={`/news/${newsList[0]?.slug}`} className="last-news__large-article--body"
+                                             title="Название новости или статьи">
+                                        <div className="last-news__large-article--image">
+                                            <picture>
+                                                <img src={getApiLink("/" + newsList[0]?.image)} alt="" width="400"
+                                                     loading="lazy" className="last-news__large-article--img"/>
+                                            </picture>
+                                        </div>
+                                        <h3 className="last-news__large-article--title">
+                                            {
+                                                newsList[0]?.name
+                                            }
+                                        </h3>
+                                        <time className="last-news__large-article--time" dateTime="2022-12-12">
+                                            {newsList[0]?.created_at.slice(0, newsList[0]?.created_at.indexOf(", ")).split('.')[1]} / {newsList[0]?.created_at.slice(0, newsList[0]?.created_at.indexOf(", ")).split('.')[0]} / {newsList[0]?.created_at.slice(0, newsList[0]?.created_at.indexOf(", ")).split('.')[2]}
+                                        </time>
+                                        <div className="last-news__large-article--text">
+                                            {
+                                                newsList[0]?.text.slice(0, 50) + "..."
+                                            }
+                                        </div>
+                                    </NavLink>
+                                </article>
+                                <div className="last-news__article--list">
+
+                                    {
+                                        newsList.filter((item, index) => index > 0 && index <= 3).map(item =>
+                                            <article className="last-news__article" data-aos="fade-up" data-aos-delay="600"
+                                                     data-aos-anchor=".last-news__article--list">
+                                                <NavLink to={`/news/${item.slug}`} className="last-news__article--body">
+                                                    <div className="last-news__article--info">
+                                                        <h3 className="last-news__article--title">
+                                                            {item.name}
+                                                        </h3>
+                                                        <time className="last-news__article--time" dateTime="2022-12-12">
+                                                            {item?.created_at.slice(0, item?.created_at.indexOf(", ")).split('.')[1]} / {item?.created_at.slice(0, item?.created_at.indexOf(", ")).split('.')[0]} / {item?.created_at.slice(0, item?.created_at.indexOf(", ")).split('.')[2]}
+                                                        </time>
+                                                        <div className="last-news__article--text">
+                                                            {
+                                                                item?.text.slice(0, 50) + "..."
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                    <div className="last-news__article--image">
+                                                        <picture>
+                                                            <img src={getApiLink("/" + item?.image)} loading="lazy" alt=""
+                                                                 width="250" className="last-news__article--img"/>
+                                                        </picture>
+                                                    </div>
+                                                </NavLink>
+                                            </article>
+                                        )
+                                    }
+
                                 </div>
-                                <h3 className="last-news__large-article--title">
-                                    {newsList[0]?.name}
-                                </h3>
-                                <time className="last-news__large-article--time" dateTime="2022-12-12">
-                                    {newsList[0]?.created_at}
-                                </time>
-                                <div className="last-news__large-article--text">
-                                    {newsList[0]?.text}
-                                </div>
-                            </NavLink>
-                        </article>
-                        <div className="last-news__article--list">
-                            {
-                                newsList?.filter((item, index) => index < 2)?.map(item =>
-                                    <article key={item?.slug} className="last-news__article" data-aos="fade-up"
-                                             data-aos-delay="600"
-                                             data-aos-anchor=".last-news__article--list">
-                                        <NavLink to={`/news/${item?.slug}`} className="last-news__article--body">
-                                            <div className="last-news__article--info">
-                                                <h3 className="last-news__article--title">
-                                                    {item?.name}
-                                                </h3>
-                                                <time className="last-news__article--time" dateTime="2022-12-12">
-                                                    {item?.created_at}
-                                                </time>
-                                                <div className="last-news__article--text">
-                                                    {item?.text}
-                                                </div>
-                                            </div>
-                                            <div className="last-news__article--image">
-                                                <picture>
-                                                    <img src={item?.image} loading="lazy" alt=""
-                                                         width="250" className="last-news__article--img"/>
-                                                </picture>
-                                            </div>
-                                        </NavLink>
-                                    </article>
-                                )
-                            }
+                            </div>
                         </div>
-                    </div> : <p>Новостей нет</p>}
+                    </div>
                 </div>
                 <a href="#" className="last-news__game large-game" data-aos="fade-in"
                    data-aos-delay="600">

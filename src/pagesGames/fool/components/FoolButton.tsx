@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {WS, WSMessage} from "../Fool";
 import {IPlayerUser, IUser} from "../../../models";
 import { useSelector } from 'react-redux';
@@ -39,7 +39,27 @@ export const FoolButton: React.FC<IFoolButtonProps> = ({roomState, userTurn, isE
 
     const isReady = roomState?.users?.some((player: IPlayerUser) => player.ready && player.id === user.id)
 
+    const [timer, setTimer] = useState(0)
+
     const isYourTurn = userTurn?.player?.id === user?.id
+
+    useEffect(() => {
+        if(!userTurn?.timeout) return;
+
+        const timer = 70 - userTurn.timeout
+        setTimer(timer === 0 ? 70 : timer)
+
+    }, [userTurn])
+
+    useEffect(() => {
+        if(timer < 0) return ;
+
+        const interval = setInterval(() => {
+            setTimer(prev => prev - 1)
+        }, 1000)
+
+        return () => clearInterval(interval)
+    }, [timer])
 
     return (
         <>
@@ -53,10 +73,10 @@ export const FoolButton: React.FC<IFoolButtonProps> = ({roomState, userTurn, isE
 
             {!isWaitingGame && isYourTurn && <div className="game__user-menu--timer">
                 Осталось:
-                <b>10 сек</b>
+                <b>{timer.toFixed(0)} сек</b>
             </div>}
 
-            {!isEndGame && !isWaitingGame && isYourTurn && userTurn.role === "attacker" && <button onClick={handlePass} className="game__user-menu--main-btn btn _large _shadow _red" type="button">
+            {!isEndGame && !isWaitingGame && isYourTurn && (userTurn.role === "attacker" || userTurn.role === "sub_attacker") && <button onClick={handlePass} className="game__user-menu--main-btn btn _large _shadow _red" type="button">
                 Принять
             </button>}
 

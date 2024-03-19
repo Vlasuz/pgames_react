@@ -1,4 +1,4 @@
-import {IGames, IRoom, IUser} from "../models";
+import {IContacts, IGames, IRoom, IUser} from "../models";
 
 export const initialState = () => {
     return {
@@ -6,5 +6,6 @@ export const initialState = () => {
         notification: <string[]>[],
         games: <IGames[]>[],
         rooms: <IRoom[]>[],
+        contacts: <IContacts>{},
     }
 }

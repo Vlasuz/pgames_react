@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react'
 import {Aside} from "../../components/aside/Aside";
+import {ProfileReferralStyled} from "./ProfileReferral.styled";
 
 interface IProfileReferalProps {
 
@@ -8,8 +9,8 @@ interface IProfileReferalProps {
 export const ProfileReferral: React.FC<IProfileReferalProps> = () => {
 
     return (
-        <main className="main">
-            <section className="account">
+        <ProfileReferralStyled className="main">
+            <section className="account" style={{paddingTop: "calc(60px + 33px)"}}>
                 <div className="account__container container _large">
 
                     <Aside/>
@@ -182,6 +183,6 @@ export const ProfileReferral: React.FC<IProfileReferalProps> = () => {
                     </div>
                 </div>
             </section>
-        </main>
+        </ProfileReferralStyled>
     )
 }

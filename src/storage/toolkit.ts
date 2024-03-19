@@ -13,12 +13,16 @@ const toolkit = createSlice({
             state.user = {};
         },
 
+        setContacts(state, action) {
+            state.contacts = action.payload
+        },
+
         setGames(state, action) {
-          state.games = action.payload
+            state.games = action.payload
         },
 
         setRooms(state, action) {
-          state.rooms = action.payload
+            state.rooms = action.payload
         },
 
         setNotification(state, action) {
@@ -39,6 +43,8 @@ export const {
     removeUser,
 
     setGames,
+
+    setContacts,
 
     setRooms,
 

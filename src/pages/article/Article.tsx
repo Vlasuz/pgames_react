@@ -1,10 +1,34 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
+import {NavLink, useParams} from "react-router-dom";
+import axios from "axios";
+import {getApiLink} from "../../functions/getApiLink";
+import {INews} from "../../models";
 
 interface IArticleProps {
 
 }
 
 export const Article: React.FC<IArticleProps> = () => {
+
+    const {newsId} = useParams()
+
+    const [newsItem, setNewsItem] = useState<INews>()
+    const [newsList, setNewsList] = useState<INews[]>([])
+
+    useEffect(() => {
+        axios.get(getApiLink("/api/news/list/")).then(({data}) => {
+            console.log(data)
+            setNewsList(data.news)
+        }).catch(er => console.log(er))
+    }, [])
+
+    useEffect(() => {
+
+        axios.get(getApiLink(`/api/news/get/${newsId}/`)).then(({data}) => {
+            setNewsItem(data)
+        }).catch(er => console.log(er))
+
+    }, [newsId])
 
     return (
         <main className="main">
@@ -24,9 +48,9 @@ export const Article: React.FC<IArticleProps> = () => {
                         <div className="news-page__bread-crumbs page-header__bread-crumbs">
                             <ul className="page-header__bread-crumbs--list">
                                 <li className="page-header__bread-crumbs--item">
-                                    <a href="index.html" className="page-header__bread-crumbs--link">
+                                    <NavLink to={"/"} className="page-header__bread-crumbs--link">
                                         Главная
-                                    </a>
+                                    </NavLink>
                                 </li>
                                 <li className="page-header__bread-crumbs--item">
                                     <a className="page-header__bread-crumbs--link">
@@ -39,212 +63,99 @@ export const Article: React.FC<IArticleProps> = () => {
                     <div className="news-page__main">
                         <div className="news-page__main--block news-page__block">
                             <h3 className="news-page__title">
-                                Название новости или статьи
+                                {newsItem?.name}
                             </h3>
                             <time className="news-page__time" dateTime="2022-12-12">
-                                12 / 12 / 2022
+                                {newsItem?.created_at.slice(0, newsItem?.created_at.indexOf(", ")).split('.')[1]} / {newsItem?.created_at.slice(0, newsItem?.created_at.indexOf(", ")).split('.')[0]} / {newsItem?.created_at.slice(0, newsItem?.created_at.indexOf(", ")).split('.')[2]}
                             </time>
                             <div className="news-page__image">
                                 <div className="news-page__image--body">
                                     <picture>
-                                        <img src="img/main-page/news/image-large.jpg" alt="" width="300"
+                                        <img src={getApiLink("/" + newsItem?.image)} alt="" width="300"
                                              className="news-page__image--img"/>
                                     </picture>
                                 </div>
                             </div>
                             <div className="news-page__text">
-                                <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </h4>
-                                <p>
-                                    Ut a enim hendrerit, dignissim tellus vitae, porttitor purus. Ut laoreet odio ut
-                                    ipsum
-                                    accumsan, et varius diam pretium. Maecenas vitae ullamcorper magna, et vehicula mi.
-                                    Sed
-                                    nec risus mattis, condimentum nulla id, venenatis magna. Suspendisse in mollis arcu.
-                                    Nulla viverra porttitor ligula quis vulputate.
-                                </p>
-                                <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </h4>
-                                <p>
-                                    Vivamus at feugiat sem. Fusce elit lacus, fermentum quis interdum quis, efficitur
-                                    quis
-                                    justo.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a enim hendrerit,
-                                    dignissim tellus vitae, porttitor purus. Ut laoreet odio ut ipsum accumsan, et
-                                    varius
-                                    diam pretium. Maecenas vitae ullamcorper magna, et vehicula mi. Sed nec risus
-                                    mattis,
-                                    condimentum nulla id, venenatis magna. Suspendisse in mollis arcu. Nulla viverra
-                                    porttitor ligula quis vulputate. Vivamus at feugiat sem. Fusce elit lacus, fermentum
-                                    quis interdum quis, efficitur quis justo.
-                                </p>
-                                <p>
-                                    Ut a enim hendrerit, dignissim tellus vitae, porttitor purus. Ut laoreet odio ut
-                                    ipsum
-                                    accumsan, et varius diam pretium. Maecenas vitae ullamcorper magna, et vehicula mi.
-                                    Sed
-                                    nec risus mattis, condimentum nulla id, venenatis magna. Suspendisse in mollis arcu.
-                                    Nulla viverra porttitor ligula quis vulputate.
-                                </p>
-                                <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </h4>
-                                <p>
-                                    Vivamus at feugiat sem. Fusce elit lacus, fermentum quis interdum quis, efficitur
-                                    quis
-                                    justo.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a enim hendrerit,
-                                    dignissim tellus vitae, porttitor purus. Ut laoreet odio ut ipsum accumsan, et
-                                    varius
-                                    diam pretium. Maecenas vitae ullamcorper magna, et vehicula mi. Sed nec risus
-                                    mattis,
-                                    condimentum nulla id, venenatis magna. Suspendisse in mollis arcu. Nulla viverra
-                                    porttitor ligula quis vulputate. Vivamus at feugiat sem. Fusce elit lacus, fermentum
-                                    quis interdum quis, efficitur quis justo.
-                                </p>
+                                {newsItem?.text}
                             </div>
                         </div>
                         <div className="news-page__main--aside news-page__aside">
                             <div className="news-page__aside--body">
                                 <ul className="news-page__aside--list">
-                                    <li className="news-page__aside--item">
-                                        <a href="#" className="news-list__item--body">
-                                            <div className="news-list__item--image">
-                                                <div className="news-list__item--image-body">
-                                                    <picture>
-                                                        <img src="img/news/image-1.png" loading="lazy" alt=""
-                                                             width="311"
-                                                             height="150" className="news-list__item--img"/>
-                                                    </picture>
-                                                </div>
-                                            </div>
-                                            <h3 className="news-list__item--title" title="Название новости или статьи">
-                                                Название новости или статьи
-                                            </h3>
-                                            <time className="news-list__item--time" dateTime="2022-12-12">
-                                                12 / 12 / 2022
-                                            </time>
-                                            <div className="news-list__item--text">
-                                                Proin orci ex, ornare non auctor sit amet, egestas id neque. Donec non
-                                                elei...
-                                            </div>
-                                            <div className="news-list__item--footer">
-                                                <span className="news-list__item--link">
-                                                    Смотреть статью
-                                                </span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li className="news-page__aside--item">
-                                        <a href="#" className="news-list__item--body">
-                                            <div className="news-list__item--image">
-                                                <div className="news-list__item--image-body">
-                                                    <picture>
-                                                        <img src="img/news/image-2.png" loading="lazy" alt=""
-                                                             width="311"
-                                                             height="150" className="news-list__item--img"/>
-                                                    </picture>
-                                                </div>
-                                            </div>
-                                            <h3 className="news-list__item--title" title="Название новости или статьи">
-                                                Название новости или статьи
-                                            </h3>
-                                            <time className="news-list__item--time" dateTime="2022-12-12">
-                                                12 / 12 / 2022
-                                            </time>
-                                            <div className="news-list__item--text">
-                                                Proin orci ex, ornare non auctor sit amet, egestas id neque. Donec non
-                                                elei...
-                                            </div>
-                                            <div className="news-list__item--footer">
-                                                <span className="news-list__item--link">
-                                                    Смотреть статью
-                                                </span>
-                                            </div>
-                                        </a>
-                                    </li>
+
+                                    {
+                                        newsList?.filter((item, index) => index < 2)?.map(item =>
+                                            <li className="news-page__aside--item">
+                                                <NavLink to={`/news/${item.slug}`} className="news-list__item--body">
+                                                    <div className="news-list__item--image">
+                                                        <div className="news-list__item--image-body">
+                                                            <picture>
+                                                                <img src={getApiLink("/" + item?.image)} loading="lazy" alt=""
+                                                                     width="311"
+                                                                     height="150" className="news-list__item--img"/>
+                                                            </picture>
+                                                        </div>
+                                                    </div>
+                                                    <h3 className="news-list__item--title" title="Название новости или статьи">
+                                                        {item?.name}
+                                                    </h3>
+                                                    <time className="news-list__item--time" dateTime="2022-12-12">
+                                                        {item?.created_at.slice(0, item?.created_at.indexOf(", ")).split('.')[1]} / {item?.created_at.slice(0, item?.created_at.indexOf(", ")).split('.')[0]} / {item?.created_at.slice(0, item?.created_at.indexOf(", ")).split('.')[2]}
+                                                    </time>
+                                                    <div className="news-list__item--text">
+                                                        {
+                                                            newsList[0]?.text.slice(0, 50) + "..."
+                                                        }
+                                                    </div>
+                                                    <div className="news-list__item--footer">
+                                                        <span className="news-list__item--link">
+                                                            Смотреть статью
+                                                        </span>
+                                                    </div>
+                                                </NavLink>
+                                            </li>
+                                        )
+                                    }
+
                                 </ul>
                             </div>
                         </div>
                     </div>
                     <ul className="news-list__row">
-                        <li className="news-list__item" data-aos="fade-up" data-aos-delay="300">
-                            <a href="news-page.html" className="news-list__item--body">
-                                <div className="news-list__item--image">
-                                    <div className="news-list__item--image-body">
-                                        <picture>
-                                            <img src="img/news/image-1.png" loading="lazy" alt="" width="311"
-                                                 height="150"
-                                                 className="news-list__item--img"/>
-                                        </picture>
-                                    </div>
-                                </div>
-                                <h3 className="news-list__item--title" title="Название новости или статьи">
-                                    Название новости или статьи
-                                </h3>
-                                <time className="news-list__item--time" dateTime="2022-12-12">
-                                    12 / 12 / 2022
-                                </time>
-                                <div className="news-list__item--text">
-                                    Proin orci ex, ornare non auctor sit amet, egestas id neque. Donec non elei...
-                                </div>
-                                <div className="news-list__item--footer">
-            <span className="news-list__item--link">
-                Смотреть статью
-            </span>
-                                </div>
-                            </a>
-                        </li>
-                        <li className="news-list__item" data-aos="fade-up" data-aos-delay="300">
-                            <a href="news-page.html" className="news-list__item--body">
-                                <div className="news-list__item--image">
-                                    <div className="news-list__item--image-body">
-                                        <picture>
-                                            <img src="img/news/image-2.png" loading="lazy" alt="" width="311"
-                                                 height="150"
-                                                 className="news-list__item--img"/>
-                                        </picture>
-                                    </div>
-                                </div>
-                                <h3 className="news-list__item--title"
-                                    title="Название новости или статьи если очень длинное">
-                                    Название новости или статьи если очень длинное
-                                </h3>
-                                <time className="news-list__item--time" dateTime="2022-12-12">
-                                    12 / 12 / 2022
-                                </time>
-                                <div className="news-list__item--text">
-                                    Proin orci ex, ornare non auctor sit amet, egestas id neque. Donec non elei...
-                                </div>
-                                <div className="news-list__item--footer">
-            <span className="news-list__item--link">
-                Смотреть статью
-            </span>
-                                </div>
-                            </a>
-                        </li>
-                        <li className="news-list__item" data-aos="fade-up" data-aos-delay="300">
-                            <a href="news-page.html" className="news-list__item--body">
-                                <div className="news-list__item--image">
-                                    <div className="news-list__item--image-body">
-                                        <picture>
-                                            <img src="img/news/image-3.png" loading="lazy" alt="" width="311"
-                                                 height="150"
-                                                 className="news-list__item--img"/>
-                                        </picture>
-                                    </div>
-                                </div>
-                                <h3 className="news-list__item--title"
-                                    title="Название новости или статьи если очень длинное">
-                                    Название новости или статьи если очень длинное
-                                </h3>
-                                <time className="news-list__item--time" dateTime="2022-12-12">
-                                    12 / 12 / 2022
-                                </time>
-                                <div className="news-list__item--text">
-                                    Proin orci ex, ornare non auctor sit amet, egestas id neque. Donec non elei...
-                                </div>
-                                <div className="news-list__item--footer">
-            <span className="news-list__item--link">
-                Смотреть статью
-            </span>
-                                </div>
-                            </a>
-                        </li>
+
+                        {
+                            newsList.filter((item, index) => index > 1).map(item =>
+                                <li className="news-list__item" data-aos="fade-up" data-aos-delay="300">
+                                    <NavLink to={`/news/${item.slug}`} className="news-list__item--body">
+                                        <div className="news-list__item--image">
+                                            <div className="news-list__item--image-body">
+                                                <picture>
+                                                    <img src={getApiLink("/" + item?.image)} loading="lazy" alt="" width="311"
+                                                         height="150" className="news-list__item--img"/>
+                                                </picture>
+                                            </div>
+                                        </div>
+                                        <h3 className="news-list__item--title" title="Название новости или статьи">
+                                            {item.name}
+                                        </h3>
+                                        <time className="news-list__item--time" dateTime="2022-12-12">
+                                            {item?.created_at.slice(0, item?.created_at.indexOf(", ")).split('.')[1]} / {item?.created_at.slice(0, item?.created_at.indexOf(", ")).split('.')[0]} / {item?.created_at.slice(0, item?.created_at.indexOf(", ")).split('.')[2]}
+                                        </time>
+                                        <div className="news-list__item--text">
+                                            {
+                                                item?.text.slice(0, 50) + "..."
+                                            }
+                                        </div>
+                                        <div className="news-list__item--footer">
+                                            <span className="news-list__item--link">
+                                                Смотреть статью
+                                            </span>
+                                        </div>
+                                    </NavLink>
+                                </li>
+                            )
+                        }
                     </ul>
                 </div>
             </section>

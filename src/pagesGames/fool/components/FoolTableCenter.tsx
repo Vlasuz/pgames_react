@@ -1,30 +1,43 @@
 import React, {Dispatch, SetStateAction, useContext, useEffect, useRef, useState} from 'react'
 import {useAllCards} from "../../../hooks/AllCards";
 import cardPlaceholder from './../../../assets/img/game/cards/place.svg'
-import {WS} from "../Fool";
+import {WS, WSMessage} from "../Fool";
+import {IUser} from "../../../models";
+import {useSelector} from 'react-redux';
+import {FoolTableCardSecond} from "./FoolTableCardSecond";
+import {FoolTableCardFirst} from "./FoolTableCardFirst";
+import {FoolTableCards} from "./FoolTableCards";
 
 interface IFoolTableCenterProps {
     isEndGame: boolean
     isWaitingGame: boolean
-    selectedCard: {suit: string; rank: string} | undefined
+    selectedCard: { suit: string; rank: string } | undefined
     userTurn: any
-    setTableCards: Dispatch<SetStateAction<any>>
     tableCards: any
     setMyCards: Dispatch<SetStateAction<any>>
+    defenderTakenUser: any
+    isCardsBeaten: boolean
 }
 
-export const FoolTableCenter: React.FC<IFoolTableCenterProps> = ({isEndGame, isWaitingGame, selectedCard, userTurn, setTableCards, tableCards, setMyCards}) => {
+export const FoolTableCenter: React.FC<IFoolTableCenterProps> = ({
+                                                                     isEndGame,
+                                                                     isWaitingGame,
+                                                                     selectedCard,
+                                                                     userTurn,
+                                                                     tableCards,
+                                                                     setMyCards,
+                                                                     defenderTakenUser,
+                                                                     isCardsBeaten,
+                                                                 }) => {
 
-    const {allCards}: any = useAllCards()
 
     const ws: any = useContext(WS)
 
-    const [isBeat, setIsBeat] = useState(false)
-    const [isLoad, setIsLoad] = useState(false)
+    const user: IUser = useSelector((state: any) => state.toolkit.user)
 
-    const cardRef: any = useRef(null)
+    const handleBeat = (playedCard: { suit: string; rank: string } | null) => {
 
-    const handleBeat = (playedCard: {suit: string; rank: string} | null) => {
+        if (!selectedCard || !Object.keys(selectedCard).length) return;
 
         let jsonTitle: string = "paying_card"
         let jsonCards: any = {
@@ -34,9 +47,7 @@ export const FoolTableCenter: React.FC<IFoolTableCenterProps> = ({isEndGame, isW
             }
         }
 
-        console.log(playedCard)
-
-        if(playedCard?.suit && playedCard?.rank) {
+        if (playedCard?.suit && playedCard?.rank) {
             jsonTitle = "played_beat_card"
 
             jsonCards.entry_card = {
@@ -45,7 +56,6 @@ export const FoolTableCenter: React.FC<IFoolTableCenterProps> = ({isEndGame, isW
             }
         }
 
-        console.log(jsonCards)
         ws.send(JSON.stringify(
             {
                 "command": jsonTitle,
@@ -53,17 +63,20 @@ export const FoolTableCenter: React.FC<IFoolTableCenterProps> = ({isEndGame, isW
             }
         ))
 
-        setMyCards((prevCards: any) => {
-            return prevCards.filter((card: any) => {
-                const isSameRank = card.rank === selectedCard?.rank;
-                const isSameSuit = card.suit === selectedCard?.suit;
-                return !(isSameRank && isSameSuit);
+
+        setTimeout(() => {
+            setMyCards((prevCards: any) => {
+                return prevCards.filter((card: any) => {
+                    const isSameRank = card.rank === selectedCard?.rank;
+                    const isSameSuit = card.suit === selectedCard?.suit;
+                    return !(isSameRank && isSameSuit);
+                });
             });
-        });
+        }, 500)
 
     }
 
-    const isAttacker = userTurn.role === "attacker"
+    const isAttacker = userTurn?.player?.id === user?.id && (userTurn?.role === "attacker" || userTurn?.role === "sub_attacker")
 
     return (
         <div className="game__main--table game__table">
@@ -86,23 +99,14 @@ export const FoolTableCenter: React.FC<IFoolTableCenterProps> = ({isEndGame, isW
                 <ul className="game__table-cards--list">
 
                     {
-                        tableCards.map((cards: any) =>
-                            <li ref={cardRef} key={`${cards?.played_card?.suit}${cards?.played_card?.rank}${cards?.entry_card?.suit}${cards?.entry_card?.rank}`} className="game__table-cards--item _accent">
-                                <div className="game__table-cards--card" onClick={_ => handleBeat(cards?.played_card)}>
-                                    <img src={allCards[`${cards?.played_card?.suit}${cards?.played_card?.rank}`]} alt="" className="game__table-cards--img" />
-                                </div>
-                                {cards.entry_card && <div className="game__table-cards--card">
-                                    <img src={allCards[`${cards?.entry_card?.suit}${cards?.entry_card?.rank}`]} alt="" className="game__table-cards--img"/>
-                                </div>}
-                            </li>
-                        )
+                        tableCards.map((cards: any) => <FoolTableCards cards={cards} isCardsBeaten={isCardsBeaten} defenderTakenUser={defenderTakenUser} handleBeat={handleBeat}/>)
                     }
 
-                    {isAttacker && <li className="game__table-cards--item" onClick={_ => handleBeat(null)}>
+                    <li className={`game__table-cards--item game__table-cards--item_placeholder ${isAttacker && "_active"}`} onClick={_ => handleBeat(null)}>
                         <div className="game__table-cards--card">
                             <img src={cardPlaceholder} alt="" className="game__table-cards--img"/>
                         </div>
-                    </li>}
+                    </li>
                 </ul>
             </div>}
         </div>

@@ -5,6 +5,7 @@ import {PopupLogin} from "./components/PopupLogin";
 import {PopupRegistration} from "./components/PopupRegistration";
 import {PopupPokerCombination} from "./components/PopupPokerCombination";
 import {PopupWinnerGame} from "./components/PopupWinnerGame";
+import {PopupPromoCode} from "./components/PopupPromoCode";
 
 interface IPopupsProps {
     modal: string
@@ -61,6 +62,7 @@ export const Popups: React.FC<IPopupsProps> = ({modal}) => {
         'registration': <PopupRegistration/>,
         'poker-combination': <PopupPokerCombination/>,
         'game-winner': <PopupWinnerGame/>,
+        'promo-code': <PopupPromoCode/>,
     }
 
     return (

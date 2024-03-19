@@ -1,5 +1,7 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Aside} from "../../components/aside/Aside";
+import {ProfileWithdrawalsForm} from "./components/ProfileWithdrawalsForm";
+import icon1 from './../../assets/img/account/icon-1.svg'
 
 interface IProfileWithdrawalsProps {
 
@@ -9,7 +11,7 @@ export const ProfileWithdrawals: React.FC<IProfileWithdrawalsProps> = () => {
 
     return (
         <main className="main">
-            <section className="account">
+            <section className="account" style={{paddingTop: "calc(60px + 33px)"}}>
                 <div className="account__container container _large">
 
                     <Aside/>
@@ -49,80 +51,9 @@ export const ProfileWithdrawals: React.FC<IProfileWithdrawalsProps> = () => {
                         </div>
                         <div className="account__main--wrapper">
                             <div className="account__row">
-                                <div className="account__col">
-                                    <div className="account__block" data-aos="fade-in" data-aos-delay="500"
-                                         data-aos-anchor=".account__main">
-                                        <div className="account__block--body _none-padding _transparent">
-                                            <form action="#" className="account-withdrawals">
-                                                <fieldset className="account-withdrawals__block">
-                                                    <h3 className="account-withdrawals__title account-min-title">
-                                                        Выбор вывода средств
-                                                    </h3>
-                                                    <div className="account-withdrawals__row">
-                                                        <div className="account-withdrawals__row--block">
-                                                            <select name="withdrawals-type"
-                                                                    className="account-withdrawals__select custom-select">
-                                                                <option value="chips" selected
-                                                                        data-image="img/icons/chip.svg">
-                                                                    Фишки
-                                                                </option>
-                                                                <option value="money"
-                                                                        data-image="img/icons/dollar-circle.svg">
-                                                                    Деньги
-                                                                </option>
-                                                            </select>
-                                                        </div>
-                                                        <div className="account-withdrawals__row--block">
-                                                            <label className="account-withdrawals__label form-label">
-                                                                <input type="number" name="sum" required
-                                                                       placeholder="Сумма"
-                                                                       className="account-withdrawals__input form-input _add-bg"/>
-                                                                <span
-                                                                    className="account-withdrawals__input-placeholder form-input-placeholder">
-                                                                    Сумма
-                                                                </span>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </fieldset>
-                                                <fieldset className="account-withdrawals__block">
-                                                    <h3 className="account-withdrawals__title account-min-title">
-                                                        Выбор вывода средств
-                                                    </h3>
-                                                    <select name="withdrawals-type"
-                                                            className="account-withdrawals__type--select custom-select">
-                                                        <option value="card-1" selected>
-                                                            Карта монобанка
-                                                        </option>
-                                                        <option value="card-2">
-                                                            Карта 2
-                                                        </option>
-                                                        <option value="card-3">
-                                                            Карта 3
-                                                        </option>
-                                                    </select>
-                                                </fieldset>
-                                                <fieldset className="account-withdrawals__block">
-                                                    <h3 className="account-withdrawals__title account-min-title">
-                                                        История реферальной системы
-                                                    </h3>
-                                                    <div className="account-withdrawals__result">
-                                                        <span className="account-withdrawals__result--name">
-                                                            Будет зачислено:
-                                                        </span>
-                                                        <span className="account-withdrawals__result--value">
-                                                            $ 54.00
-                                                        </span>
-                                                    </div>
-                                                </fieldset>
-                                                <button className="account-withdrawals__submit btn _large-2 _full"
-                                                        type="submit">
-                                                    Вывести
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
+
+                                <ProfileWithdrawalsForm/>
+
                                 <div className="account__col">
                                     <div className="account__block" data-aos="fade-in" data-aos-delay="500"
                                          data-aos-anchor=".account__main">
@@ -134,7 +65,7 @@ export const ProfileWithdrawals: React.FC<IProfileWithdrawalsProps> = () => {
                                                             <div className="account-history-element__body">
                                                                 <div className="account-history-element__col">
                                                                     <div className="account-history-element__icon">
-                                                                        <img src="img/account/icon-1.svg" width="18"
+                                                                        <img src={icon1} width="18"
                                                                              height="18" alt=""
                                                                              className="account-history-element__icon--img"/>
                                                                     </div>
@@ -189,7 +120,7 @@ export const ProfileWithdrawals: React.FC<IProfileWithdrawalsProps> = () => {
                                                             <div className="account-history-element__body">
                                                                 <div className="account-history-element__col">
                                                                     <div className="account-history-element__icon">
-                                                                        <img src="img/account/icon-1.svg" width="18"
+                                                                        <img src={icon1} width="18"
                                                                              height="18" alt=""
                                                                              className="account-history-element__icon--img"/>
                                                                     </div>
@@ -244,7 +175,7 @@ export const ProfileWithdrawals: React.FC<IProfileWithdrawalsProps> = () => {
                                                             <div className="account-history-element__body">
                                                                 <div className="account-history-element__col">
                                                                     <div className="account-history-element__icon">
-                                                                        <img src="img/account/icon-1.svg" width="18"
+                                                                        <img src={icon1} width="18"
                                                                              height="18" alt=""
                                                                              className="account-history-element__icon--img"/>
                                                                     </div>

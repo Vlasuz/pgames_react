@@ -1,7 +1,8 @@
-import React, {Dispatch, ReactNode, SetStateAction, useEffect, useRef, useState} from 'react'
+import React, {Dispatch, ReactNode, SetStateAction, useContext, useEffect, useRef, useState} from 'react'
 import {useSelector} from 'react-redux';
 import {useAllCards} from "../../../hooks/AllCards";
 import {ICard, IUser} from "../../../models";
+import {SelectedCardRef} from '../Fool';
 import {FoolCardTemplate} from "./FoolCardTemplate";
 
 interface IFoolMyCardsProps {
@@ -14,26 +15,25 @@ interface IFoolMyCardsProps {
 
 export const FoolMyCards: React.FC<IFoolMyCardsProps> = ({cardsList, deck, setSelectedCard, tableCards, userTurn}) => {
 
-    console.log(userTurn)
-
     const user: IUser = useSelector((state: any) => state.toolkit.user)
+
+    const cardRef = useContext(SelectedCardRef)
 
     const [_selectedCard, set_SelectedCard] = useState<any>({})
     const [suitableCards, setSuitableCards] = useState<any>([])
 
-    const cardRef: any = useRef()
-
     useEffect(() => {
         setSuitableCards([]);
         set_SelectedCard({});
+        setSelectedCard({});
         if (user?.id !== userTurn?.player?.id) return;
 
         if (userTurn?.role === "defender") {
             tableCards.forEach((cards: any) => {
-                const filteredCards = cardsList.filter(card => cards.played_card.suit === card.suit && cardsRank[card.rank] > cardsRank[cards.played_card.rank]);
+                const filteredCards = cardsList.filter(card => (cards.entry_card === null && cards.played_card.suit === card.suit && cardsRank[card.rank] > cardsRank[cards.played_card.rank]) || card?.suit === deck?.trump?.suit);
                 setSuitableCards((prev: any) => [...prev, ...filteredCards]);
             });
-        } else if (userTurn?.role === "attacker") {
+        } else if (userTurn?.role === "attacker" || userTurn?.role === "sub_attacker") {
             tableCards.forEach((cards: any) => {
                 const filteredCards = cardsList.filter(card => cards?.played_card?.rank === card.rank || cards?.entry_card?.rank === card.rank);
                 setSuitableCards((prev: any) => [...prev, ...filteredCards]);
@@ -42,7 +42,6 @@ export const FoolMyCards: React.FC<IFoolMyCardsProps> = ({cardsList, deck, setSe
 
     }, [tableCards, userTurn]);
 
-
     const handleSelectCard = (card: any) => {
 
         if (card.suit === _selectedCard?.suit && card.rank === _selectedCard?.rank) {
@@ -50,7 +49,7 @@ export const FoolMyCards: React.FC<IFoolMyCardsProps> = ({cardsList, deck, setSe
             return set_SelectedCard({})
         }
 
-        if (!tableCards.length || ((userTurn?.role === "defender" || userTurn?.role === "attacker") && suitableCards.some((sc: any) => sc.suit === card.suit && sc.rank === card.rank))) {
+        if (!tableCards.length || ((userTurn?.role === "defender" || userTurn?.role === "attacker" || userTurn?.role === "sub_attacker") && suitableCards.some((sc: any) => sc.suit === card.suit && sc.rank === card.rank))) {
             set_SelectedCard(card)
             setSelectedCard(card)
         }
@@ -82,10 +81,13 @@ export const FoolMyCards: React.FC<IFoolMyCardsProps> = ({cardsList, deck, setSe
                         ?.filter((item: any) => item.suit !== deck.trump.suit)
                         ?.map(card =>
                             <FoolCardTemplate
+                                tableCards={tableCards}
                                 isPossibleToUse={!tableCards.length || suitableCards.some((sc: any) => sc.suit === card.suit && sc.rank === card.rank)}
                                 key={`${card?.suit}${card?.rank}`}
-                                _selectedCard={_selectedCard} card={card}
-                                cardRef={cardRef} handleSelectCard={() => handleSelectCard(card)}
+                                card={card}
+                                cardRef={cardRef}
+                                handleSelectCard={() => handleSelectCard(card)}
+                                _selectedCard={_selectedCard}
                             />
                         )
                 }
@@ -94,10 +96,13 @@ export const FoolMyCards: React.FC<IFoolMyCardsProps> = ({cardsList, deck, setSe
                         ?.filter((item: any) => item.suit === deck.trump.suit)
                         ?.map(card =>
                             <FoolCardTemplate
+                                tableCards={tableCards}
                                 isPossibleToUse={!tableCards.length || suitableCards.some((sc: any) => sc.suit === card.suit && sc.rank === card.rank)}
                                 key={`${card?.suit}${card?.rank}`}
-                                _selectedCard={_selectedCard} card={card}
-                                cardRef={cardRef} handleSelectCard={() => handleSelectCard(card)}
+                                card={card}
+                                cardRef={cardRef}
+                                handleSelectCard={() => handleSelectCard(card)}
+                                _selectedCard={_selectedCard}
                             />
                         )
                 }
