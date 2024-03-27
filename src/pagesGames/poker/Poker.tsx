@@ -9,8 +9,6 @@ import {useAllCards} from "../../hooks/AllCards";
 import {IUser} from "../../models";
 import {useSelector} from 'react-redux';
 import {getApiLink} from '../../functions/getApiLink';
-// import Nouislider from "nouislider-react";
-// import "nouislider/distribute/nouislider.css";
 
 interface IPokerProps {
 
@@ -42,7 +40,7 @@ export const Poker: React.FC<IPokerProps> = () => {
                             </div>
                         </div>
                         <div className="poker__grid--item">
-                            <Player isHavePlayer={false} isReady={false} position={4}/>
+                            <Player isHavePlayer={true} isReady={true} position={4}/>
                         </div>
                         <div className="poker__grid--item">
                             <Player isHavePlayer={false} isReady={false} position={5}/>

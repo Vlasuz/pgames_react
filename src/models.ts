@@ -20,11 +20,13 @@ export interface IGame {
     slug: string
     image: string
 }
+
 export interface IGames {
     game: IGame[]
     name: string
     slug: string
 }
+
 export interface IRoom {
     bet: number
     bet_type: string
@@ -36,7 +38,8 @@ export interface IRoom {
     players_count: number
     room_type: string
 }
-export interface  INews {
+
+export interface INews {
     name: string
     slug: string
     image: string
@@ -94,4 +97,10 @@ export interface IContacts {
     support_phone_number: string;
     telegram: string;
     twitter: string;
+}
+
+export interface IChecker {
+    "owner": string;
+    "is_king": boolean;
+    "position": number
 }

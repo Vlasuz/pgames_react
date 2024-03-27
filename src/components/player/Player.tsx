@@ -8,9 +8,9 @@ import {getApiLink} from "../../functions/getApiLink";
 
 interface IPlayerProps {
     isHavePlayer: boolean
-    playerInfo?: IPlayerUser
     isReady: boolean
     position: number
+    playerInfo?: IPlayerUser
     isDealer?: boolean
     isPlayerMin?: boolean
     gameSlug?: string
@@ -44,7 +44,7 @@ export const Player: React.FC<IPlayerProps> = ({isHavePlayer, playerInfo, isRead
     playerInfo = ws?.users?.filter((user: IPlayer) => user.position === position)[0]
 
     useEffect(() => {
-        playerNewCards.length && playerNewCards?.map((player: any) => {
+        playerNewCards?.length && playerNewCards?.map((player: any) => {
             const allAmount = player.cards_count
             const addCards = player?.player?.new_cards_count
 
@@ -68,9 +68,9 @@ export const Player: React.FC<IPlayerProps> = ({isHavePlayer, playerInfo, isRead
     }, [userEvent])
 
     useEffect(() => {
-        if (!events[ws.event]) return;
+        if (!events[ws?.event]) return;
 
-        events[ws.event]();
+        events[ws?.event]();
     }, [ws]);
 
     const handleNewPlayer = (data: any) => {

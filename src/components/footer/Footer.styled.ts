@@ -5,5 +5,6 @@ export const FooterStyled = styled.footer`
     height: 100%;
     object-fit: cover;
     -webkit-border-radius: 4px;-moz-border-radius: 4px;border-radius: 4px;
+    max-width: 150px;
   }
 `

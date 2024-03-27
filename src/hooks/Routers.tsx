@@ -13,6 +13,7 @@ import {RoomCreate} from "../pages/roomCreate/RoomCreate";
 import {GamesSingle} from "../pages/gamesSingle/GamesSingle";
 import {Poker} from "../pagesGames/poker/Poker";
 import {Fool} from "../pagesGames/fool/Fool";
+import {Checkers} from "../pagesGames/checkers/Checkers";
 
 interface IRoutes {
     [key: string]: {
@@ -94,6 +95,11 @@ export const useRouters = (): IRoutes => {
             title: "",
             isHeader: false,
             element: <Fool/>
+        },
+        "/checkers/:roomId": {
+            title: "",
+            isHeader: false,
+            element: <Checkers/>
         },
     }
 }
